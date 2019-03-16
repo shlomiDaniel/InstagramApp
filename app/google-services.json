@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "241413055650",
+    "firebase_url": "https://instagramapp-acdec.firebaseio.com",
+    "project_id": "instagramapp-acdec",
+    "storage_bucket": "instagramapp-acdec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241413055650:android:2c50bbcb40b6d44b",
+        "android_client_info": {
+          "package_name": "com.shlomi.instagramapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241413055650-5faqu5r2p57gqrjod3oomc0m8o31urhu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shlomi.instagramapp",
+            "certificate_hash": "89fd29f2f300f41e4478271d0794925f5554f6b8"
+          }
+        },
+        {
+          "client_id": "241413055650-d3n7947i421ekr9drm03h5e1375oc6fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF0GMx8Q3DtqGpkS89tR2HUn9CySd3uuo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241413055650-d3n7947i421ekr9drm03h5e1375oc6fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
