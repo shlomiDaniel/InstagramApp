@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.google.android.gms.signin.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.*;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView signInTextView;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signInTextView.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         if(firebaseAuth.getCurrentUser() != null){
             finish();
@@ -48,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void registerUser(){
-     String email = emailText.getText().toString().trim();
-     String password = passwordText.getText().toString().trim();
+     final String email = emailText.getText().toString().trim();
+     final String password = passwordText.getText().toString().trim();
      if(TextUtils.isEmpty(email)){
          Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
          return;
@@ -70,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                        finish();
                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                   firebaseDatabase.getReference().child("users").child(firebaseAuth.getUid()).setValue(email.toString().trim());
+                   firebaseDatabase.getReference().child("users").child(firebaseAuth.getUid()).setValue(password);
 
                }else{
                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
