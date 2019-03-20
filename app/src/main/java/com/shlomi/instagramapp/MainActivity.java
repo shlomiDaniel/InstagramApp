@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             finish();
-                             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                             startActivity(new Intent(getApplicationContext(),Home.class));
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
