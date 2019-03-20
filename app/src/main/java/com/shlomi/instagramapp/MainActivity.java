@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,19 +23,25 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.signin.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.*;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,23 +50,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText passwordText;
     private TextView signInTextView;
     private EditText userName;
+    private ImageView profile_image;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    private StorageReference storageReference ;
-    private Storage storage;
+    String url;
+    FirebaseStorage storage;
+    // FirebaseDatabase database;
+    StorageReference storageReference;
 
-
-
-    private Button btnChoose, btnUpload;
-    private ImageView imageView;
+   // FirebaseStorage storage;
+    // FirebaseDatabase database;
+   // StorageReference storageReference;
 
     private Uri filePath;
 
     private final int PICK_IMAGE_REQUEST = 71;
 
+    // Creating StorageReference and DatabaseReference object.
+    //StorageReference storageReference;
+    DatabaseReference databaseReference;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
@@ -68,34 +84,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonRegister.setOnClickListener(this);
         signInTextView.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
+        profile_image = (ImageView) findViewById(R.id.profile_image);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         userName = (EditText)findViewById(R.id.editUserName);
+        //profile_image = (ImageView)findViewById(R.id.profile_image);
 
-        btnChoose = (Button) findViewById(R.id.btnChoose);
-        btnUpload = (Button) findViewById(R.id.btnUpload);
-        imageView = (ImageView) findViewById(R.id.imgView);
-        storageReference = storage.getReference();
         storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
-        btnChoose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
 
         if(firebaseAuth.getCurrentUser() != null){
             finish();
             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
         }
+     profile_image.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             chooseImage();
+         }
+     });
 
     }
 
@@ -108,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
-                imageView.setImageBitmap(bitmap);
+                profile_image.setImageBitmap(bitmap);
             }
             catch (IOException e)
             {
@@ -124,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+
 
     private void registerUser(){
      final String email = emailText.getText().toString();
@@ -145,13 +157,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                if(task.isSuccessful()){
                    Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
                    progressDialog.cancel();
-
-                       finish();
-                       startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                         ///check
+                       //finish();
+                      // startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
                       // String mail = email.toString();
                        //firebaseDatabase.getReference().child("users").child(firebaseAuth.getUid()).setValue(mail);
                    String name = userName.getText().toString().trim();
-                   writeNewUser(firebaseAuth.getUid(),name,email,password);
+                   writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
 
                }else{
                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
@@ -159,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                }
             }
         });
+
+        uploadImage();
+        getUrl();
     }
     @Override
     public void onClick(View view) {
@@ -170,13 +185,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          }
     }
 
-    private void writeNewUser(String userId, String userName, String email,String password) {
-        User user = new User(userId, userName,email,password);
-        HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password);
+    private void writeNewUser(String userId, String userName, String email,String password,String profile_image) {
+        User user = new User(userId, userName,email,password,profile_image);
+        HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password,profile_image);
         Log.println(1,"TAG",userId);
         firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
 
+
         //ref.child("users").child(userId).setValue(user);
     }
+
+    private void uploadImage() {
+        //String profile_image = UUID.randomUUID().toString();
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            //String profile_image = UUID.randomUUID().toString();
+            //StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/"+ "profile_image.png");
+            //StorageReference ref = storageReference.child("images/profile_image.png");
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            finish();
+                             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+
+
+        }
+
+
+    }
+    public String getUrl(){
+        // String url;
+         //String url;
+         //final Uri uri2;
+        storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.i("profile_image : ",uri.toString());
+                url = uri.toString();
+               //url = uri.toString();
+                //uri = uri;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+return url;
+    }
+
+
 
 }
