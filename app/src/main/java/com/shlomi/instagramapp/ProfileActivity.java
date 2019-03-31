@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp;
 
 import android.content.Intent;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +21,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth firebaseAuth;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
+//        //  enableNavigation(Home.this,bn);
+//
+//        ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this,bn);
+        setContentView(R.layout.layout_bottom_navogation);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         email = (TextView) findViewById(R.id.emailText);
@@ -47,4 +54,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
            startActivity(new Intent(this, SignInActivity.class));
        }
     }
+
+
 }

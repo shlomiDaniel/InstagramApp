@@ -1,14 +1,15 @@
 package com.shlomi.instagramapp;
 
-import android.support.design.widget.BottomNavigationView;
+//import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.support.design.widget.*;
 
-import com.shlomi.ButtonNavigationViewHelper.ButtonNavigationViewHelper;
+//import com.shlomi.ButtonNavigationViewHelper.ButtonNavigationViewHelper;
 
 public class SearchActivity extends AppCompatActivity {
     private static String TAG = "Search_activity";
@@ -19,14 +20,12 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         Toast.makeText(this,"search",Toast.LENGTH_SHORT).show();
-
         Log.d(TAG,"Started");
-        setupButonNavigation();
     }
 
     public void setupButonNavigation(){
         BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
-        ButtonNavigationViewHelper.setupButtonNavigationView(bn);
+       // ButtonNavigationViewHelper.setupButtonNavigationView(bn);
         // Intent intent2 = new Intent(ProfileActivity.this, Home.class);
         // startActivity(intent2);
         ButtonNavigationViewHelper.enableNavigation(SearchActivity.this,bn);
@@ -35,4 +34,6 @@ public class SearchActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(activity_num);
         menuItem.setChecked(true);
     }
+
+
 }
