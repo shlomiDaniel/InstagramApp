@@ -1,9 +1,11 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Share;
 
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.shlomi.instagramapp.R;
 
 public class ShareActivity extends AppCompatActivity {
     private static String TAG = "shareActivity";

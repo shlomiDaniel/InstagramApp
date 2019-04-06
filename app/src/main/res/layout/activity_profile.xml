@@ -4,68 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".Profile.ProfileActivity">
 
     <RelativeLayout
+
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
+        <include layout="@layout/top_profile_bar"></include>
 
-        <LinearLayout
-
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="55dp"
-            android:layout_width="395dp"
-            android:layout_height="715dp"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:layout_margin="15dp"
-                android:hint="User Profile:"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+      <include layout="@layout/layaot_center_profile"/>
 
 
-            <TextView
-               android:layout_margin="15dp"
-                android:hint="Email:"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/emailText"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_margin="15dp"
-                android:hint="Password:"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/passwordText"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:layout_margin="15dp"
-                android:hint="logOut"
-                android:id="@+id/logOut"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
 
-        </LinearLayout>
+        <include layout="@layout/layout_bottom_navogation"/>
+
     </RelativeLayout>
 
 

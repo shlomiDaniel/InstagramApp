@@ -13,12 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomeActivity"
+            android:name=".Home.HomeActivity"
             android:label="@string/title_activity_home"></activity>
-        <activity android:name=".ShareActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".Home" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".Share.ShareActivity" />
+        <activity android:name=".Search.SearchActivity" />
+        <activity android:name=".Home.Home" />
+        <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

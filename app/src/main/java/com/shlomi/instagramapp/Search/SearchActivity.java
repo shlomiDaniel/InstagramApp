@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Search;
 
 //import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import android.support.design.widget.*;
+
+import com.shlomi.instagramapp.ButtonNavigationViewHelper;
+import com.shlomi.instagramapp.R;
 
 //import com.shlomi.ButtonNavigationViewHelper.ButtonNavigationViewHelper;
 
