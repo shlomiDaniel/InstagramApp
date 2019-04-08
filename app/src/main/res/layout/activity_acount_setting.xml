@@ -2,7 +2,8 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<RelativeLayout
+    <include layout="@layout/layout_center_view_pagetr"/>
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relayout1"
@@ -20,7 +21,7 @@
         android:layout_below="@+id/relayout2"
         android:layout_marginBottom="50dp"
         android:layout_height="wrap_content">
-
+        <include layout="@layout/layout_center_acout_settng"/>
 
     </RelativeLayout>
 

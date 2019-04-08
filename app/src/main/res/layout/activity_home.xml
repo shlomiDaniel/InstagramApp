@@ -26,6 +26,10 @@
         <include layout="@layout/layout_center"/>
 
     </RelativeLayout>
-    <include layout="@layout/layout_bottom_navogation"/>
+
+    <include
+        layout="@layout/layout_bottom_navogation"
+        android:layout_width="97dp"
+        android:layout_height="144dp" />
 </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
@@ -40,21 +42,13 @@ public class ProfileActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//
-//        BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
-//        //  enableNavigation(Home.this,bn);
-//
-//        ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this,bn);
+
         setContentView(R.layout.layout_bottom_navogation);
         super.onCreate(savedInstanceState);
-        //getSupportActionBar().hide();
+
 
         setContentView(R.layout.activity_profile);
-        //setContentView(R.layout.textmenu);
-        //email = (TextView) findViewById(R.id.emailText);
-       // pass = (TextView) findViewById(R.id.passwordText);
-      //  logOut = (Button)findViewById(R.id.logOut);
-       // logOut.setOnClickListener(this);
+
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             finish();
@@ -64,46 +58,25 @@ public class ProfileActivity extends AppCompatActivity  {
          setTitle("                                                ");
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-      //  email.setText("hello : " + user.getEmail());
     }
 
-//    @Override
-//    public void onClick(View v) {
-//       if(v == logOut){
-//           firebaseAuth.signOut();
-//           finish();
-//           startActivity(new Intent(this, SignInActivity.class));
-//       }
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setupToolBar(){
 
-       // Toolbar toolbar = (Toolbar)findViewById(R.id.profileToolBar);
         Toolbar toolbar = (Toolbar)findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+        ImageView profile_image_view = (ImageView)findViewById(R.id.profile_menu);
+        profile_image_view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-
-                Log.d(TAG,"onmenu click : click menu item : "+ menuItem);
-                switch (menuItem.getItemId()){
-                    case R.id.profileMenu:
-                        Log.d(TAG,"navigation");
-
-                }
-
-                return false;
+            public void onClick(View v) {
+                Log.d(TAG,"ONCLICK NAVIGATION ACOUNT SETTING");
+                Intent intent = new Intent(ProfileActivity.this,accountSettingsActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile_menu,menu);
-       getMenuInflater().inflate(R.menu.profile_menu,menu);
 
-        return true;
-    }
 }

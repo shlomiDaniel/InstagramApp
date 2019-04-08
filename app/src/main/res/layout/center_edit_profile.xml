@@ -1,0 +1,195 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="20dp"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:id="@+id/profile_photo"
+                    android:layout_marginTop="20dp"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_width="2dp"
+
+                    />
+            </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Photo"
+        android:id="@+id/changeProfilePhoto"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+
+        ></TextView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/changeProfilePhoto"
+        android:id="@+id/relayout1"
+        >
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_alert"
+            android:layout_centerVertical="true"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/username"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="40dp"
+            android:hint="user name"
+            />
+
+
+    </RelativeLayout>
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/relayout1"
+            android:id="@+id/relayout2"
+            >
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_alert"
+                android:layout_centerVertical="true"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/display_name"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:hint="display name"
+                />
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/relayout2"
+            android:id="@+id/relayout3"
+            >
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_alert"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/website"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:hint="website"
+                />
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/relayout3"
+            android:id="@+id/relayout4"
+            >
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_alert"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dicription"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:hint="description"
+                />
+
+
+        </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="PRIVATE INFO"
+                android:layout_below="@id/relayout4"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+
+                />
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/relayout4"
+                android:id="@+id/textPrivateInfo"
+                >
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_alert"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="15dp"
+
+                    />
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:hint="Email" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+</merge>
