@@ -7,4 +7,10 @@
     <string name="editProfile">Edit Profile</string>
     <string name="profile_activity">Profile</string>
     <string name="sign_out">Sign Out</string>
+
+
+    <string name="auth_failed">Failed to Authenticated</string>
+    <string name="auth_success">Authentication Success</string>
+    <string name="dbname_users_account_settings">User_acount_settings</string>
+    <string name="dbname_users">Users</string>
 </resources>

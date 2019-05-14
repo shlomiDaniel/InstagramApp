@@ -1,9 +1,6 @@
 package com.shlomi.instagramapp.Profile;
 
 import android.content.Intent;
-import android.os.Build;
-import android.provider.ContactsContract;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -19,21 +15,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.shlomi.instagramapp.Home.HomeActivity;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Search.SearchActivity;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
-import com.shlomi.instagramapp.Utils.User;
 
 import java.util.ArrayList;
 

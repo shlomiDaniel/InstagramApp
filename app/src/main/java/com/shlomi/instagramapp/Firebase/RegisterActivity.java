@@ -30,8 +30,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Home.Home;
 
+import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.R;
 
 import java.io.IOException;
@@ -52,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     FirebaseStorage storage;
     // FirebaseDatabase database;
     StorageReference storageReference;
-
+    ModelFirebase modelFirebase;
     // FirebaseStorage storage;
     // FirebaseDatabase database;
     // StorageReference storageReference;
@@ -155,7 +157,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                     String name = userName.getText().toString().trim();
                     writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
-
+                    //checkit
+                    //modelFirebase.addAcountSettingToDataBase
+                    //modelFirebase.addAcountSettingToDataBase("","","",",","","");
                 }else{
                     Toast.makeText(RegisterActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
 

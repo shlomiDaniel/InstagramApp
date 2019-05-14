@@ -30,7 +30,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Home.Home;
+import com.shlomi.instagramapp.Models.User;
+import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.R;
 
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    // FirebaseStorage storage;
     // FirebaseDatabase database;
    // StorageReference storageReference;
-
+ public ModelFirebase modelFirebase;
 
 
     private Uri filePath;
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                    String name = userName.getText().toString().trim();
                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
+                  // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
                }else{
                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
@@ -185,8 +189,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         User user = new User(userId, userName,email,password,profile_image);
         HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password,profile_image);
         Log.println(1,"TAG",userId);
+        //UserAccountSetting settings = new UserAccountSetting("","","","","","","","");
+        //HashMap<String, Object> hashMap2 = settings.toMap("","","","","","","","");
         firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
-
+       // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
         //ref.child("users").child(userId).setValue(user);
     }
