@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Utils;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

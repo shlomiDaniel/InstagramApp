@@ -5,5 +5,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="editProfile">Edit Profile</string>
+    <string name="profile_activity">Profile</string>
     <string name="sign_out">Sign Out</string>
 </resources>

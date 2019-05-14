@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.shlomi.instagramapp.ButtonNavigationViewHelper;
+import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
 
 public class Home extends AppCompatActivity {

@@ -12,9 +12,9 @@ import java.util.List;
 public class SectionStatePagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> flist = new ArrayList<>();
-    private final HashMap<Fragment,Integer> mfragments = new HashMap<>();
-    private final HashMap<String,Integer> mfragmentsNum = new HashMap<>();
-    private final  HashMap<Integer,String>mfragmentsNames = new HashMap<>();
+    private final HashMap<Fragment,Integer> mFragments = new HashMap<>();
+    private final HashMap<String,Integer> mFragmentsNum = new HashMap<>();
+    private final  HashMap<Integer,String>mFragmentsNames = new HashMap<>();
 
     public SectionStatePagerAdapter(FragmentManager fm){
         super(fm);
@@ -33,15 +33,15 @@ public class SectionStatePagerAdapter extends FragmentStatePagerAdapter {
 
     public  void addFragments(Fragment fragment,String fragment_name){
         flist.add(fragment);
-        mfragments.put(fragment,flist.size()-1);
-        mfragmentsNum.put(fragment_name,flist.size()-1);
-        mfragmentsNames.put(flist.size()-1,fragment_name);
+        mFragments.put(fragment,flist.size()-1);
+        mFragmentsNum.put(fragment_name,flist.size()-1);
+        mFragmentsNames.put(flist.size()-1,fragment_name);
 
     }
 
     public Integer getFragmentNumber(String fragmentName){
-        if(mfragmentsNum.containsKey(fragmentName)){
-            return mfragmentsNum.get(fragmentName);
+        if(mFragmentsNum.containsKey(fragmentName)){
+            return mFragmentsNum.get(fragmentName);
         }
             else
             {
@@ -50,8 +50,8 @@ public class SectionStatePagerAdapter extends FragmentStatePagerAdapter {
 
     }
     public Integer getFragmentNumber(Fragment fragment){
-        if(mfragmentsNum.containsKey(fragment)){
-            return mfragmentsNum.get(fragment);
+        if(mFragmentsNum.containsKey(fragment)){
+            return mFragmentsNum.get(fragment);
         }
         else
         {
@@ -61,8 +61,8 @@ public class SectionStatePagerAdapter extends FragmentStatePagerAdapter {
     }
     public String getFragmentName(Integer fragmentNumber){
 
-        if(mfragmentsNames.containsKey(fragmentNumber)){
-            return mfragmentsNames.get(fragmentNumber);
+        if(mFragmentsNames.containsKey(fragmentNumber)){
+            return mFragmentsNames.get(fragmentNumber);
         }else
         {
             return null;

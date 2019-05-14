@@ -1,7 +1,6 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Utils;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class User {
     private String profile_image_url;

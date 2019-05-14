@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Utils;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shlomi.instagramapp.Home.Home;
+import com.shlomi.instagramapp.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 

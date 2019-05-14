@@ -1,5 +1,5 @@
-package com.shlomi.instagramapp;
 
+package com.shlomi.instagramapp.Utils;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,13 +31,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.shlomi.instagramapp.Home.Home;
-import com.shlomi.instagramapp.Profile.ProfileActivity;
 
+import com.shlomi.instagramapp.R;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
     private EditText emailText;
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // FirebaseDatabase database;
     StorageReference storageReference;
 
-   // FirebaseStorage storage;
+    // FirebaseStorage storage;
     // FirebaseDatabase database;
-   // StorageReference storageReference;
+    // StorageReference storageReference;
 
     private Uri filePath;
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firebaseDatabase = FirebaseDatabase.getInstance();
         userName = (EditText)findViewById(R.id.editUserName);
         //profile_image = (ImageView)findViewById(R.id.profile_image);
-
+        databaseReference = firebaseDatabase.getReference();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -91,17 +91,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-
-        if(firebaseAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
-     profile_image.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             chooseImage();
-         }
-     });
+//important
+//        if(firebaseAuth.getCurrentUser() != null){
+//            finish();
+//            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+//        }
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
 
     }
 
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 e.printStackTrace();
             }
+
         }
     }
 
@@ -132,42 +133,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void registerUser(){
-     final String email = emailText.getText().toString();
-     final String password = passwordText.getText().toString();
-     if(TextUtils.isEmpty(email)){
-         Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
-         return;
-     }
-     if(TextUtils.isEmpty(password)){
-         Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
-       return;
-     }
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-     progressDialog.setMessage("Please Wait...");
+        progressDialog.setMessage("Please Wait...");
         progressDialog.show();
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-               if(task.isSuccessful()){
-                   Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
-                   progressDialog.cancel();
-                         ///check
-                       //finish();
-                      // startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-                      // String mail = email.toString();
-                       //firebaseDatabase.getReference().child("users").child(firebaseAuth.getUid()).setValue(mail);
-                   String name = userName.getText().toString().trim();
-                   writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
+                if(task.isSuccessful()){
+                    Toast.makeText(RegisterActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
+                    progressDialog.cancel();
 
-               }else{
-                   Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
+                    String name = userName.getText().toString().trim();
+                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
 
-               }
+                }else{
+                    Toast.makeText(RegisterActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
         uploadImage();
-        getUrl();
+
     }
     @Override
     public void onClick(View view) {
@@ -175,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerUser();
         }else if(view == signInTextView){
             finish();
-            startActivity(new Intent(this,SignInActivity.class));
-         }
+            startActivity(new Intent(this, SignInActivity.class));
+        }
     }
 
     private void writeNewUser(String userId, String userName, String email,String password,String profile_image) {
@@ -197,25 +194,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            //String profile_image = UUID.randomUUID().toString();
-            //StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
             StorageReference ref = storageReference.child("images/"+ "profile_image.png");
-            //StorageReference ref = storageReference.child("images/profile_image.png");
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             finish();
-                             startActivity(new Intent(getApplicationContext(), Home.class));
+                            startActivity(new Intent(getApplicationContext(), Home.class));
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -232,16 +226,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+    public void writeImage(){
+
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("profile_image").setValue(url);
+    }
     public String getUrl(){
         // String url;
-         //String url;
-         //final Uri uri2;
+        //String url;
+        //final Uri uri2;
         storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Log.i("profile_image : ",uri.toString());
                 url = uri.toString();
-               //url = uri.toString();
+                if(url != null && url != "" ){
+
+                    writeImage();
+                }
+
+
                 //uri = uri;
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -250,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Handle any errors
             }
         });
-return url;
+        return url;
     }
 
 

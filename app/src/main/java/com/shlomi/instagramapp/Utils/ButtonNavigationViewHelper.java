@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.shlomi.instagramapp.Home.Home;
 import com.shlomi.instagramapp.Profile.ProfileActivity;
+import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Search.SearchActivity;
 import com.shlomi.instagramapp.Share.ShareActivity;
 

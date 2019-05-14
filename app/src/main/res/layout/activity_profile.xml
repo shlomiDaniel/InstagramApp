@@ -12,9 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
-        <include layout="@layout/top_profile_bar"></include>
 
-      <include layout="@layout/layaot_center_profile"/>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            >
+
+            <include layout="@layout/layaot_center_profile"/>
+        </RelativeLayout>
+
 
 
 
