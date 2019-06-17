@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Utils.StringManipulation;
 
 import java.util.HashMap;
 
@@ -61,8 +62,11 @@ public class ModelFirebase {
             Log.d("userName","check if exist" + ds);
             user.setUserName(ds.getValue(User.class).getUserName());
 
+            if(StringManipulation.expandUserName(user.getUserName()).equals(userName)){
+                return  true;
+            }
         }
-        return  true;
+        return false;
     }
 
     public void addAcountSettingToDataBase(String email,String userName,String pass,String description, String website , String profile_photo){

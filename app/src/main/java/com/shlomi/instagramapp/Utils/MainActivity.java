@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    progressDialog.cancel();
 
                    String name = userName.getText().toString().trim();
-                   writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl());
+                   writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
                   // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
                }else{
@@ -185,16 +185,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          }
     }
 
-    private void writeNewUser(String userId, String userName, String email,String password,String profile_image) {
+    private void writeNewUser(String userId, String userName, String email,String password,String profile_image,String website,String descripation) {
         User user = new User(userId, userName,email,password,profile_image);
         HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password,profile_image);
         Log.println(1,"TAG",userId);
-        //UserAccountSetting settings = new UserAccountSetting("","","","","","","","");
-        //HashMap<String, Object> hashMap2 = settings.toMap("","","","","","","","");
-        firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
-       // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
-        //ref.child("users").child(userId).setValue(user);
+        firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
+        UserAccountSetting setting = new UserAccountSetting(descripation,userName,0,0,"",profile_image,"",website);
+        firebaseDatabase.getReference().child("userAcountSetting").child(userId).setValue(setting);
     }
 
     private void uploadImage() {

@@ -5,14 +5,14 @@ import java.util.HashMap;
 public class UserAccountSetting {
     private String description;
     private String display_name;
-    private String followers;
-    private String following;
+    private long followers;
+    private long following;
     private String posts;
     private String profile_photo;
     private String userName;
     private String website;
 
-    public UserAccountSetting(String description, String display_name, String  followers, String following, String posts, String profile_photo, String userName, String website) {
+    public UserAccountSetting(String description, String display_name, long  followers, long following, String posts, String profile_photo, String userName, String website) {
         this.description = description;
         this.display_name = display_name;
         this.followers = followers;
@@ -27,11 +27,11 @@ public class UserAccountSetting {
         return userName;
     }
 
-    public String getFollowers() {
+    public long getFollowers() {
         return followers;
     }
 
-    public String getFollowing() {
+    public long getFollowing() {
         return following;
     }
 
@@ -67,11 +67,11 @@ public class UserAccountSetting {
         this.display_name = display_name;
     }
 
-    public void setFollowers(String followers) {
+    public void setFollowers(long followers) {
         this.followers = followers;
     }
 
-    public void setFollowing(String following) {
+    public void setFollowing(long following) {
         this.following = following;
     }
 
@@ -88,7 +88,7 @@ public class UserAccountSetting {
     }
 
 
-    public HashMap<String,Object> toMap(String description, String display_name, String followers, String following, String posts, String profile_photo, String userName, String website) {
+    public HashMap<String,Object> toMap(String description, String display_name, long followers, long following, String posts, String profile_photo, String userName, String website) {
         UserAccountSetting settings = new UserAccountSetting(description,display_name,followers,
                 following,posts,profile_photo,userName,website);
 
@@ -106,5 +106,18 @@ public class UserAccountSetting {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "UserAccountSetting{" +
+                "description='" + description + '\'' +
+                ", display_name='" + display_name + '\'' +
+                ", followers='" + followers + '\'' +
+                ", following='" + following + '\'' +
+                ", posts='" + posts + '\'' +
+                ", profile_photo='" + profile_photo + '\'' +
+                ", userName='" + userName + '\'' +
+                ", website='" + website + '\'' +
+                '}';
+    }
 }
 
