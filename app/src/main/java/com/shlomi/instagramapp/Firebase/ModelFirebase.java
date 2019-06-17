@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 
 public class ModelFirebase {
 
+    public Context mcontext;
     public FirebaseAuth firebaseAuth;
     public FirebaseDatabase firebaseDatabase;
     public FirebaseStorage firebaseStorage;
@@ -49,6 +51,8 @@ public class ModelFirebase {
                     Toast.makeText(context,"authentication Faild",Toast.LENGTH_LONG).show();
                 }else if(task.isSuccessful()){
                     userId = firebaseAuth.getCurrentUser().getUid();
+
+                    sendVereficationEmail();
                     Toast.makeText(context,"Success user Createded",Toast.LENGTH_LONG).show();
                 }
             }
@@ -84,6 +88,24 @@ public class ModelFirebase {
 //        HashMap<String, Object> hashMap2 = settings.toMap("","","","","","","","");
 //        firebaseDatabase.getReference().child("users_acount_setings").child(userId).setValue(hashMap2);
 //        //databaseReference.addAcountSettingToDataBase("","","","description","web","");
+    }
+
+    public void sendVereficationEmail(){
+        FirebaseUser user = firebaseAuth.getInstance().getCurrentUser();
+        if(user!=null){
+            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    if(task.isSuccessful()){
+
+                    }else{
+                        Toast.makeText(mcontext,"couldnt send verefication email.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
     }
 
 

@@ -185,6 +185,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password,profile_image);
         Log.println(1,"TAG",userId);
         firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
+        modelFirebase.sendVereficationEmail();
 
 
         //ref.child("users").child(userId).setValue(user);
