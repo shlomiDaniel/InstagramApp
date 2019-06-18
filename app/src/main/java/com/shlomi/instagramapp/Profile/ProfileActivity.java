@@ -1,10 +1,12 @@
 package com.shlomi.instagramapp.Profile;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +20,16 @@ import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.shlomi.instagramapp.Firebase.ModelFirebase;
+import com.shlomi.instagramapp.Models.User;
+import com.shlomi.instagramapp.Models.UserAccountSetting;
+import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
@@ -31,12 +40,22 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity  {
 
+    private TextView userName;
+    private TextView discription;
+    private TextView followers;
+    private TextView following;
+    private TextView website;
     private TextView email;
-    private TextView pass;
+    private TextView posts;
+    private TextView name;
     private Button logOut;
+    private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private ImageView profile_image;
+
     private ProgressBar progressBar;
+    private FirebaseDatabase mfirebasedatabase;
+    private DatabaseReference myRef;
    private static  String TAG = "Profile_activity";
     private final int activity_num  = 1;
 
@@ -46,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity  {
         // Intent intent2 = new Intent(ProfileActivity.this, Home.class);
         // startActivity(intent2);
         ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this,bn);
-
+         modelFirebase = new ModelFirebase(getApplicationContext());
         Menu menu = bn.getMenu();
         MenuItem menuItem = menu.getItem(activity_num);
         menuItem.setChecked(true);
@@ -54,12 +73,15 @@ public class ProfileActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+         email = (TextView)findViewById(R.id.email_id);
         setContentView(R.layout.activity_profile);
         super.onCreate(savedInstanceState);
-
+        mfirebasedatabase =    FirebaseDatabase.getInstance();
+        myRef = mfirebasedatabase.getReference();
+        discription = (TextView)findViewById(R.id.dicriptionid);
+        website = (TextView)findViewById(R.id.websiteid);
        setupButonNavigation();
-
+       // modelFirebase = new ModelFirebase(getActivi);
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             finish();
@@ -70,9 +92,47 @@ public class ProfileActivity extends AppCompatActivity  {
          setTitle("                                                ");
         FirebaseUser user = firebaseAuth.getCurrentUser();
        initImageLoader();
-        setupActivityWidgets();
-       setProfile_image();
+        //setupActivityWidgets();
+       //setProfile_image();
        tempGridSetup();
+
+       myRef.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               setProfileWidget( modelFirebase.getUserAccoountSetting(dataSnapshot));
+               //email.setText("aaaaaaa");
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+    }
+
+    private void setProfileWidget(UserSetting userSetting){
+        User user = userSetting.getUser();
+
+        UserAccountSetting userAccountSetting = userSetting.getUserAccountSetting();
+//        UniversalImageLoader.setIamge(userAccountSetting.getProfile_photo()
+//                ,profile_image,null,"");
+        //FirebaseUser user = firebaseAuth.getCurrentUser();
+        TextView emailtText = (TextView)findViewById(R.id.email_id);
+        emailtText.setText(user.getEmail());
+         TextView userNameText = (TextView)findViewById(R.id.usernameid);
+         userNameText.setText(user.getUserName());
+        //email.setText("a");
+        //email.setText("aaaaaaa");
+        //userName.setText(user.getUserName());
+        website.setText(userAccountSetting.getWebsite());
+        discription.setText(userAccountSetting.getDescription());
+//        followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+//        following.setText(String.valueOf(userAccountSetting.getFollowing()));
+//        posts.setText(String.valueOf(userAccountSetting.getPosts()));
+
+
+
+
     }
     private void setProfile_image(){
 
@@ -84,20 +144,17 @@ public class ProfileActivity extends AppCompatActivity  {
     private void setupActivityWidgets(){
 //        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
 //        progressBar.setVisibility(View.GONE);
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         profile_image = (ImageView) findViewById(R.id.profile_image);
-        TextView userNameText = (TextView)findViewById(R.id.usernameid);
-        userNameText.setText(user.getDisplayName());
+       // TextView userNameText = (TextView)findViewById(R.id.usernameid);
+       // userNameText.setText(user.getDisplayName());
 
         profile_image = (ImageView) findViewById(R.id.profile_image);
         TextView emailtText = (TextView)findViewById(R.id.email_id);
         emailtText.setText(user.getEmail());
 
-         DatabaseReference mDatabase ;
-        //mDatabase.child("users").child(userId).child("username").setValue(name);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-         //String name = mDatabase.child("users").child(firebaseAuth.getUid());
-        //String name = mDatabase.child("users").child(firebaseAuth.getUid()).child("userName");
+
     }
 
     public void setupImageGreedView(ArrayList<String>imgUrls){

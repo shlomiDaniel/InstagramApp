@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
+import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.StringManipulation;
 
@@ -108,6 +109,108 @@ public class ModelFirebase {
 
     }
 
+    public UserSetting getUserAccoountSetting(DataSnapshot dataSnapshot){
+        UserAccountSetting setting = new UserAccountSetting();
+        User user = new User();
+        UserSetting userSetting = new UserSetting(user,setting);
+
+        for(DataSnapshot  ds : dataSnapshot.getChildren()){
+
+
+
+
+            if(ds.getKey().equals("userAcountSetting")){
+
+                try{
+                    setting.setDisplay_name(
+                            ds.child(userId).getValue(UserAccountSetting.class).getDisplay_name()
+
+                    );
+                    setting.setDescription(
+                            ds.child(userId).getValue(UserAccountSetting.class).getDescription()
+
+
+
+                    );
+
+                    setting.setProfile_photo(
+                            ds.child(userId).getValue(UserAccountSetting.class).getProfile_photo()
+
+
+
+                    );
+
+                    setting.setPosts(
+                            ds.child(userId).getValue(UserAccountSetting.class).getPosts()
+
+
+
+                    );
+
+                    setting.setFollowers(
+                            ds.child(userId).getValue(UserAccountSetting.class).getFollowers()
+
+
+
+                    );
+                    setting.setFollowing(
+                            ds.child(userId).getValue(UserAccountSetting.class).getFollowing()
+
+                    );
+                    setting.setWebsite(
+                            ds.child(userId).getValue(UserAccountSetting.class).getWebsite()
+
+
+
+                    );
+                    setting.setUserName(
+                            ds.child(userId).getValue(UserAccountSetting.class).getUserName()
+
+
+
+                    );
+                }catch (NullPointerException ex){
+
+                    Log.d("error","null pointer ex");
+                }
+
+                if(ds.getKey().equals("users")){
+
+                    try{
+                        user.setUserName(
+                                ds.child(userId).getValue(User.class).getUserName()
+
+                        );
+                        user.setEmail(
+                                ds.child(userId).getValue(User.class).getEmail()
+
+                        );
+                        user.setPassword(
+                                ds.child(userId).getValue(User.class).getPassword()
+
+                        );
+                        user.setProfile_image_url(
+                                ds.child(userId).getValue(User.class).getProfile_image_url()
+
+                        );
+                    }catch (NullPointerException ex){
+                        Log.d("error","nullpointer ex from users");
+                    }
+
+
+
+
+
+                }
+
+            }
+
+
+
+        }
+        return new UserSetting(user,setting);
+
+    }
 
 
 }

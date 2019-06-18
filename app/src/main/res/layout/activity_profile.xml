@@ -22,6 +22,28 @@
             >
 
             <include layout="@layout/layaot_center_profile"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="website"
+                android:width="100dp"
+                android:height="100dp"
+                android:layout_marginTop="65dp"
+                android:textSize="20dp"
+                android:id="@+id/websiteid"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="description"
+                android:layout_marginTop="80dp"
+                android:width="100dp"
+                android:height="100dp"
+                android:textSize="20dp"
+                android:id="@+id/dicriptionid"
+                />
         </RelativeLayout>
 
 

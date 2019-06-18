@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class User {
     private String profile_image_url;
-    private ModelFirebase firebase;
+   // private ModelFirebase firebase;
     private String userName;
     private String password;
     private String email;

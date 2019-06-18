@@ -23,6 +23,17 @@ public class UserAccountSetting {
         this.website = website;
     }
 
+    public UserAccountSetting() {
+        this.description = "";
+        this.display_name = "";
+        this.followers = 0;
+        this.following = 0;
+        this.posts = "";
+        this.profile_photo = "";
+        this.userName = "";
+        this.website = "";
+    }
+
     public String getUserName() {
         return userName;
     }

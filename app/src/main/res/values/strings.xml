@@ -7,6 +7,8 @@
     <string name="editProfile">Edit Profile</string>
     <string name="profile_activity">Profile</string>
     <string name="sign_out">Sign Out</string>
+    <string name="profile_fragment">Profile</string>
+
 
 
     <string name="auth_failed">Failed to Authenticated</string>
