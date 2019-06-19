@@ -61,18 +61,18 @@ public class ModelFirebase {
 
     }
 
-    public boolean checkIfUserExistOnFirebase(String userName , DataSnapshot dataSnapshot){
-        User user = new User();
-        for(DataSnapshot ds : dataSnapshot.getChildren()){
-            Log.d("userName","check if exist" + ds);
-            user.setUserName(ds.getValue(User.class).getUserName());
-
-            if(StringManipulation.expandUserName(user.getUserName()).equals(userName)){
-                return  true;
-            }
-        }
-        return false;
-    }
+//    public boolean checkIfUserExistOnFirebase(String userName , DataSnapshot dataSnapshot){
+//        User user = new User();
+//        for(DataSnapshot ds : dataSnapshot.getChildren()){
+//            Log.d("userName","check if exist" + ds);
+//            user.setUserName(ds.getValue(User.class).getUserName());
+//
+//            if(StringManipulation.expandUserName(user.getUserName()).equals(userName)){
+//                return  true;
+//            }
+//        }
+//        return false;
+//    }
 
     public void addAcountSettingToDataBase(String email,String userName,String pass,String description, String website , String profile_photo){
 
@@ -116,7 +116,34 @@ public class ModelFirebase {
 
         for(DataSnapshot  ds : dataSnapshot.getChildren()){
 
+            if(ds.getKey().equals("users")){
 
+                try{
+                    user.setUserName(
+                            ds.child(userId).getValue(User.class).getUserName()
+
+                    );
+                    user.setEmail(
+                            ds.child(userId).getValue(User.class).getEmail()
+
+                    );
+                    user.setPassword(
+                            ds.child(userId).getValue(User.class).getPassword()
+
+                    );
+                    user.setProfile_image_url(
+                            ds.child(userId).getValue(User.class).getProfile_image_url()
+
+                    );
+                }catch (NullPointerException ex){
+                    Log.d("error","nullpointer ex from users");
+                }
+
+
+
+
+
+            }
 
 
             if(ds.getKey().equals("userAcountSetting")){
@@ -174,34 +201,7 @@ public class ModelFirebase {
                     Log.d("error","null pointer ex");
                 }
 
-                if(ds.getKey().equals("users")){
 
-                    try{
-                        user.setUserName(
-                                ds.child(userId).getValue(User.class).getUserName()
-
-                        );
-                        user.setEmail(
-                                ds.child(userId).getValue(User.class).getEmail()
-
-                        );
-                        user.setPassword(
-                                ds.child(userId).getValue(User.class).getPassword()
-
-                        );
-                        user.setProfile_image_url(
-                                ds.child(userId).getValue(User.class).getProfile_image_url()
-
-                        );
-                    }catch (NullPointerException ex){
-                        Log.d("error","nullpointer ex from users");
-                    }
-
-
-
-
-
-                }
 
             }
 
@@ -211,6 +211,45 @@ public class ModelFirebase {
         return new UserSetting(user,setting);
 
     }
+public void updateUserName(String userName){
+
+        firebaseDatabase.getReference().child("users").child(userId).child(mcontext.getString(R.string.filed_user_name)).setValue(userName);
+    firebaseDatabase.getReference().child("userAcountSetting").child(userId).child(mcontext.getString(R.string.filed_user_name)).setValue(userName);
 
 
+
+}
+
+    public void updateEmail(String email){
+
+        firebaseDatabase.getReference().child("users").child(userId).child("email").setValue(email);
+       // firebaseDatabase.getReference().child("userAcountSetting").child(userId).child(mcontext.getString(R.string.filed_user_name)).setValue(email);
+
+
+
+    }
+    public void updateUserAcountSetting(String displayName,String userName,String description,String website){
+
+        if(userName!=null){
+
+            firebaseDatabase.getReference().child("users").child(userId).child("userName").setValue(userName);
+            firebaseDatabase.getReference().child("userAcountSetting").child(userId).child("userName").setValue(userName);
+
+        }
+        if(description!=null){
+            firebaseDatabase.getReference().child("userAcountSetting").child(userId).child("description").setValue(description);
+
+        }
+        if(website!=null){
+            firebaseDatabase.getReference().child("userAcountSetting").child(userId).child("website").setValue(website);
+
+        }
+        if(displayName!=null){
+            firebaseDatabase.getReference().child("userAcountSetting").child(userId).child("display_name").setValue(displayName);
+
+
+        }
+
+
+    }
 }
