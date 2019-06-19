@@ -186,15 +186,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void writeNewUser(String userId, String userName, String email,String password,String profile_image,String website,String descripation) {
-        User user = new User(userId, userName,email,password,profile_image);
-        HashMap<String, Object> hashMap = user.toMap(userId, userName,email,password,profile_image);
-        Log.println(1,"TAG",userId);
+        User user = new User(userId, userName, email, password, profile_image);
+        HashMap<String, Object> hashMap = user.toMap(userId, userName, email, password, profile_image);
+        Log.println(1, "TAG", userId);
 
         firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
-        UserAccountSetting setting = new UserAccountSetting(descripation,userName,0,0,"",profile_image,"",website);
+        UserAccountSetting setting = new UserAccountSetting(descripation, "", 0, 0, "", profile_image, userName, website);
         firebaseDatabase.getReference().child("userAcountSetting").child(userId).setValue(setting);
     }
-
     private void uploadImage() {
         //String profile_image = UUID.randomUUID().toString();
         if(filePath != null)

@@ -52,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity  {
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private ImageView profile_image;
+    private  TextView userNameText;
+    private  TextView emailtText ;
 
     private ProgressBar progressBar;
     private FirebaseDatabase mfirebasedatabase;
@@ -61,9 +63,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
     public void setupButonNavigation(){
         BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
-        // ButtonNavigationViewHelper.setupButtonNavigationView(bn);
-        // Intent intent2 = new Intent(ProfileActivity.this, Home.class);
-        // startActivity(intent2);
+
         ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this,bn);
          modelFirebase = new ModelFirebase(getApplicationContext());
         Menu menu = bn.getMenu();
@@ -78,29 +78,40 @@ public class ProfileActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         mfirebasedatabase =    FirebaseDatabase.getInstance();
         myRef = mfirebasedatabase.getReference();
+         emailtText = (TextView)findViewById(R.id.email_id);
+         userNameText = (TextView)findViewById(R.id.usernameid);
         discription = (TextView)findViewById(R.id.dicriptionid);
         website = (TextView)findViewById(R.id.websiteid);
        setupButonNavigation();
-       // modelFirebase = new ModelFirebase(getActivi);
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(this, SignInActivity.class));
         }
         setupToolBar();
-       // setProfile_image();
          setTitle("                                                ");
         FirebaseUser user = firebaseAuth.getCurrentUser();
        initImageLoader();
-        //setupActivityWidgets();
-       //setProfile_image();
+
        tempGridSetup();
+        Button editProfile = (Button)findViewById(R.id.editProfileButtonid);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("onClick","navigation to EditProfile");
+                Intent intent = new Intent(ProfileActivity.this
+                        ,accountSettingsActivity.class);
+                intent.putExtra(getString
+                        (R.string.calling_activity),
+                        getString(R.string.profile_activity));
+                       startActivity(intent);
+            }
+        });
 
        myRef.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                setProfileWidget( modelFirebase.getUserAccoountSetting(dataSnapshot));
-               //email.setText("aaaaaaa");
            }
 
            @Override
@@ -117,9 +128,9 @@ public class ProfileActivity extends AppCompatActivity  {
 //        UniversalImageLoader.setIamge(userAccountSetting.getProfile_photo()
 //                ,profile_image,null,"");
         //FirebaseUser user = firebaseAuth.getCurrentUser();
-        TextView emailtText = (TextView)findViewById(R.id.email_id);
+
         emailtText.setText(user.getEmail());
-         TextView userNameText = (TextView)findViewById(R.id.usernameid);
+
          userNameText.setText(user.getUserName());
         //email.setText("a");
         //email.setText("aaaaaaa");

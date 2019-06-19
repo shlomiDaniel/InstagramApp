@@ -5,7 +5,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="editProfile">Edit Profile</string>
-    <string name="profile_activity">Profile</string>
+    <string name="edit_profile_fragment">Edit Profile</string>
+    <string name="profile_activity">Profile Activity</string>
     <string name="sign_out">Sign Out</string>
     <string name="profile_fragment">Profile</string>
 
@@ -15,4 +16,10 @@
     <string name="auth_success">Authentication Success</string>
     <string name="dbname_users_account_settings">User_acount_settings</string>
     <string name="dbname_users">Users</string>
+    <string name="calling_activity">calling_activity</string>
+
+    <string name="filed_user_name">userName</string>
+
+    <string name="confirm_passwoed_dialog">ConfirmPasswordDialog</string>
+
 </resources>

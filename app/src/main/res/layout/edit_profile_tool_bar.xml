@@ -45,7 +45,9 @@
                     android:id="@+id/save_changes"
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_save_setting"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+
+                    />
 
 
             </RelativeLayout>

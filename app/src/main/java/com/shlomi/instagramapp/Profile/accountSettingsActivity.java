@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -44,6 +45,14 @@ public class accountSettingsActivity extends AppCompatActivity {
             }
         });
         setupFragments();
+        getIncomingIntant();
+    }
+
+    private void getIncomingIntant(){
+        Intent intent = getIntent();
+        if(intent.hasExtra(getString(R.string.calling_activity))){
+           setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
+        }
     }
 
     private void setViewPager(int fragmentNum){
