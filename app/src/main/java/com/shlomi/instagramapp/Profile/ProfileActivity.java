@@ -76,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity  {
          email = (TextView)findViewById(R.id.email_id);
         setContentView(R.layout.activity_profile);
         super.onCreate(savedInstanceState);
+
         mfirebasedatabase =    FirebaseDatabase.getInstance();
         myRef = mfirebasedatabase.getReference();
          emailtText = (TextView)findViewById(R.id.email_id);

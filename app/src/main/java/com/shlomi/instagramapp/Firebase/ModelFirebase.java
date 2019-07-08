@@ -1,11 +1,15 @@
 package com.shlomi.instagramapp.Firebase;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,13 +18,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Share.ShareActivity;
+import com.shlomi.instagramapp.Utils.FilePath;
+import com.shlomi.instagramapp.Utils.ImageManager;
 import com.shlomi.instagramapp.Utils.StringManipulation;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 public class ModelFirebase {
 
@@ -31,16 +47,31 @@ public class ModelFirebase {
     private Context context;
     public DatabaseReference databaseReference;
     public String userId;
+    private double mPhotoUploadProgress = 0;
 
     public ModelFirebase(Context context){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
         this.context = context;
         if(firebaseAuth.getCurrentUser() != null){
             userId = firebaseAuth.getCurrentUser().getUid();
         }
 
+
+    }
+
+    public int getImageCount(DataSnapshot dataSnapshot){
+        int count = 0;
+
+        for(DataSnapshot ds : dataSnapshot.child("user_photos")
+                .child(firebaseAuth.getInstance().getCurrentUser().getUid()).getChildren()){
+            count++;
+
+        }
+
+        return count;
 
     }
 
@@ -250,6 +281,76 @@ public void updateUserName(String userName){
 
         }
 
+
+    }
+
+
+    public void uploadNewPhoto(String photo_type, final String caption, int count, String imgUrl){
+        FilePath filePath = new FilePath();
+    //    String a = mcontext.getString(R.string.new_photo);
+        boolean a = true;
+        String b = photo_type;
+        //photo_type.equals(mcontext.getString(R.string.new_photo)
+               if(a){
+                   StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/photo" + (count +1));
+                   Bitmap bitmap = ImageManager.getBitmap(imgUrl);
+                   UploadTask uploadTask = null;
+                   byte [] bytes = ImageManager.getByteFromBitMap(bitmap,100);
+                   uploadTask = storageReference.putBytes(bytes);
+                   uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                           String fireBaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                           Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
+                            addPhotoToDataBase(caption,fireBaseUrl);
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                           Toast.makeText(context,"photo update failed",Toast.LENGTH_LONG).show();
+
+                       }
+                   }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                          // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                           double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                   .getTotalByteCount());
+                           if(progress-15>mPhotoUploadProgress){
+                              Toast.makeText(context,"photo upload in progress" + String.format("%.0f",progress),Toast.LENGTH_SHORT).show();
+                               mPhotoUploadProgress = progress;
+                           }
+                       }
+                   });
+
+
+               }else if(photo_type.equals(mcontext.getString(R.string.profile_photo))){
+
+
+               }
+
+    }
+    private String getTimestap(){
+
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+        sfd.setTimeZone(TimeZone.getTimeZone("Israel"));
+        return sfd.format(new Date());
+    }
+
+    private void addPhotoToDataBase(String caption , String url){
+
+        String tags = StringManipulation.getTags(caption);
+        String newPhotoKey = databaseReference.child("photos").push().getKey();
+        Photo photo = new Photo();
+        photo.setCaption(caption);
+        photo.setDate_created(getTimestap());
+        photo.setImage_path(url);
+        photo.setTags(tags);
+        photo.setPhoto_id(newPhotoKey);
+        photo.setUser_id(firebaseAuth.getCurrentUser().getUid());
+        databaseReference.child(("user_photos")).child(firebaseAuth.getCurrentUser()
+                .getUid()).child(newPhotoKey).setValue(photo);
+        databaseReference.child(("photos")).child(newPhotoKey).setValue(photo);
 
     }
 }
