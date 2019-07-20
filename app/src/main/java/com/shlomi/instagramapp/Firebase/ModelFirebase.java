@@ -321,8 +321,8 @@ public void updateUserName(String userName){
                                   // application.getApplicationContext();
 
 
-                                       Intent intent = new Intent( mcontext, HomeActivity.class);
-                                   mcontext.startActivity(intent);
+                                      //Intent intent = new Intent( mcontext, HomeActivity.class);
+                                  // mcontext.startActivity(intent);
 
 
 
