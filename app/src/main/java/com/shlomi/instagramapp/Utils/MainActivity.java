@@ -159,11 +159,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                if(task.isSuccessful()){
                    Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
+
                    progressDialog.cancel();
 
                    String name = userName.getText().toString().trim();
                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
-                  // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
+                   startActivity(new Intent(getApplicationContext(), Home.class));
+
+                   // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
                }else{
                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
@@ -210,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             finish();
-                             startActivity(new Intent(getApplicationContext(), Home.class));
+                            // startActivity(new Intent(getApplicationContext(), Home.class));
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Share.SectionStatePagerAdapter;
 
@@ -50,6 +51,18 @@ public class accountSettingsActivity extends AppCompatActivity {
 
     private void getIncomingIntant(){
         Intent intent = getIntent();
+
+        //if there is image url attacked as extra , than chosen from the galary fragment
+        if(intent.hasExtra(getString(R.string.selected_img))){
+            if(intent.getStringExtra("return_to_fragment").equals("Edit Profile")){
+
+                ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
+                modelFirebase.uploadNewPhoto("profile_photo",null,0,intent.getStringExtra(getString(R.string.selected_img)));
+            }
+
+        }
+
+
         if(intent.hasExtra(getString(R.string.calling_activity))){
            setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
         }

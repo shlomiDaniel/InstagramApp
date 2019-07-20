@@ -91,4 +91,9 @@ public class ShareActivity extends AppCompatActivity {
       //  BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
       //  ButtonNavigationViewHelper.enableNavigation(ShareActivity.this,bn);
     }
+
+    public int getTask(){
+
+        return getIntent().getFlags();
+    }
 }

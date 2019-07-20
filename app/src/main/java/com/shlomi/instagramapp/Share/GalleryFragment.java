@@ -22,6 +22,9 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.shlomi.instagramapp.Firebase.ModelFirebase;
+import com.shlomi.instagramapp.Profile.ProfileActivity;
+import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.FileSearch;
@@ -63,9 +66,21 @@ public class GalleryFragment extends Fragment {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(getActivity(),NextActivity.class);
-                intent.putExtra(getString(R.string.selected_img),selectedImage);
-                startActivity(intent);
+
+                if(isRoootTask()){
+                    Intent intent  = new Intent(getActivity(),NextActivity.class);
+                    intent.putExtra(getString(R.string.selected_img),selectedImage);
+                    startActivity(intent);
+
+                }else{
+                    Intent intent  = new Intent(getActivity(), accountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_img),selectedImage);
+                    intent.putExtra("return_to_fragment",getString(R.string.edit_profile_fragment));
+
+                    startActivity(intent);
+
+                }
+
             }
         });
         init();
@@ -160,6 +175,14 @@ public class GalleryFragment extends Fragment {
 
              }
          });
+     }
+
+     private boolean isRoootTask(){
+        if(((ShareActivity)getActivity()).getTask()==0){
+            return true;
+        }else{
+            return false;
+        }
      }
 
 }

@@ -1,12 +1,16 @@
 package com.shlomi.instagramapp.Firebase;
 
+import android.Manifest;
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,10 +21,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Home.HomeActivity;
 import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
@@ -35,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
@@ -288,11 +295,11 @@ public void updateUserName(String userName){
     public void uploadNewPhoto(String photo_type, final String caption, int count, String imgUrl){
         FilePath filePath = new FilePath();
     //    String a = mcontext.getString(R.string.new_photo);
-        boolean a = true;
+        final boolean a = true;
         String b = photo_type;
         //photo_type.equals(mcontext.getString(R.string.new_photo)
                if(a){
-                   StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/photo" + (count +1));
+                   final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/photo" + (count +1));
                    Bitmap bitmap = ImageManager.getBitmap(imgUrl);
                    UploadTask uploadTask = null;
                    byte [] bytes = ImageManager.getByteFromBitMap(bitmap,100);
@@ -300,9 +307,30 @@ public void updateUserName(String userName){
                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                        @Override
                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                           String fireBaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                           Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
-                            addPhotoToDataBase(caption,fireBaseUrl);
+                           Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+                           task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                               @Override
+                               public void onSuccess(Uri uri) {
+                                   String photoLink = uri.toString();
+                                   Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
+                                   addPhotoToDataBase(caption,photoLink);
+
+                                 //  MainApplication application = new MainApplication();
+                                   //application.onCreate();
+                                  // application.getApplicationContext();
+
+
+                                       Intent intent = new Intent( mcontext, HomeActivity.class);
+                                   mcontext.startActivity(intent);
+
+
+
+                               }
+                           });
+
+
+
                        }
                    }).addOnFailureListener(new OnFailureListener() {
                        @Override
@@ -325,7 +353,52 @@ public void updateUserName(String userName){
 
 
                }else if(photo_type.equals(mcontext.getString(R.string.profile_photo))){
+                   final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/profile_image");
+                   Bitmap bitmap = ImageManager.getBitmap(imgUrl);
+                   UploadTask uploadTask = null;
+                   byte [] bytes = ImageManager.getByteFromBitMap(bitmap,100);
+                   uploadTask = storageReference.putBytes(bytes);
+                   uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                           Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
+                           task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                               @Override
+                               public void onSuccess(Uri uri) {
+                                   String photoLink = uri.toString();
+                                   Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
+                                   setProfilePhoto(photoLink);
+
+//                                   Intent intent = new Intent( mcontext, HomeActivity.class);
+//                                   mcontext.startActivity(intent);
+
+
+
+                               }
+                           });
+
+
+
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                           Toast.makeText(context,"photo update failed",Toast.LENGTH_LONG).show();
+
+                       }
+                   }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                           // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                           double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                   .getTotalByteCount());
+                           if(progress-15>mPhotoUploadProgress){
+                               Toast.makeText(context,"photo upload in progress" + String.format("%.0f",progress),Toast.LENGTH_SHORT).show();
+                               mPhotoUploadProgress = progress;
+                           }
+                       }
+                   });
 
                }
 
@@ -352,5 +425,31 @@ public void updateUserName(String userName){
                 .getUid()).child(newPhotoKey).setValue(photo);
         databaseReference.child(("photos")).child(newPhotoKey).setValue(photo);
 
+    }
+
+    public String getPhotoUrl(){
+return ";";
+    }
+
+
+    private void setProfilePhoto(String url){
+        databaseReference.child("users").child(userId).child("profile_image").setValue(url);
+
+    }
+
+}
+
+
+ class MainApplication extends Application {
+
+    private static Context context;
+
+    public void onCreate() {
+        super.onCreate();
+        MainApplication.context = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return MainApplication.context;
     }
 }

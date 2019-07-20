@@ -34,6 +34,7 @@ import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
+import com.shlomi.instagramapp.Share.ShareActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 import com.shlomi.instagramapp.R;
 
@@ -81,6 +82,15 @@ private ImageView saveChanges;
 
             }
         });
+
+//        changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), ShareActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                getActivity().startActivity(intent);
+//            }
+//        });
 
         setupFirebase();
 
@@ -230,7 +240,14 @@ private ImageView saveChanges;
 
         website.setText(userAccountSetting.getWebsite());
         description.setText(userAccountSetting.getDescription());
-
+        changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+            }
+        });
 
     }
 
