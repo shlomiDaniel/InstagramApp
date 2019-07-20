@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "241413055650-f2oplc21j1ghp8p35p1csu021hp63agk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shlomi.instagramapp",
+            "certificate_hash": "b5baae7a9a691bf453caa3e5190a8adb1e0ebbb1"
+          }
+        },
+        {
           "client_id": "241413055650-5faqu5r2p57gqrjod3oomc0m8o31urhu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +41,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "241413055650-d3n7947i421ekr9drm03h5e1375oc6fb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
