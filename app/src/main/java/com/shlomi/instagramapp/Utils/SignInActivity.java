@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp;
+package com.shlomi.instagramapp.Utils;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,8 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
+import com.shlomi.instagramapp.Home.Home;
+import com.shlomi.instagramapp.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,7 +65,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                    Toast.makeText(SignInActivity.this,"Log In Success.",Toast.LENGTH_SHORT).show();
 
                  //startActivity(new Intent(getApplicationContext(),new ProfileActivity().getClass()));Intent i = new Intent(CurrentClassName.this, LoginActivity.class);
-                   Intent intent = new Intent(SignInActivity.this, ProfileActivity.class);
+                   Intent intent = new Intent(SignInActivity.this, Home.class);
                   // finish();
                    startActivity(intent);
                }else{

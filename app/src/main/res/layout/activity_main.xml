@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Utils.MainActivity">
 
     <RelativeLayout
         android:background="@color/colorPrimary"
@@ -14,61 +14,88 @@
         tools:ignore="MissingConstraints">
 
 
+        <LinearLayout
 
-    <LinearLayout
+            android:layout_width="340dp"
+            android:layout_height="663dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="55dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="55dp"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
 
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="55dp"
-        android:layout_width="395dp"
-        android:layout_height="715dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:ignore="MissingConstraints">
+            <TextView
 
-        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:hint="Register User"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse" />
 
-            android:hint="Register User"
-            android:textAlignment="center"
-            android:layout_gravity="center_horizontal"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:background="@color/common_google_signin_btn_text_dark_default"
-            android:layout_margin="15dp"
-            android:hint="Email:"
-            android:id="@+id/editTextMail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="170dp"
+                android:layout_height="100dp"
+                android:layout_margin="50dp"
+                android:layout_marginLeft="150dp"
+                android:src="@drawable/profile_image" />
 
-        <EditText
-            android:background="@color/common_google_signin_btn_text_dark_default"
 
-            android:layout_margin="15dp"
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password:" />
+            <EditText
+                android:id="@+id/editTextMail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:hint="Email:" />
 
-        <Button
-            android:layout_margin="15dp"
-            android:hint="Register"
-            android:id="@+id/buttonRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
+            <EditText
+                android:id="@+id/editUserName"
 
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textAlignment="center"
-            android:layout_margin="15dp"
-            android:id="@+id/textViewSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Member?Click Here To Sign In:" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:hint="User Name:" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/editTextPassword"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:hint="Password:" />
+
+            <Button
+                android:id="@+id/buttonRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="Register" />
+
+            <EditText
+
+                android:id="@+id/textViewSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_margin="5dp"
+                android:hint="Member?Click Here To Sign here"
+                android:textAlignment="center"
+                android:textColor="@color/common_google_signin_btn_text_dark_default" />
+
+
+        </LinearLayout>
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
 

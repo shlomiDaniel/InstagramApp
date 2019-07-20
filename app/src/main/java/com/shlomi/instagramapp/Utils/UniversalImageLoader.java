@@ -1,0 +1,81 @@
+package com.shlomi.instagramapp.Utils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.shlomi.instagramapp.R;
+
+public class UniversalImageLoader {
+
+    private static final int defaltImage = R.drawable.ic_android;
+    private Context mcnontext;
+
+    public  UniversalImageLoader(Context context){
+        mcnontext = context;
+    }
+
+    public ImageLoaderConfiguration getConfig(){
+        DisplayImageOptions  displayImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(defaltImage)
+                .showImageForEmptyUri(defaltImage).showImageOnFail(defaltImage).cacheOnDisc(true).cacheInMemory(true).resetViewBeforeLoading(true).imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new FadeInBitmapDisplayer(300)).build();
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mcnontext).defaultDisplayImageOptions(displayImageOptions).
+                memoryCache(new WeakMemoryCache()).diskCacheSize(100*1024*1024).build();
+        return configuration;
+    }
+
+    public static  void setIamge(String url, ImageView image, final ProgressBar progressBar,String append){
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(append + url, image, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                if(progressBar != null){
+                    progressBar.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                if(progressBar != null){
+                    progressBar.setVisibility(View.GONE);
+
+                }
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(progressBar != null){
+                    progressBar.setVisibility(View.GONE);
+
+                }
+            }
+
+
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                if(progressBar != null){
+                    progressBar.setVisibility(View.GONE);
+
+                }
+            }
+        });
+    }
+
+
+
+
+
+}
