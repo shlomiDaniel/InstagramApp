@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                    String name = userName.getText().toString().trim();
                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
+                   uploadImage();
                    startActivity(new Intent(getApplicationContext(), Home.class));
 
                    // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        uploadImage();
+
 
     }
     @Override
@@ -206,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             progressDialog.show();
 
             StorageReference ref = storageReference.child("images/"+ "profile_image.png");
+            String userId = firebaseAuth.getCurrentUser().getUid();
+            ref =   storageReference.child("photos").child("users").child(userId).child("profile_image");
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -246,25 +249,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // String url;
          //String url;
          //final Uri uri2;
-        storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.i("profile_image : ",uri.toString());
-                url = uri.toString();
-                  if(url != null && url != "" ){
+//        storageReference.child("photos").child("users").child(firebaseAuth.getCurrentUser().getUid()).child("profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                                                                                                                                                           @Override
+//                                                                                                                                                                           public void onSuccess(Uri uri) {
+//                                                                                                                                                                               Log.i("profile_image : ", uri.toString());
+//                                                                                                                                                                               url = uri.toString();
+//                                                                                                                                                                               if (url != null && url != "") {
+//
+//                                                                                                                                                                                   writeImage();
+//                                                                                                                                                                               }
+//                                                                                                                                                                           }
+//                                                                                                                                                                       });
+                storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.i("profile_image : ", uri.toString());
+                        url = uri.toString();
+                        if (url != null && url != "") {
 
-                      writeImage();
-                  }
+                            writeImage();
+                        }
 
 
-                //uri = uri;
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
+                        //uri = uri;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
 return url;
     }
 

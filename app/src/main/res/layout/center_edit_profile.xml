@@ -27,26 +27,35 @@
 
             >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_photo"
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:id="@+id/profile_photo"-->
+                <!--android:layout_width="391dp"-->
+                <!--android:layout_height="161dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--app:civ_border_color="@color/black"-->
+                <!--app:civ_border_width="2dp"-->
+
+                <!--/>-->
+            <ImageView
                 android:layout_width="391dp"
                 android:layout_height="161dp"
                 android:layout_marginTop="20dp"
-                app:civ_border_color="@color/black"
-                app:civ_border_width="2dp"
+                android:id="@+id/profile_photo_id"
 
                 />
+
 
             <TextView
                 android:id="@+id/changeProfilePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_photo"
+                android:layout_below="@+id/profile_photo_id"
                 android:layout_centerHorizontal="true"
                 android:text="Change Photo"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
-                android:layout_marginTop="-150dp"
+                android:layout_marginTop="-183dp"
+                android:textColorHint="@color/black"
 
 
                 ></TextView>

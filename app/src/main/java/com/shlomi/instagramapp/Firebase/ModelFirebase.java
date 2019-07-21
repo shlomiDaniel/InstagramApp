@@ -37,6 +37,7 @@ import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.ImageManager;
 import com.shlomi.instagramapp.Utils.StringManipulation;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -298,7 +299,7 @@ public void updateUserName(String userName){
         final boolean a = true;
         String b = photo_type;
         //photo_type.equals(mcontext.getString(R.string.new_photo)
-               if(a){
+               if(photo_type!="profile_photo"){
                    final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/photo" + (count +1));
                    Bitmap bitmap = ImageManager.getBitmap(imgUrl);
                    UploadTask uploadTask = null;
@@ -314,7 +315,15 @@ public void updateUserName(String userName){
                                public void onSuccess(Uri uri) {
                                    String photoLink = uri.toString();
                                    Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
-                                   addPhotoToDataBase(caption,photoLink);
+                                   if(caption!= null){
+
+                                       addPhotoToDataBase(caption,photoLink);
+
+                                   }else{
+                                       addPhotoToDataBase("",photoLink);
+
+
+                                   }
 
                                  //  MainApplication application = new MainApplication();
                                    //application.onCreate();
@@ -352,7 +361,8 @@ public void updateUserName(String userName){
                    });
 
 
-               }else if(photo_type.equals(mcontext.getString(R.string.profile_photo))){
+               }
+               if(photo_type.equals("profile_photo")){
                    final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/profile_image");
                    Bitmap bitmap = ImageManager.getBitmap(imgUrl);
                    UploadTask uploadTask = null;
@@ -366,9 +376,18 @@ public void updateUserName(String userName){
                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                @Override
                                public void onSuccess(Uri uri) {
+
+                                   StorageReference ref = storageReference.child("images/"+ "profile_image.png");
+                                   String userId = firebaseAuth.getCurrentUser().getUid();
+                                   ref =   storageReference.child("photos").child("users").child(userId).child("profile_image.png");
+
                                    String photoLink = uri.toString();
-                                   Toast.makeText(context,"photo update succsess",Toast.LENGTH_LONG).show();
+                                   Toast.makeText(context,"Profile Photo updated succsess",Toast.LENGTH_LONG).show();
                                    setProfilePhoto(photoLink);
+//                                   Uri file = Uri.fromFile(new File(ref.getPath()));
+//                                   StorageReference riversRef = storageReference.child("images/"+file.getLastPathSegment());
+//                                    riversRef.putFile(file);
+
 
 //                                   Intent intent = new Intent( mcontext, HomeActivity.class);
 //                                   mcontext.startActivity(intent);
@@ -438,6 +457,8 @@ return ";";
     }
 
 }
+
+
 
 
  class MainApplication extends Application {

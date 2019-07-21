@@ -1,7 +1,12 @@
 package com.shlomi.instagramapp.Profile;
 
 import android.content.Intent;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,19 +20,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shlomi.instagramapp.Dialogs.ConfirmPasswordDialog;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
@@ -37,16 +51,25 @@ import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.Share.ShareActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 import com.shlomi.instagramapp.R;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
 public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {
 
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri filePath;
 private ImageView profilePhoto;
+
 private FirebaseAuth mAuth;
 private FirebaseAuth.AuthStateListener authStateListener;
 private FirebaseDatabase firebaseDatabase;
@@ -55,12 +78,15 @@ private EditText userName,displayName,website,description,email;
 private TextView changeProfilePhoto;
 private CircleImageView mProfilePhoto;
 private String userid;
+private FirebaseStorage storage;
+    // FirebaseDatabase database;
+  private   StorageReference storageReference;
 private UserSetting mUserSettings;
 private ImageView saveChanges;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile,container,false);
-
-        profilePhoto = (ImageView)view.findViewById(R.id.profile_photo);
+         mAuth = FirebaseAuth.getInstance();
+        profilePhoto = (ImageView)view.findViewById(R.id.profile_photo_id);
         displayName = (EditText) view.findViewById(R.id.display_name);
         userName = (EditText) view.findViewById(R.id.user_name);
         website = (EditText) view.findViewById(R.id.website);
@@ -69,9 +95,29 @@ private ImageView saveChanges;
         changeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
         modelFirebase = new ModelFirebase(getContext());
         saveChanges = (ImageView)view.findViewById(R.id.save_changes);
-
+        // profilePhoto.setimage
         // initImageLoader();
-        setProfileImage();
+        //setProfileImage();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+         storage = FirebaseStorage.getInstance();
+         storageRef = storage.getReference();
+        //storage = FirebaseStorage.getInstance();
+        StorageReference photoReference = storageRef.child("photos").child("users").child(mAuth.getCurrentUser().getUid()).child("profile_image");
+        photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+             profilePhoto.setImageURI(uri);
+                Glide.with(getContext() /* context */).load(uri).into(profilePhoto);
+            }
+        });
+
+
+
         ImageView backArrow = (ImageView)view.findViewById(R.id.profile_menu);
 
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +128,9 @@ private ImageView saveChanges;
 
             }
         });
+
+
+
 
 //        changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -207,6 +256,7 @@ private ImageView saveChanges;
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
              setProfileWidget(modelFirebase.getUserAccoountSetting(dataSnapshot));
              //checkIfUserNameExist(userName);
+
            }
 
            @Override
@@ -224,7 +274,7 @@ private ImageView saveChanges;
 
 
 
-    private void setProfileWidget(UserSetting userSetting){
+    private void setProfileWidget(final UserSetting userSetting){
 
         mUserSettings = userSetting;
 
@@ -243,9 +293,11 @@ private ImageView saveChanges;
         changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getActivity(), ShareActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
+
             }
         });
 
@@ -256,7 +308,46 @@ private ImageView saveChanges;
         Log.d("Edit Profile Fragment","setting profile image");
         String imageUrl = "http://www.teknoustam.com/wp-content/uploads/2018/06/android.png";
         UniversalImageLoader.setIamge(imageUrl,profilePhoto,null,"");
+        uploadFileFromDataMemory();
     }
+
+    public void  uploadFileFromDataMemory(){
+     StorageReference ref = storageReference.child("images/"+ "profile_image.png");
+        //String userId = firebaseAuth.getCurrentUser().getUid();
+        ref =   storageReference.child("photos").child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile_image.png");
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+            }
+        });
+
+
+
+        profilePhoto.setDrawingCacheEnabled(true);
+        profilePhoto.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) profilePhoto.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = ref.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+    }
+
+
 
     @Override
     public void onConfirmPass(String pass) {
@@ -328,6 +419,8 @@ private ImageView saveChanges;
 //        UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
 //        ImageLoader.getInstance().init(universalImageLoader.getConfig());
 //    }
+
+
 
 
 }

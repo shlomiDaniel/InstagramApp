@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp.Share;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.R;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,7 +40,7 @@ public class NextActivity extends AppCompatActivity {
     private int imageCount = 0;
     private EditText mCaption;
     private String imgUrl;
-
+   private  FirebaseAuth mAuth;
     private String mAppend = "file:/";
 
 
@@ -45,7 +49,7 @@ public class NextActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-
+        mAuth = FirebaseAuth.getInstance();
         mfirebasedatabase =    FirebaseDatabase.getInstance();
         myRef = mfirebasedatabase.getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -93,6 +97,32 @@ public class NextActivity extends AppCompatActivity {
         ImageView img = (ImageView)findViewById(R.id.imgShare);
         imgUrl = intent.getStringExtra(getString(R.string.selected_img));
         UniversalImageLoader.setIamge(imgUrl,img,null,mAppend);
+
+//        if(intent.hasExtra("selected_img")){
+//            FirebaseStorage storage = FirebaseStorage.getInstance();
+//            StorageReference storageRef = storage.getReference();
+//            //storage = FirebaseStorage.getInstance();
+//            StorageReference photoReference = storageRef.child("photos").child("users").child(mAuth.getCurrentUser().getUid()).child("profile_image.png");
+//            photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(Uri uri) {
+//                   // photoReference.child()
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                }
+//            });
+//
+//        }
+
+
+
 
 
     }
