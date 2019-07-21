@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp.Profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 //import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Models.Photo;
@@ -53,11 +58,13 @@ public class ProfileActivity extends AppCompatActivity  {
     private Button logOut;
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
-    private ImageView profile_image;
+    private ImageView profile_photo;
     private  TextView userNameText;
     private  TextView emailtText ;
     private GridView gridView;
-
+    private FirebaseStorage storage;
+    // FirebaseDatabase database;
+    private   StorageReference storageReference;
     private ProgressBar progressBar;
     private FirebaseDatabase mfirebasedatabase;
     private DatabaseReference myRef;
@@ -86,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity  {
          userNameText = (TextView)findViewById(R.id.usernameid);
         discription = (TextView)findViewById(R.id.dicriptionid);
         website = (TextView)findViewById(R.id.websiteid);
+        profile_photo = (ImageView)findViewById(R.id.profile_photo);
        setupButonNavigation();
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
@@ -112,6 +120,29 @@ public class ProfileActivity extends AppCompatActivity  {
                        startActivity(intent);
             }
         });
+
+
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        //storage = FirebaseStorage.getInstance();
+        StorageReference photoReference = storageRef.child("photos").child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile_image");
+        photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                profile_photo.setImageURI(uri);
+                Glide.with(ProfileActivity.this/* context */).load(uri).into(profile_photo);
+            }
+        });
+
+
+
 
 
 
@@ -190,7 +221,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
         UniversalImageLoader.setIamge("http://www.teknoustam.com/wp-content/uploads/2018/06/android.png"
-                ,profile_image,null,"");
+                ,profile_photo,null,"");
     }
 
     private void setupActivityWidgets(){
@@ -198,11 +229,11 @@ public class ProfileActivity extends AppCompatActivity  {
 //        progressBar.setVisibility(View.GONE);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        profile_image = (ImageView) findViewById(R.id.profile_image);
+        profile_photo = (ImageView) findViewById(R.id.profile_photo);
        // TextView userNameText = (TextView)findViewById(R.id.usernameid);
        // userNameText.setText(user.getDisplayName());
 
-        profile_image = (ImageView) findViewById(R.id.profile_image);
+        profile_photo = (ImageView) findViewById(R.id.profile_photo);
         TextView emailtText = (TextView)findViewById(R.id.email_id);
         emailtText.setText(user.getEmail());
 
