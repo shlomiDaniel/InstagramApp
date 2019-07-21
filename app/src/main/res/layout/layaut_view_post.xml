@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/relayout1"
+                >
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/profile_photo_id"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="shlomi.daniel"
+                    android:layout_toRightOf="@id/profile_photo_id"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/userName"
+                    android:textColor="@color/black"/>
+
+<ImageView
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:src="@drawable/ic_action_name"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="20dp"
+    android:id="@+id/ivElipses"
+    />
+            </RelativeLayout>
+
+
+            <com.shlomi.instagramapp.Utils.SqaureImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_img"
+                android:layout_below="@id/relayout1"
+                android:scaleType="centerCrop"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@id/relayout2"
+                android:layout_below="@id/post_img">
+                <RelativeLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/heartlayaut"
+                  >
+
+                    <ImageView
+                        android:id="@+id/image_heart_red"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginRight="12dp"
+                        android:src="@drawable/ic_heart_red"
+                        android:visibility="invisible" />
+
+
+
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/image_heart"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_comment"
+                    android:visibility="visible"
+                    android:layout_toRightOf="@id/heartlayaut"
+                    />
+                
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/relayout3"
+                android:layout_below="@id/relayout2"
+               android:padding="20dp"
+                android:layout_marginBottom="50dp"
+                
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:id="@+id/img_likes"
+                    android:text="Linked by shlomi daniel,shany,maor and 30 others......"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:id="@+id/caption"
+                    android:text="aaaaaaaaaasdasdasdasdasd"
+                    android:layout_below="@id/img_likes"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:id="@+id/image_comment_link"
+                    android:layout_below="@+id/caption"
+                    android:layout_marginTop="15dp"
+                    android:text="comment linled"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#808080	"
+                    android:textSize="18sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/image_comment_link"
+                    android:id="@+id/img_time_post"
+
+                    android:text="date of sharing"
+                    />
+                
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+        
+        
+        
+        
+    </ScrollView>
+    <include layout="@layout/layout_bottom_navogation"></include>
+    
+</RelativeLayout>
