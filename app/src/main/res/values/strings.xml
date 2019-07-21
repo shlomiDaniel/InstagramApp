@@ -13,7 +13,7 @@
     <string name="profile_photo">profile_photo</string>
 
     <string name="selected_img">selected_img</string>
-
+    <string name="selected_bitmap">selected_bitmap</string>
 
     <string name="auth_failed">Failed to Authenticated</string>
     <string name="auth_success">Authentication Success</string>

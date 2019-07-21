@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp.Share;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,11 +38,13 @@ public class NextActivity extends AppCompatActivity {
     private static final String TAG = "NextActivity";
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
+    private Bitmap bitmap;
     private int imageCount = 0;
     private EditText mCaption;
     private String imgUrl;
    private  FirebaseAuth mAuth;
     private String mAppend = "file:/";
+    private Intent intent;
 
 
     private ProgressBar progressBar;
@@ -71,8 +74,16 @@ public class NextActivity extends AppCompatActivity {
                 Toast.makeText(NextActivity.this,"uploading photo",Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
                 if(imgUrl!=""){
-                    modelFirebase.uploadNewPhoto(getString(R.string.new_photo),caption,imageCount,imgUrl);
+                    if(intent.hasExtra(getString(R.string.selected_img))){
+                        imgUrl = intent.getStringExtra(getString(R.string.selected_img));
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo),caption,imageCount,imgUrl,null);
 
+
+                    }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+                        bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo),caption,imageCount,null,bitmap);
+
+                    }
                 }
             }
         });
@@ -93,10 +104,17 @@ public class NextActivity extends AppCompatActivity {
     }
 
     private void setImage(){
-        Intent intent = getIntent();
+         intent = getIntent();
         ImageView img = (ImageView)findViewById(R.id.imgShare);
-        imgUrl = intent.getStringExtra(getString(R.string.selected_img));
-        UniversalImageLoader.setIamge(imgUrl,img,null,mAppend);
+        if(intent.hasExtra(getString(R.string.selected_img))){
+            imgUrl = intent.getStringExtra(getString(R.string.selected_img));
+            UniversalImageLoader.setIamge(imgUrl,img,null,mAppend);
+        }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+         bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            img.setImageBitmap(bitmap);
+        }
+
+
 
 //        if(intent.hasExtra("selected_img")){
 //            FirebaseStorage storage = FirebaseStorage.getInstance();

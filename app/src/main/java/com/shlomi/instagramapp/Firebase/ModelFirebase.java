@@ -293,17 +293,21 @@ public void updateUserName(String userName){
     }
 
 
-    public void uploadNewPhoto(String photo_type, final String caption, int count, String imgUrl){
+    public void uploadNewPhoto(String photo_type, final String caption, int count, String imgUrl,Bitmap bm){
         FilePath filePath = new FilePath();
     //    String a = mcontext.getString(R.string.new_photo);
         final boolean a = true;
         String b = photo_type;
         //photo_type.equals(mcontext.getString(R.string.new_photo)
                if(photo_type!="profile_photo"){
+                   if(bm==null){
+                       bm = ImageManager.getBitmap(imgUrl);
+
+                   }
+
                    final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/photo" + (count +1));
-                   Bitmap bitmap = ImageManager.getBitmap(imgUrl);
                    UploadTask uploadTask = null;
-                   byte [] bytes = ImageManager.getByteFromBitMap(bitmap,100);
+                   byte [] bytes = ImageManager.getByteFromBitMap(bm,100);
                    uploadTask = storageReference.putBytes(bytes);
                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                        @Override
@@ -364,9 +368,12 @@ public void updateUserName(String userName){
                }
                if(photo_type.equals("profile_photo")){
                    final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE+ "/" + userId + "/profile_image");
-                   Bitmap bitmap = ImageManager.getBitmap(imgUrl);
+                   if(bm==null){
+                       bm = ImageManager.getBitmap(imgUrl);
+
+                   }
                    UploadTask uploadTask = null;
-                   byte [] bytes = ImageManager.getByteFromBitMap(bitmap,100);
+                   byte [] bytes = ImageManager.getByteFromBitMap(bm,100);
                    uploadTask = storageReference.putBytes(bytes);
                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                        @Override

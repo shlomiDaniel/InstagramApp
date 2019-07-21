@@ -2,6 +2,7 @@ package com.shlomi.instagramapp.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -51,16 +52,29 @@ public class accountSettingsActivity extends AppCompatActivity {
 
     private void getIncomingIntant(){
         Intent intent = getIntent();
+        if(intent.hasExtra(getString(R.string.selected_img))||intent.hasExtra(getString(R.string.selected_bitmap))) {
 
-        //if there is image url attacked as extra , than chosen from the galary fragment
-        if(intent.hasExtra(getString(R.string.selected_img))){
-            if(intent.getStringExtra("return_to_fragment").equals("Edit Profile")){
 
-                ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
-                modelFirebase.uploadNewPhoto("profile_photo",null,0,intent.getStringExtra(getString(R.string.selected_img)));
+            //if there is image url attacked as extra , than chosen from the galary fragment
+
+            if (intent.getStringExtra("return_to_fragment").equals("Edit Profile")) {
+
+                if (intent.hasExtra(getString(R.string.selected_img))) {
+                    ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
+                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,
+                            intent.getStringExtra(getString(R.string.selected_img)), null);
+
+                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                    ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
+                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,
+                            null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)));
+                }
+
+
             }
-
         }
+
+
 
 
         if(intent.hasExtra(getString(R.string.calling_activity))){

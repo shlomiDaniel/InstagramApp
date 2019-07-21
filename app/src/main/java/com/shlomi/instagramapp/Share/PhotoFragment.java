@@ -2,16 +2,19 @@ package com.shlomi.instagramapp.Share;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.Permissions;
 
@@ -51,8 +54,45 @@ public class PhotoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CAMERA_REQUEST_CODE){
+            Bitmap bitmap;
+            bitmap = (Bitmap) data.getExtras().get("data");
+            if(isRoootTask()){
+                try{
+                    Intent intent  = new Intent(getActivity(), NextActivity.class);
+                    intent.putExtra(getString(R.string.selected_bitmap),bitmap);
+
+                    startActivity(intent);
+                }catch (NullPointerException e){
+                    Log.d("","null pointer exeption");
+                }
+
+            }else{
+                try{
+                    Intent intent  = new Intent(getActivity(), accountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_bitmap),bitmap);
+                    intent.putExtra("return_to_fragment",getString(R.string.edit_profile_fragment));
+
+                    startActivity(intent);
+                    getActivity().finish();
+                }catch (NullPointerException e){
+                    Log.d("","null pointer exeption");
+                }
+
+            }
+
+
 
         }
 
     }
+
+
+    private boolean isRoootTask(){
+        if(((ShareActivity)getActivity()).getTask()==0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

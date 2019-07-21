@@ -24,9 +24,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
+import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
@@ -54,13 +56,14 @@ public class ProfileActivity extends AppCompatActivity  {
     private ImageView profile_image;
     private  TextView userNameText;
     private  TextView emailtText ;
+    private GridView gridView;
 
     private ProgressBar progressBar;
     private FirebaseDatabase mfirebasedatabase;
     private DatabaseReference myRef;
    private static  String TAG = "Profile_activity";
     private final int activity_num  = 1;
-
+    private final int NUM_GRID_COLUMS  = 3;
     public void setupButonNavigation(){
         BottomNavigationView bn = (BottomNavigationView)findViewById(R.id.bottom_navigationViewBar);
 
@@ -76,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity  {
          email = (TextView)findViewById(R.id.email_id);
         setContentView(R.layout.activity_profile);
         super.onCreate(savedInstanceState);
-
+         gridView =(GridView)findViewById(R.id.gridView);
         mfirebasedatabase =    FirebaseDatabase.getInstance();
         myRef = mfirebasedatabase.getReference();
          emailtText = (TextView)findViewById(R.id.email_id);
@@ -95,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity  {
        initImageLoader();
 
        tempGridSetup();
+       setupGridView();
         Button editProfile = (Button)findViewById(R.id.editProfileButtonid);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +113,8 @@ public class ProfileActivity extends AppCompatActivity  {
             }
         });
 
+
+
        myRef.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -120,6 +126,40 @@ public class ProfileActivity extends AppCompatActivity  {
 
            }
        });
+    }
+
+    private void setupGridView(){
+        final ArrayList<Photo>photos = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("user_photos").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+              for(DataSnapshot singleSnapShot : dataSnapshot.getChildren()){
+                  photos.add(singleSnapShot.getValue(Photo.class));
+              }
+              int gridWidth = getResources().getDisplayMetrics().widthPixels;
+              int imgWidth = gridWidth/NUM_GRID_COLUMS;
+              gridView.setColumnWidth(imgWidth);
+              ArrayList<String>imgUrls = new ArrayList<>();
+              for(int i=0;i<photos.size();i++){
+                  imgUrls.add(photos.get(i).getImage_path());
+              }
+              //check this row
+              GridImageAdapter adapter = new GridImageAdapter(ProfileActivity.this,R.layout.layaout_grid_imgview,"",imgUrls);
+              gridView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
     }
 
     private void setProfileWidget(UserSetting userSetting){
