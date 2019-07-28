@@ -1,5 +1,6 @@
 package com.shlomi.instagramapp.Profile;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -7,7 +8,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +39,7 @@ import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Share.SectionStatePagerAdapter;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
@@ -73,21 +74,11 @@ public class ProfileActivity extends AppCompatActivity {
     private final int activity_num = 1;
     private final int NUM_GRID_COLUMS = 3;
     private ArrayList<Photo> photos;
-
-    public void setupButonNavigation() {
-        BottomNavigationView bn = (BottomNavigationView) findViewById(R.id.bottom_navigationViewBar);
-
-        ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this, bn);
-        modelFirebase = new ModelFirebase(getApplicationContext());
-        Menu menu = bn.getMenu();
-        MenuItem menuItem = menu.getItem(activity_num);
-        menuItem.setChecked(true);
-    }
+    private SectionStatePagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_profile);
         photos = new ArrayList<>();
@@ -109,13 +100,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         setupToolBar();
-        setTitle("                                                ");
+        setTitle("");
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        initImageLoader();
 
-        tempGridSetup();
+        initImageLoader();
         setupGridView();
+
         Button editProfile = (Button) findViewById(R.id.editProfileButtonid);
+
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +135,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -153,6 +144,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+    }
+
+    public void setupButonNavigation() {
+        BottomNavigationView bn = (BottomNavigationView) findViewById(R.id.bottom_navigationViewBar);
+        ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this, bn);
+        modelFirebase = new ModelFirebase(getApplicationContext());
+        Menu menu = bn.getMenu();
+        MenuItem menuItem = menu.getItem(activity_num);
+        menuItem.setChecked(true);
     }
 
     private void setupGridView() {
@@ -198,30 +198,28 @@ public class ProfileActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             final ArrayList<Photo> all_photos = getPhotos();
-            final Photo = all_photos.get(position);
+            final Photo photo = all_photos.get(position);
 
-            //Log.d(TAG,"Position Clicked ["+position+"] with item id ["+all_photos.get(position)+"]");
+            Bundle bundle = new Bundle();
+            bundle.putString("photo_id", photo.getPhoto_id());
+            bundle.putString("user_id", photo.getUser_id());
+
+            Intent intent  = new Intent(ProfileActivity.this, ViewPostActivity.class);
+            intent.putExtra("photo_id", photo.getPhoto_id());
+            intent.putExtra("user_id", photo.getUser_id());
+
+            startActivity(intent);
         }
     };
 
     private void setProfileWidget(UserSetting userSetting) {
         User user = userSetting.getUser();
-
         UserAccountSetting userAccountSetting = userSetting.getUserAccountSetting();
-        // UniversalImageLoader.setIamge(userAccountSetting.getProfile_photo(), profile_image,null,"");
-        // FirebaseUser user = firebaseAuth.getCurrentUser();
 
         emailtText.setText(user.getEmail());
-
         userNameText.setText(user.getUserName());
-        //email.setText("a");
-        //email.setText("aaaaaaa");
-        //userName.setText(user.getUserName());
         website.setText(userAccountSetting.getWebsite());
         discription.setText(userAccountSetting.getDescription());
-        // ollowers.setText(String.valueOf(userAccountSetting.getFollowers()));
-        // following.setText(String.valueOf(userAccountSetting.getFollowing()));
-        // posts.setText(String.valueOf(userAccountSetting.getPosts()));
     }
 
     private void setProfile_image() {
@@ -262,7 +260,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupToolBar() {
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
 
@@ -276,26 +273,4 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void tempGridSetup() {
-        ArrayList<String> imgUrls = new ArrayList<>();
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg");
-        imgUrls.add("https://previews.123rf.com/images/underworld/underworld1402/underworld140200575/25668343-%E9%9D%9E%E5%B8%B8%E3%81%AB%E9%95%B7%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%82%92%E6%8C%81%E3%81%A4%E7%8F%8D%E3%81%97%E3%81%84%E3%83%94%E3%83%B3%E3%82%AF%E3%81%AE%E3%82%AA%E3%82%A6%E3%83%A0%E9%B3%A5.jpg");
-        imgUrls.add("https://previews.123rf.com/images/sergioboccardo/sergioboccardo1503/sergioboccardo150300132/38731688-%E3%83%96%E3%83%A9%E3%82%B8%E3%83%AB%E3%81%AE%E9%BB%84%E8%89%B2%E7%9B%AE%E9%BB%92%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%81%A8%E3%83%95%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B4.jpg");
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/8/8e/American_Flamingo_-_Phoenicopterus_ruber.jpg");
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg");
-        imgUrls.add("https://previews.123rf.com/images/underworld/underworld1402/underworld140200575/25668343-%E9%9D%9E%E5%B8%B8%E3%81%AB%E9%95%B7%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%82%92%E6%8C%81%E3%81%A4%E7%8F%8D%E3%81%97%E3%81%84%E3%83%94%E3%83%B3%E3%82%AF%E3%81%AE%E3%82%AA%E3%82%A6%E3%83%A0%E9%B3%A5.jpg");
-        imgUrls.add("https://previews.123rf.com/images/sergioboccardo/sergioboccardo1503/sergioboccardo150300132/38731688-%E3%83%96%E3%83%A9%E3%82%B8%E3%83%AB%E3%81%AE%E9%BB%84%E8%89%B2%E7%9B%AE%E9%BB%92%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%81%A8%E3%83%95%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B4.jpg");
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/8/8e/American_Flamingo_-_Phoenicopterus_ruber.jpg");
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg");
-        imgUrls.add("https://previews.123rf.com/images/underworld/underworld1402/underworld140200575/25668343-%E9%9D%9E%E5%B8%B8%E3%81%AB%E9%95%B7%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%82%92%E6%8C%81%E3%81%A4%E7%8F%8D%E3%81%97%E3%81%84%E3%83%94%E3%83%B3%E3%82%AF%E3%81%AE%E3%82%AA%E3%82%A6%E3%83%A0%E9%B3%A5.jpg");
-        imgUrls.add("https://previews.123rf.com/images/sergioboccardo/sergioboccardo1503/sergioboccardo150300132/38731688-%E3%83%96%E3%83%A9%E3%82%B8%E3%83%AB%E3%81%AE%E9%BB%84%E8%89%B2%E7%9B%AE%E9%BB%92%E3%81%84%E3%81%8F%E3%81%A1%E3%81%B0%E3%81%97%E3%81%A8%E3%83%95%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B4.jpg");
-        imgUrls.add("https://upload.wikimedia.org/wikipedia/commons/8/8e/American_Flamingo_-_Phoenicopterus_ruber.jpg");
-
-        setupImageGreedView(imgUrls);
-
-
-    }
-
-
 }

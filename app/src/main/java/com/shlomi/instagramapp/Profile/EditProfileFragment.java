@@ -64,7 +64,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
-public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {
+    public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
@@ -112,8 +112,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                profilePhoto.setImageURI(uri);
-                Glide.with(getContext() /* context */).load(uri).into(profilePhoto);
+            profilePhoto.setImageURI(uri);
+            Glide.with(getContext() /* context */).load(uri).into(profilePhoto);
             }
         });
 
@@ -123,9 +123,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getActivity().finish();
-
             }
         });
 
