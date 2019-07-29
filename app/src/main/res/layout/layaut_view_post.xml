@@ -22,27 +22,25 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginStart="25dp"
                     android:layout_marginTop="20dp" />
 
                 <TextView
-                    android:id="@+id/userName"
+                    android:id="@+id/post_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_toRightOf="@id/profile_photo_id"
-                    android:text="shlomi.daniel"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/user_name"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/ivElipses"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/ic_action_name" />
             </RelativeLayout>
@@ -93,8 +91,8 @@
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/heart_active_layout"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/heart_active_layout"
                     android:src="@drawable/ic_comment"
                     android:visibility="visible" />
 
@@ -121,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/post_number_of_likes"
-                    android:text="aaaa aaa aaasda sd asd asd sd sdf s sfs fsdfsfsf sdfsdfs s fs ada d ad ad sfs fsf s fs fs fs fsd s s fs fsd s s fs s sfs fs f sdf s fsf s fs fsf s fs fs fs fs fs fs s sf s fs fsf sf sf s fs fsf sf sfsdfs sdfsdf sfsdf sfsdf sfsd."
+                    android:text="@string/post_description"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

@@ -50,10 +50,8 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView userName;
-    private TextView discription;
     private TextView followers;
     private TextView following;
-    private TextView website;
     private TextView email;
     private TextView posts;
     private TextView name;
@@ -65,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView emailtText;
     private GridView gridView;
     private FirebaseStorage storage;
-    // FirebaseDatabase database;
     private StorageReference storageReference;
     private ProgressBar progressBar;
     private FirebaseDatabase mfirebasedatabase;
@@ -88,8 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
         myRef = mfirebasedatabase.getReference();
         emailtText = (TextView) findViewById(R.id.email_id);
         userNameText = (TextView) findViewById(R.id.usernameid);
-        discription = (TextView) findViewById(R.id.dicriptionid);
-        website = (TextView) findViewById(R.id.websiteid);
         profile_photo = (ImageView) findViewById(R.id.profile_photo);
         setupButonNavigation();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -218,8 +213,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         emailtText.setText(user.getEmail());
         userNameText.setText(user.getUserName());
-        website.setText(userAccountSetting.getWebsite());
-        discription.setText(userAccountSetting.getDescription());
     }
 
     private void setProfile_image() {
