@@ -14,17 +14,16 @@
             <RelativeLayout
                 android:id="@+id/relayout1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_marginTop="50dp"
+                android:layout_height="45dp">
 
                 <ImageView
-                    android:id="@+id/profile_photo_id"
+                    android:id="@+id/user_profile_image"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginTop="20dp"
-
-                    />
+                    android:layout_marginTop="20dp" />
 
                 <TextView
                     android:id="@+id/userName"
@@ -44,6 +43,7 @@
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/ic_action_name" />
             </RelativeLayout>
 
@@ -58,28 +58,34 @@
             <RelativeLayout
                 android:id="@id/relayout2"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/post_img">
 
-                <RelativeLayout
-                    android:id="@+id/heartlayaut"
-                    android:layout_width="60dp"
+                <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/heart_deactive_layout"
+                    android:layout_width="45dp"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/image_heart_red"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@drawable/ic_heart_red"
-                        android:visibility="invisible" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/like_deactive"
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        app:srcCompat="@drawable/vector_heart_deactive" />
+                </RelativeLayout>
 
+                <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/heart_active_layout"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent">
 
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/like_active"
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        app:srcCompat="@drawable/vector_heart_red" />
                 </RelativeLayout>
 
                 <ImageView
@@ -88,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/heartlayaut"
+                    android:layout_toRightOf="@id/heart_active_layout"
                     android:src="@drawable/ic_comment"
                     android:visibility="visible" />
 
@@ -100,48 +106,24 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relayout2"
                 android:layout_marginBottom="50dp"
-                android:padding="20dp"
-
-                >
+                android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/img_likes"
+                    android:id="@+id/post_number_of_likes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Linked by shlomi daniel,shany,maor and 30 others......"
+                    android:text="@string/no_likes"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/caption"
+                    android:id="@+id/post_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/img_likes"
-                    android:text="aaaaaaaaaasdasdasdasdasd"
+                    android:layout_below="@id/post_number_of_likes"
+                    android:text="aaaa aaa aaasda sd asd asd sd sdf s sfs fsdfsfsf sdfsdfs s fs ada d ad ad sfs fsf s fs fs fs fsd s s fs fsd s s fs s sfs fs f sdf s fsf s fs fsf s fs fs fs fs fs fs s sf s fs fsf sf sf s fs fsf sf sfsdfs sdfsdf sfsdf sfsdf sfsd."
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-
-                <TextView
-                    android:id="@+id/image_comment_link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/caption"
-                    android:layout_marginTop="15dp"
-                    android:text="comment linled"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/img_time_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/image_comment_link"
-                    android:layout_marginTop="15dp"
-                    android:text="date of sharing"
-                    android:textColor="#808080	"
-
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 

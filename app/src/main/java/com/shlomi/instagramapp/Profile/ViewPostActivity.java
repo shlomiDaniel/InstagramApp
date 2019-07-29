@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +36,11 @@ public class ViewPostActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private Photo photo;
+    private AppCompatImageView like_active;
+    private AppCompatImageView like_deactive;
+    private TextView post_description;
+    private TextView post_number_of_likes;
+    private ImageView user_profile_image;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +52,26 @@ public class ViewPostActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         imagePost = findViewById(R.id.post_img);
+        like_deactive = findViewById(R.id.like_deactive);
+        like_active = findViewById(R.id.like_active);
+        post_description = findViewById(R.id.post_description);
+        post_number_of_likes = findViewById(R.id.post_number_of_likes);
+        user_profile_image = findViewById(R.id.user_profile_image);
 
+
+        // init
+        post_description.setText("");
+
+        final String likes = "0 likes";
+        post_number_of_likes.setText(likes);
+
+        // get data sent to this intent
         Bundle data = getIntent().getExtras();
         photo_id = data.getString("photo_id");
         user_id = data.getString("user_id");
 
-        displayPost(photo_id,user_id);
+        like_active.setVisibility(View.INVISIBLE);
+        displayPost(photo_id, user_id);
 
     }
 
@@ -71,6 +92,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 }
 
                 Picasso.get().load(photo.getImage_path()).into(imagePost);
+                post_description.setText(photo.getCaption());
             }
 
             @Override
