@@ -25,5 +25,7 @@
     <string name="confirm_passwoed_dialog">ConfirmPasswordDialog</string>
     <string name="string_share">Share</string>
     <string name="user_name">User Name</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
     <string name="post_description">The app allows users to upload photos and videos to the service, which can be edited with various filters, and organized with tags and location information. </string>
 </resources>

@@ -1,5 +1,6 @@
 package com.shlomi.instagramapp.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
 
 public class ViewPostActivity extends AppCompatActivity {
@@ -70,7 +72,8 @@ public class ViewPostActivity extends AppCompatActivity {
         post_number_of_likes.setText(R.string.no_likes);
 
         if (currentUser == null) {
-            // TODO: go to login page
+            finish();
+            startActivity(new Intent(this, SignInActivity.class));
             return;
         }
 

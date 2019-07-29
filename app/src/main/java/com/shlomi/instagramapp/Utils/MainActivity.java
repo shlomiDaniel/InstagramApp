@@ -208,80 +208,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             StorageReference ref = storageReference.child("images/"+ "profile_image.png");
             String userId = firebaseAuth.getCurrentUser().getUid();
-            ref =   storageReference.child("photos").child("users").child(userId).child("profile_image");
+            ref =  storageReference.child("photos").child("users").child(userId).child("profile_image");
             ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                            finish();
-                            // startActivity(new Intent(getApplicationContext(), Home.class));
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
-                    });
-
-
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        finish();
+                        // startActivity(new Intent(getApplicationContext(), Home.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                    }
+                });
         }
-
-
     }
 
     public void writeImage(){
-
         databaseReference.child("users").child(firebaseAuth.getUid()).child("profile_image").setValue(url);
     }
+
     public String getUrl(){
-        // String url;
-         //String url;
-         //final Uri uri2;
-//        storageReference.child("photos").child("users").child(firebaseAuth.getCurrentUser().getUid()).child("profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                                                                                                                                                           @Override
-//                                                                                                                                                                           public void onSuccess(Uri uri) {
-//                                                                                                                                                                               Log.i("profile_image : ", uri.toString());
-//                                                                                                                                                                               url = uri.toString();
-//                                                                                                                                                                               if (url != null && url != "") {
-//
-//                                                                                                                                                                                   writeImage();
-//                                                                                                                                                                               }
-//                                                                                                                                                                           }
-//                                                                                                                                                                       });
-                storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.i("profile_image : ", uri.toString());
-                        url = uri.toString();
-                        if (url != null && url != "") {
+        storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.i("profile_image : ", uri.toString());
+                url = uri.toString();
+                if (url != null && url != "") {
 
-                            writeImage();
-                        }
+                    writeImage();
+                }
 
 
-                        //uri = uri;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-return url;
+                //uri = uri;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
+        return url;
     }
-
-
 }
 

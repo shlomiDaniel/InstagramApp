@@ -44,6 +44,7 @@ import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -81,12 +82,10 @@ public class ProfileActivity extends AppCompatActivity {
         photos = new ArrayList<>();
         email = (TextView) findViewById(R.id.email_id);
         gridView = (GridView) findViewById(R.id.gridView);
-        mfirebasedatabase = FirebaseDatabase.getInstance();
-        myRef = mfirebasedatabase.getReference();
+        myRef = FirebaseDatabase.getInstance().getReference();
         emailtText = (TextView) findViewById(R.id.email_id);
         userNameText = (TextView) findViewById(R.id.usernameid);
         profile_photo = (ImageView) findViewById(R.id.profile_photo);
-        setupButonNavigation();
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (firebaseAuth.getCurrentUser() == null) {
@@ -94,10 +93,11 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignInActivity.class));
         }
 
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         setupToolBar();
         setTitle("");
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
+        setupButonNavigation();
         initImageLoader();
         setupGridView();
 
@@ -116,24 +116,10 @@ public class ProfileActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-        //storage = FirebaseStorage.getInstance();
-        StorageReference photoReference = storageRef.child("photos").child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile_image");
-        photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-            profile_photo.setImageURI(uri);
-            Glide.with(ProfileActivity.this/* context */).load(uri).into(profile_photo);
-            }
-        });
-
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setProfileWidget(modelFirebase.getUserAccoountSetting(dataSnapshot));
+                setProfileInfo(modelFirebase.getUserAccoountSetting(dataSnapshot));
             }
 
             @Override
@@ -207,44 +193,12 @@ public class ProfileActivity extends AppCompatActivity {
         }
     };
 
-    private void setProfileWidget(UserSetting userSetting) {
+    private void setProfileInfo(UserSetting userSetting) {
         User user = userSetting.getUser();
         UserAccountSetting userAccountSetting = userSetting.getUserAccountSetting();
-
         emailtText.setText(user.getEmail());
         userNameText.setText(user.getUserName());
-    }
-
-    private void setProfile_image() {
-
-
-        UniversalImageLoader.setIamge("http://www.teknoustam.com/wp-content/uploads/2018/06/android.png"
-                , profile_photo, null, "");
-    }
-
-    private void setupActivityWidgets() {
-        // progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
-        // progressBar.setVisibility(View.GONE);
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        profile_photo = (ImageView) findViewById(R.id.profile_photo);
-        // TextView userNameText = (TextView)findViewById(R.id.usernameid);
-        // userNameText.setText(user.getDisplayName());
-
-        profile_photo = (ImageView) findViewById(R.id.profile_photo);
-        TextView emailtText = (TextView) findViewById(R.id.email_id);
-        emailtText.setText(user.getEmail());
-
-
-    }
-
-    public void setupImageGreedView(ArrayList<String> imgUrls) {
-        GridView gridView = findViewById(R.id.gridView);
-        int gridwidth = getResources().getDisplayMetrics().widthPixels;
-        int imgWidth = gridwidth / 3;
-        gridView.setColumnWidth(imgWidth);
-        GridImageAdapter adapter = new GridImageAdapter(ProfileActivity.this, R.layout.layaout_grid_imgview, "", imgUrls);
-        gridView.setAdapter(adapter);
+        Picasso.get().load(user.getProfile_image()).into(profile_photo);
     }
 
     private void initImageLoader() {
