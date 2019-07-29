@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-
-<RelativeLayout
-    android:id="@+id/fragment_view_post"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <include layout="@layout/post_tool_bar"></include>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/relayout2"
+        android:id="@+id/fragment_view_post"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/relayout1">
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/layaut_view_post"></include>
+        <include layout="@layout/post_tool_bar"/>
+
+        <RelativeLayout
+            android:id="@+id/relayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relayout1">
+
+            <include layout="@layout/layaut_view_post"/>
+        </RelativeLayout>
 
     </RelativeLayout>
-
-
-</RelativeLayout>
-
-
 </RelativeLayout>
