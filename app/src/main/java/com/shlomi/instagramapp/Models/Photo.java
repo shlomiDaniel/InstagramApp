@@ -1,5 +1,8 @@
 package com.shlomi.instagramapp.Models;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Photo {
     private String caption;
     private String date_created;
@@ -7,6 +10,7 @@ public class Photo {
     private String photo_id;
     private String user_id;
     private String tags;
+    private ArrayList<String> likes;
 
     public Photo() {
     }
@@ -18,6 +22,8 @@ public class Photo {
         this.photo_id = photo_id;
         this.user_id = user_id;
         this.tags = tags;
+        this.likes = new ArrayList<>();
+
     }
 
     public void setCaption(String caption) {
@@ -66,5 +72,9 @@ public class Photo {
 
     public String getTags() {
         return tags;
+    }
+
+    public ArrayList<String> getLikes() {
+        return likes;
     }
 }

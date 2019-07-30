@@ -27,5 +27,10 @@
     <string name="user_name">User Name</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+    <string name="changePhoto">Change Photo</string>
+    <string name="displayName">Display Name</string>
+    <string name="website">Website</string>
+    <string name="description">Description</string>
+    <string name="privateInfo">Private Info</string>
     <string name="post_description">The app allows users to upload photos and videos to the service, which can be edited with various filters, and organized with tags and location information. </string>
 </resources>

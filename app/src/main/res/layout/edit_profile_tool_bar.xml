@@ -14,24 +14,23 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 >
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/profile_menu"
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_back_arrow"/>
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="EditProfile"
+                    android:text="@string/editProfile"
                     android:textSize="20sp"
-                    android:layout_toRightOf="@+id/profile_menu"
+                    android:layout_toEndOf="@+id/profile_menu"
                     android:textColor="@color/black"
                     android:id="@+id/proileName"
                     />
@@ -45,16 +44,9 @@
                     android:id="@+id/save_changes"
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_save_setting"
-                    android:layout_alignParentRight="true"
-
+                    android:layout_alignParentEnd="true"
                     />
-
-
             </RelativeLayout>
-
-
         </android.support.v7.widget.Toolbar>
-
-
     </android.support.design.widget.AppBarLayout>
 </merge>

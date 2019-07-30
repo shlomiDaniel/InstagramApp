@@ -18,6 +18,5 @@
 
             <include layout="@layout/layaut_view_post"/>
         </RelativeLayout>
-
     </RelativeLayout>
 </RelativeLayout>

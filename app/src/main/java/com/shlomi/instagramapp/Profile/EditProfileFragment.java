@@ -79,7 +79,6 @@ import static android.support.constraint.Constraints.TAG;
     private CircleImageView mProfilePhoto;
     private String userid;
     private FirebaseStorage storage;
-    // FirebaseDatabase database;
     private StorageReference storageReference;
     private UserSetting mUserSettings;
     private ImageView saveChanges;
@@ -96,18 +95,13 @@ import static android.support.constraint.Constraints.TAG;
         changeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
         modelFirebase = new ModelFirebase(getContext());
         saveChanges = (ImageView) view.findViewById(R.id.save_changes);
-        // profilePhoto.setimage
-        // initImageLoader();
-        //setProfileImage();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
-        //storage = FirebaseStorage.getInstance();
         StorageReference photoReference = storageRef.child("photos").child("users").child(mAuth.getCurrentUser().getUid()).child("profile_image");
         photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -117,48 +111,24 @@ import static android.support.constraint.Constraints.TAG;
             }
         });
 
-
         ImageView backArrow = (ImageView) view.findViewById(R.id.profile_menu);
-
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-
-
-//        changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ShareActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                getActivity().startActivity(intent);
-//            }
-//        });
-
         setupFirebase();
 
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveProfileSettings();
-                Toast.makeText(getActivity(), "here", Toast.LENGTH_SHORT).show();
-
-
+            saveProfileSettings();
+            Toast.makeText(getActivity(), "here", Toast.LENGTH_SHORT).show();
             }
         });
 
         return view;
-
-
-    }
-
-    public void changeUserName(String user_name) {
-        // firebaseDatabase.getReference().child("users").child(userid).setValue("aaa");
-        String s = userName.getText().toString();
-        firebaseDatabase.getReference().setValue(s);
-        //firebaseDatabase.getReference().add
     }
 
     private void saveProfileSettings() {
@@ -241,8 +211,6 @@ import static android.support.constraint.Constraints.TAG;
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-
-
     }
 
 
@@ -266,9 +234,7 @@ import static android.support.constraint.Constraints.TAG;
             getActivity().startActivity(intent);
             }
         });
-
     }
-
 
     private void setProfileImage() {
         Log.d("Edit Profile Fragment", "setting profile image");
@@ -370,13 +336,6 @@ import static android.support.constraint.Constraints.TAG;
             }
         });
     }
-
-//    private  void initImageLoader(){
-//        UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
-//        ImageLoader.getInstance().init(universalImageLoader.getConfig());
-//    }
-
-
 }
 
 

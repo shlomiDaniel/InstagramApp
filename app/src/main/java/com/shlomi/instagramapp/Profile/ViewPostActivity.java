@@ -3,19 +3,12 @@ package com.shlomi.instagramapp.Profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +56,7 @@ public class ViewPostActivity extends AppCompatActivity {
         post_number_of_likes = findViewById(R.id.post_number_of_likes);
         user_profile_image = findViewById(R.id.user_profile_image);
         post_user_name = findViewById(R.id.post_user_name);
+        imgBackArrow = findViewById(R.id.imgBackArrow);
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // init
@@ -85,10 +79,20 @@ public class ViewPostActivity extends AppCompatActivity {
         settUserName(user_id);
         displayPost(photo_id, user_id);
 
-        imgBackArrow = this.findViewById(R.id.imgBackArrow);
+
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
+            }
+        });
+
+        post_user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                startActivity(intent);
                 finish();
             }
         });
@@ -100,7 +104,6 @@ public class ViewPostActivity extends AppCompatActivity {
         ref.child("users")
         .child(user_id)
         .addListenerForSingleValueEvent(new ValueEventListener() {
-
             @Override
             public void onCancelled(DatabaseError error) {
 
@@ -109,6 +112,7 @@ public class ViewPostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 post_user_name.setText(snapshot.getValue(User.class).getUserName());
+                Picasso.get().load(snapshot.getValue(User.class).getProfile_image()).into(user_profile_image);
             }
         });
     }
