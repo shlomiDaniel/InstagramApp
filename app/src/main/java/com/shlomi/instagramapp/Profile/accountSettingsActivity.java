@@ -33,18 +33,15 @@ public class accountSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acount_setting);
-        vp = (ViewPager) findViewById(R.id.container);
-        rl = (RelativeLayout) findViewById(R.id.relayout1);
+        vp = findViewById(R.id.container);
+        rl = findViewById(R.id.relayout1);
 
-        Log.d("started", "acountsetting ");
         setupSetting();
-
         ImageView imageView = (ImageView) findViewById(R.id.profile_menu);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Log.d("started", "profileActivity");
-            finish();
+                finish();
             }
         });
 
@@ -52,26 +49,38 @@ public class accountSettingsActivity extends AppCompatActivity {
         getIncomingIntant();
     }
 
+    @Override
+    protected void onDestroy() {
+        Intent current_intent = getIntent();
+        if (current_intent.hasExtra("back_to_post")) {
+            Bundle data = getIntent().getExtras();
+            final String photo_id = data.getString("photo_id");
+            final String user_id = data.getString("user_id");
+
+            Intent intent  = new Intent(accountSettingsActivity.this, ViewPostActivity.class);
+            intent.putExtra("photo_id", photo_id);
+            intent.putExtra("user_id", user_id);
+            startActivity(intent);
+        }
+
+        super.onDestroy();
+    }
+
     private void getIncomingIntant() {
         Intent intent = getIntent();
+
         if (intent.hasExtra(getString(R.string.selected_img)) || intent.hasExtra(getString(R.string.selected_bitmap))) {
-            //if there is image url attacked as extra , than chosen from the galary fragment
-
             if (intent.getStringExtra("return_to_fragment").equals("Edit Profile")) {
-
                 if (intent.hasExtra(getString(R.string.selected_img))) {
                     ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
-                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,
-                            intent.getStringExtra(getString(R.string.selected_img)), null);
+                    modelFirebase.uploadNewPhoto("profile_photo", null, 0, intent.getStringExtra(getString(R.string.selected_img)), null);
 
                 } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                     ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
-                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,
-                            null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)));
+                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)));
                 }
             }
         }
-
 
         if (intent.hasExtra(getString(R.string.calling_activity))) {
             setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
@@ -100,7 +109,6 @@ public class accountSettingsActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
 
-
         ArrayAdapter adapter = new ArrayAdapter(accountSettingsActivity.this, android.R.layout.simple_list_item_1, options);
         list.setAdapter(adapter);
 
@@ -110,7 +118,5 @@ public class accountSettingsActivity extends AppCompatActivity {
             setViewPager(position);
             }
         });
-
     }
-
 }

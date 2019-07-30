@@ -103,6 +103,7 @@ import static android.support.constraint.Constraints.TAG;
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         StorageReference photoReference = storageRef.child("photos").child("users").child(mAuth.getCurrentUser().getUid()).child("profile_image");
+
         photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

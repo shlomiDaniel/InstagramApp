@@ -60,7 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private ImageView profile_photo;
-    private TextView userNameText;
+    private TextView numberOfPhotos;
+    private TextView proileName;
     private TextView emailtText;
     private GridView gridView;
     private FirebaseStorage storage;
@@ -84,15 +85,15 @@ public class ProfileActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.gridView);
         myRef = FirebaseDatabase.getInstance().getReference();
         emailtText = (TextView) findViewById(R.id.email_id);
-        userNameText = (TextView) findViewById(R.id.usernameid);
+        numberOfPhotos = (TextView) findViewById(R.id.numberOfPhotos);
         profile_photo = (ImageView) findViewById(R.id.profile_photo);
+        proileName = findViewById(R.id.proileName);
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, SignInActivity.class));
         }
-
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         setupToolBar();
@@ -106,7 +107,6 @@ public class ProfileActivity extends AppCompatActivity {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Log.d("onClick", "navigation to EditProfile");
             Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
             intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
             startActivity(intent);
@@ -162,6 +162,13 @@ public class ProfileActivity extends AppCompatActivity {
                 GridImageAdapter adapter = new GridImageAdapter(ProfileActivity.this, R.layout.layaout_grid_imgview, "", imgUrls);
                 gridView.setAdapter(adapter);
 
+                if(photos.size() > 0) {
+                    numberOfPhotos.setText(getString(R.string.totalUploadedPhotos, photos.size()));
+                }
+                else {
+                    numberOfPhotos.setText(getString(R.string.noPhotosUploaded));
+                }
+
                 gridView.setOnItemClickListener(itemClickListener);
             }
 
@@ -197,7 +204,8 @@ public class ProfileActivity extends AppCompatActivity {
         User user = userSetting.getUser();
         UserAccountSetting userAccountSetting = userSetting.getUserAccountSetting();
         emailtText.setText(user.getEmail());
-        userNameText.setText(user.getUserName());
+
+        proileName.setText(user.getUserName());
         Picasso.get().load(user.getProfile_image()).into(profile_photo);
     }
 
@@ -214,9 +222,8 @@ public class ProfileActivity extends AppCompatActivity {
         profile_image_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "ONCLICK NAVIGATION ACOUNT SETTING");
-                Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
+            startActivity(intent);
             }
         });
     }

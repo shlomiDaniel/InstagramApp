@@ -79,7 +79,6 @@ public class ViewPostActivity extends AppCompatActivity {
         settUserName(user_id);
         displayPost(photo_id, user_id);
 
-
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +87,19 @@ public class ViewPostActivity extends AppCompatActivity {
         });
 
         post_user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                intent.putExtra("back_to_post", true);
+                intent.putExtra("photo_id", photo_id);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        user_profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);

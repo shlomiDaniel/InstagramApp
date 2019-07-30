@@ -16,9 +16,10 @@
 
                 <TextView
                     android:id="@+id/proileName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:gravity="center"
                     android:text="@string/user_name"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -33,10 +34,6 @@
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_action_name" />
             </RelativeLayout>
-
-
         </android.support.v7.widget.Toolbar>
-
-
     </android.support.design.widget.AppBarLayout>
 </merge>
