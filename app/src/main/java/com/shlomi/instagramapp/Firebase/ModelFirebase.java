@@ -104,11 +104,11 @@ public class ModelFirebase {
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
-                } else {
-                    Toast.makeText(mcontext, "couldnt send verefication email.", Toast.LENGTH_SHORT).show();
-                }
+                    } else {
+                        Toast.makeText(mcontext, "couldnt send verefication email.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -125,19 +125,19 @@ public class ModelFirebase {
 
                 try {
                     user.setUserName(
-                        ds.child(userId).getValue(User.class).getUserName()
+                            ds.child(userId).getValue(User.class).getUserName()
 
                     );
                     user.setEmail(
-                        ds.child(userId).getValue(User.class).getEmail()
+                            ds.child(userId).getValue(User.class).getEmail()
 
                     );
                     user.setPassword(
-                        ds.child(userId).getValue(User.class).getPassword()
+                            ds.child(userId).getValue(User.class).getPassword()
 
                     );
                     user.setProfile_image_url(
-                        ds.child(userId).getValue(User.class).getProfile_image()
+                            ds.child(userId).getValue(User.class).getProfile_image()
                     );
                 } catch (NullPointerException ex) {
                     Log.d("error", "nullpointer ex from users");
@@ -148,32 +148,32 @@ public class ModelFirebase {
 
                 try {
                     setting.setDisplay_name(
-                        ds.child(userId).getValue(UserAccountSetting.class).getDisplay_name()
+                            ds.child(userId).getValue(UserAccountSetting.class).getDisplay_name()
 
                     );
                     setting.setDescription(
-                        ds.child(userId).getValue(UserAccountSetting.class).getDescription()
+                            ds.child(userId).getValue(UserAccountSetting.class).getDescription()
                     );
 
                     setting.setProfile_photo(
-                        ds.child(userId).getValue(UserAccountSetting.class).getProfile_photo()
+                            ds.child(userId).getValue(UserAccountSetting.class).getProfile_photo()
                     );
 
                     setting.setPosts(
-                        ds.child(userId).getValue(UserAccountSetting.class).getPosts()
+                            ds.child(userId).getValue(UserAccountSetting.class).getPosts()
                     );
 
                     setting.setFollowers(
-                        ds.child(userId).getValue(UserAccountSetting.class).getFollowers()
+                            ds.child(userId).getValue(UserAccountSetting.class).getFollowers()
                     );
                     setting.setFollowing(
-                        ds.child(userId).getValue(UserAccountSetting.class).getFollowing()
+                            ds.child(userId).getValue(UserAccountSetting.class).getFollowing()
                     );
                     setting.setWebsite(
-                        ds.child(userId).getValue(UserAccountSetting.class).getWebsite()
+                            ds.child(userId).getValue(UserAccountSetting.class).getWebsite()
                     );
                     setting.setUserName(
-                        ds.child(userId).getValue(UserAccountSetting.class).getUserName()
+                            ds.child(userId).getValue(UserAccountSetting.class).getUserName()
                     );
                 } catch (NullPointerException ex) {
                     Log.d("error", "null pointer ex");
@@ -217,51 +217,51 @@ public class ModelFirebase {
 
     public void uploadNewPhoto(String photo_type, final String caption, int count, String imgUrl, Bitmap bm) {
         FilePath filePath = new FilePath();
-        //    String a = mcontext.getString(R.string.new_photo);
-        final boolean a = true;
-        String b = photo_type;
-        //photo_type.equals(mcontext.getString(R.string.new_photo)
-        if (photo_type != "profile_photo") {
+
+        if (!photo_type.equals("profile_photo")) {
             if (bm == null) {
                 bm = ImageManager.getBitmap(imgUrl);
             }
 
             final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE + "/" + userId + "/photo" + (count + 1));
+
             UploadTask uploadTask = null;
             byte[] bytes = ImageManager.getByteFromBitMap(bm, 100);
             uploadTask = storageReference.putBytes(bytes);
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                    Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                    String photoLink = uri.toString();
-                    Toast.makeText(context, "photo update succsess", Toast.LENGTH_LONG).show();
-                    if (caption != null) {
-                        addPhotoToDataBase(caption, photoLink);
-                    } else {
-                        addPhotoToDataBase("", photoLink);
-                    }
-                    }
-                });
+                    task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String photoLink = uri.toString();
+                            Toast.makeText(context, "photo update success", Toast.LENGTH_LONG).show();
+                            if (caption != null) {
+                                addPhotoToDataBase(caption, photoLink);
+                            } else {
+                                addPhotoToDataBase("", photoLink);
+                            }
+                        }
+                    });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+            })
+            .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(context, "photo update failed", Toast.LENGTH_LONG).show();
 
                 }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            })
+            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                            .getTotalByteCount());
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     if (progress - 15 > mPhotoUploadProgress) {
-                        Toast.makeText(context, "photo upload in progress" + String.format("%.0f", progress), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
                         mPhotoUploadProgress = progress;
                     }
                 }
@@ -270,10 +270,11 @@ public class ModelFirebase {
 
         if (photo_type.equals("profile_photo")) {
             final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE + "/" + userId + "/profile_image");
+
             if (bm == null) {
                 bm = ImageManager.getBitmap(imgUrl);
-
             }
+
             UploadTask uploadTask = null;
             byte[] bytes = ImageManager.getByteFromBitMap(bm, 100);
             uploadTask = storageReference.putBytes(bytes);
@@ -285,33 +286,31 @@ public class ModelFirebase {
                     task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                        StorageReference ref = storageReference.child("images/" + "profile_image.png");
-                        String userId = firebaseAuth.getCurrentUser().getUid();
-                        ref = storageReference.child("photos").child("users").child(userId).child("profile_image.png");
+                            StorageReference ref = storageReference.child("images/" + "profile_image.png");
+                            String userId = firebaseAuth.getCurrentUser().getUid();
+                            ref = storageReference.child("photos").child("users").child(userId).child("profile_image.png");
 
-                        String photoLink = uri.toString();
-                        Toast.makeText(context, "Profile Photo updated succsess", Toast.LENGTH_LONG).show();
-                        setProfilePhoto(photoLink);
+                            String photoLink = uri.toString();
+                            Toast.makeText(context, "Profile Photo updated success", Toast.LENGTH_LONG).show();
+                            setProfilePhoto(photoLink);
                         }
                     });
-
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "photo update failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "photo update failed", Toast.LENGTH_LONG).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                        .getTotalByteCount());
-                if (progress - 15 > mPhotoUploadProgress) {
-                    Toast.makeText(context, "photo upload in progress" + String.format("%.0f", progress), Toast.LENGTH_SHORT).show();
-                    mPhotoUploadProgress = progress;
-                }
+                    // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                            .getTotalByteCount());
+                    if (progress - 15 > mPhotoUploadProgress) {
+                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
                 }
             });
         }
@@ -339,19 +338,5 @@ public class ModelFirebase {
 
     private void setProfilePhoto(String url) {
         databaseReference.child("users").child(userId).child("profile_image").setValue(url);
-    }
-}
-
-
-class MainApplication extends Application {
-    private static Context context;
-
-    public void onCreate() {
-        super.onCreate();
-        MainApplication.context = getApplicationContext();
-    }
-
-    public static Context getAppContext() {
-        return MainApplication.context;
     }
 }

@@ -30,26 +30,28 @@ public class NextActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private Bitmap bitmap;
     private int imageCount = 0;
-    private EditText mCaption;
+    private EditText photoDescription;
     private String imgUrl;
     private FirebaseAuth mAuth;
     private String mAppend = "file:/";
     private Intent intent;
     private ProgressBar progressBar;
-    private  TextView share;
+    private TextView share;
+    private ImageView backArrow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_next);
+
         mAuth = FirebaseAuth.getInstance();
         mfirebasedatabase = FirebaseDatabase.getInstance();
         myRef = mfirebasedatabase.getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         modelFirebase = new ModelFirebase(NextActivity.this);
-        mCaption = (EditText) findViewById(R.id.caption);
-        ImageView backArrow = (ImageView) findViewById(R.id.ivBackArrow);
+        photoDescription = findViewById(R.id.photoDescription);
+        backArrow = findViewById(R.id.ivBackArrow);
         share = findViewById(R.id.tvShare);
 
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -62,16 +64,24 @@ public class NextActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //upload the image to firebase
-                Toast.makeText(NextActivity.this, "uploading photo", Toast.LENGTH_SHORT).show();
-                String caption = mCaption.getText().toString();
+                // Upload the image to firebase
+
+                final String description = photoDescription.getText().toString();
+
+                if(description.equals("")){
+                    Toast.makeText(NextActivity.this, "Please write something to describe your photo.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (!imgUrl.equals("")) {
+                    Toast.makeText(NextActivity.this, "uploading photo...", Toast.LENGTH_SHORT).show();
+
                     if (intent.hasExtra(getString(R.string.selected_img))) {
                         imgUrl = intent.getStringExtra(getString(R.string.selected_img));
-                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgUrl, null);
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imageCount, imgUrl, null);
                     } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                         bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imageCount, null, bitmap);
                     }
                 }
             }
