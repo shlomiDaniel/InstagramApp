@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // FirebaseDatabase database;
     StorageReference storageReference;
 
-   // FirebaseStorage storage;
+    // FirebaseStorage storage;
     // FirebaseDatabase database;
-   // StorageReference storageReference;
- public ModelFirebase modelFirebase;
+    // StorageReference storageReference;
+    public ModelFirebase modelFirebase;
 
 
     private Uri filePath;
@@ -79,54 +79,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buttonRegister = (Button) findViewById(R.id.buttonRegister);
-        emailText = (EditText)findViewById(R.id.editTextMail);
-        passwordText = (EditText) findViewById(R.id.editTextPassword);
-        signInTextView = (TextView)findViewById(R.id.textViewSignIn);
+        buttonRegister = findViewById(R.id.buttonRegister);
+        emailText = findViewById(R.id.editTextMail);
+        passwordText = findViewById(R.id.editTextPassword);
+        signInTextView = findViewById(R.id.textViewSignIn);
         buttonRegister.setOnClickListener(this);
         signInTextView.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
-        profile_image = (ImageView) findViewById(R.id.profile_image);
+        profile_image = findViewById(R.id.profile_image);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        userName = (EditText)findViewById(R.id.editUserName);
-        //profile_image = (ImageView)findViewById(R.id.profile_image);
+        userName = findViewById(R.id.editUserName);
         databaseReference = firebaseDatabase.getReference();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-//important
-        if(firebaseAuth.getCurrentUser() != null){
+        //important
+        if (firebaseAuth.getCurrentUser() != null) {
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), Home.class));
         }
-     profile_image.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             chooseImage();
-         }
-     });
 
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 profile_image.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -139,57 +133,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-
-    private void registerUser(){
+    private void registerUser() {
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
 
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Please Enter Email.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please Enter password.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Register Succses , User Created", Toast.LENGTH_SHORT).show();
 
                     progressDialog.cancel();
 
                     String name = userName.getText().toString().trim();
-                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
+                    writeNewUser(firebaseAuth.getUid(), name, email, password, getUrl(), "", "");
                     uploadImage();
                     startActivity(new Intent(getApplicationContext(), Home.class));
 
                     // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
-                }else{
-                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Register faild , User not Created,try again.", Toast.LENGTH_SHORT).show();
                     progressDialog.cancel();
                 }
             }
         });
-
     }
+
     @Override
     public void onClick(View view) {
-        if(view == buttonRegister){
+        if (view == buttonRegister) {
             registerUser();
-        }else if(view == signInTextView){
+        } else if (view == signInTextView) {
             finish();
-            startActivity(new Intent(this,SignInActivity.class));
-         }
+            startActivity(new Intent(this, SignInActivity.class));
+        }
     }
 
-    private void writeNewUser(String userId, String userName, String email,String password,String profile_image,String website,String descripation) {
+    private void writeNewUser(String userId, String userName, String email, String password, String profile_image, String website, String descripation) {
         User user = new User(userId, userName, email, password, profile_image);
         HashMap<String, Object> hashMap = user.toMap(userId, userName, email, password, profile_image);
         Log.println(1, "TAG", userId);
@@ -198,50 +191,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UserAccountSetting setting = new UserAccountSetting(descripation, "", 0, 0, "", profile_image, userName, website);
         firebaseDatabase.getReference().child("userAcountSetting").child(userId).setValue(setting);
     }
+
     private void uploadImage() {
         //String profile_image = UUID.randomUUID().toString();
-        if(filePath != null)
-        {
+        if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ "profile_image.png");
+            StorageReference ref = storageReference.child("images/" + "profile_image.png");
             String userId = firebaseAuth.getCurrentUser().getUid();
-            ref =  storageReference.child("photos").child("users").child(userId).child("profile_image");
+            ref = storageReference.child("photos").child("users").child(userId).child("profile_image");
             ref.putFile(filePath)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        finish();
-                        // startActivity(new Intent(getApplicationContext(), Home.class));
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                .getTotalByteCount());
-                        progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                    }
-                });
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            finish();
+                            // startActivity(new Intent(getApplicationContext(), Home.class));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
         }
     }
 
-    public void writeImage(){
+    public void writeImage() {
         databaseReference.child("users").child(firebaseAuth.getUid()).child("profile_image").setValue(url);
     }
 
-    public String getUrl(){
+    public String getUrl() {
         storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -251,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     writeImage();
                 }
-
-
                 //uri = uri;
             }
         }).addOnFailureListener(new OnFailureListener() {

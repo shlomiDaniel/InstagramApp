@@ -1,13 +1,10 @@
 package com.shlomi.instagramapp.Profile;
 
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +12,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-//import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,9 +31,8 @@ import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Share.SectionStatePagerAdapter;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
-import com.shlomi.instagramapp.Utils.GridImageAdapter;
+import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 import com.squareup.picasso.Picasso;
@@ -50,13 +41,6 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView userName;
-    private TextView followers;
-    private TextView following;
-    private TextView email;
-    private TextView posts;
-    private TextView name;
-    private Button logOut;
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private ImageView profile_photo;
@@ -66,14 +50,10 @@ public class ProfileActivity extends AppCompatActivity {
     private GridView gridView;
     private FirebaseStorage storage;
     private StorageReference storageReference;
-    private ProgressBar progressBar;
-    private FirebaseDatabase mfirebasedatabase;
     private DatabaseReference myRef;
-    private static String TAG = "Profile_activity";
     private final int activity_num = 1;
     private final int NUM_GRID_COLUMS = 3;
     private ArrayList<Photo> photos;
-    private SectionStatePagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +61,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
         photos = new ArrayList<>();
-        email = (TextView) findViewById(R.id.email_id);
-        gridView = (GridView) findViewById(R.id.gridView);
+        gridView = findViewById(R.id.gridView);
         myRef = FirebaseDatabase.getInstance().getReference();
-        emailtText = (TextView) findViewById(R.id.email_id);
-        numberOfPhotos = (TextView) findViewById(R.id.numberOfPhotos);
-        profile_photo = (ImageView) findViewById(R.id.profile_photo);
+        emailtText = findViewById(R.id.email_id);
+        numberOfPhotos = findViewById(R.id.numberOfPhotos);
+        profile_photo = findViewById(R.id.profile_photo);
         proileName = findViewById(R.id.proileName);
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -107,9 +86,9 @@ public class ProfileActivity extends AppCompatActivity {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
-            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-            startActivity(intent);
+                Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                startActivity(intent);
             }
         });
 
@@ -128,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void setupButonNavigation() {
-        BottomNavigationView bn = (BottomNavigationView) findViewById(R.id.bottom_navigationViewBar);
+        BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this, bn);
         modelFirebase = new ModelFirebase(getApplicationContext());
         Menu menu = bn.getMenu();
@@ -153,13 +132,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 gridView.setColumnWidth(imgWidth);
 
-                ArrayList<String> imgUrls = new ArrayList<>();
-
-                for (int i = 0; i < photos.size(); i++) {
-                    imgUrls.add(photos.get(i).getImage_path());
-                }
-
-                GridImageAdapter adapter = new GridImageAdapter(ProfileActivity.this, R.layout.layaout_grid_imgview, "", imgUrls);
+                GridPhotoAdapter adapter = new GridPhotoAdapter(ProfileActivity.this, R.layout.layaout_grid_imgview, "", photos);
                 gridView.setAdapter(adapter);
 
                 if(photos.size() > 0) {
@@ -215,15 +188,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
+        Toolbar toolbar = findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
 
-        ImageView profile_image_view = (ImageView) findViewById(R.id.profile_menu);
+        ImageView profile_image_view = findViewById(R.id.profile_menu);
         profile_image_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
+                startActivity(intent);
             }
         });
     }

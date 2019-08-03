@@ -2,13 +2,13 @@ package com.shlomi.instagramapp.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -19,14 +19,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class GridImageAdapter extends ArrayAdapter<String> {
+public class GridPhotoAdapter extends ArrayAdapter<Photo> {
     private Context mContext;
     private LayoutInflater mInflater;
     private String maPpend;
-    private ArrayList<String> images;
+    private ArrayList<Photo> images;
     private int layoutRes;
 
-    public GridImageAdapter(Context context, int layoutRes, String maPpend, ArrayList<String> images) {
+    public GridPhotoAdapter(Context context, int layoutRes, String maPpend, ArrayList<Photo> images) {
         super(context, layoutRes, images);
         this.images = images;
         this.maPpend = maPpend;
@@ -44,7 +44,6 @@ public class GridImageAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         final ViewHolder viewHolder;
-
         if (convertView == null) {
             convertView = mInflater.inflate(layoutRes, parent, false);
             viewHolder = new ViewHolder();
@@ -55,36 +54,24 @@ public class GridImageAdapter extends ArrayAdapter<String> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        String image = getItem(position);
+        Photo image = images.get(position);
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(maPpend + image, viewHolder.img, new ImageLoadingListener() {
+        Picasso.get().load(image.getImage_path()).into(viewHolder.img, new Callback() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                if (viewHolder.progressBar != null) {
-                    viewHolder.progressBar.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            public void onSuccess() {
                 if (viewHolder.progressBar != null) {
                     viewHolder.progressBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            public void onError(Exception e) {
                 if (viewHolder.progressBar != null) {
                     viewHolder.progressBar.setVisibility(View.GONE);
                 }
-            }
 
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-                if (viewHolder.progressBar != null) {
-                    viewHolder.progressBar.setVisibility(View.GONE);
-                }
+                images.remove(position);
+                notifyDataSetChanged();
             }
         });
 

@@ -86,15 +86,15 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         mAuth = FirebaseAuth.getInstance();
-        profilePhoto = (ImageView) view.findViewById(R.id.profile_photo_id);
-        displayName = (EditText) view.findViewById(R.id.display_name);
-        userName = (EditText) view.findViewById(R.id.user_name);
-        website = (EditText) view.findViewById(R.id.website);
-        description = (EditText) view.findViewById(R.id.description);
-        email = (EditText) view.findViewById(R.id.email);
-        changeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
+        profilePhoto = view.findViewById(R.id.profile_photo_id);
+        displayName = view.findViewById(R.id.display_name);
+        userName = view.findViewById(R.id.user_name);
+        website = view.findViewById(R.id.website);
+        description = view.findViewById(R.id.description);
+        email = view.findViewById(R.id.email);
+        changeProfilePhoto = view.findViewById(R.id.changeProfilePhoto);
         modelFirebase = new ModelFirebase(getContext());
-        saveChanges = (ImageView) view.findViewById(R.id.save_changes);
+        saveChanges = view.findViewById(R.id.save_changes);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -112,7 +112,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             }
         });
 
-        ImageView backArrow = (ImageView) view.findViewById(R.id.profile_menu);
+        ImageView backArrow = view.findViewById(R.id.profile_menu);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,7 +3,6 @@ package com.shlomi.instagramapp.Share;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,13 +21,12 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.shlomi.instagramapp.Firebase.ModelFirebase;
-import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.FileSearch;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
+import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 
 import java.util.ArrayList;
 
@@ -111,7 +109,7 @@ public class GalleryFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setupGreedVeiw(dir.get(position));
+                setupGreedView(dir.get(position));
                 Toast.makeText(getContext(), "Please Enter Email.", Toast.LENGTH_SHORT).show();
             }
 
@@ -123,13 +121,14 @@ public class GalleryFragment extends Fragment {
     }
 
 
-    private void setupGreedVeiw(String selecttedDir) {
-        final ArrayList<String> imgUrl = FileSearch.getFilePath(selecttedDir);
+    private void setupGreedView(String selectedDir) {
+        final ArrayList<String> imgUrl = FileSearch.getFilePath(selectedDir);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imgWidth = gridWidth / NUM_GRID_COL;
+
         gridView.setColumnWidth(imgWidth);
-        final GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layaout_grid_imgview, mAppend,
-                imgUrl);
+        final GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layaout_grid_imgview, mAppend, imgUrl);
+
         gridView.setAdapter(adapter);
         setImage(imgUrl.get(0), galleryImage, mAppend);
         selectedImage = imgUrl.get(0);
