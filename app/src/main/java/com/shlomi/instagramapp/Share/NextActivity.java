@@ -29,15 +29,14 @@ public class NextActivity extends AppCompatActivity {
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private Bitmap bitmap;
-    private int imageCount = 0;
     private EditText photoDescription;
     private String imgUrl;
     private FirebaseAuth mAuth;
     private String mAppend = "file:/";
     private Intent intent;
-    private ProgressBar progressBar;
     private TextView share;
     private ImageView backArrow;
+    private ImageView img;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +52,17 @@ public class NextActivity extends AppCompatActivity {
         photoDescription = findViewById(R.id.photoDescription);
         backArrow = findViewById(R.id.ivBackArrow);
         share = findViewById(R.id.tvShare);
+        intent = getIntent();
+        img = findViewById(R.id.imgShare);
+
+        // Show selected image
+        if (intent.hasExtra(getString(R.string.selected_img))) {
+            imgUrl = intent.getStringExtra(getString(R.string.selected_img));
+            UniversalImageLoader.setIamge(imgUrl, img, null, mAppend);
+        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+            bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            img.setImageBitmap(bitmap);
+        }
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,39 +88,13 @@ public class NextActivity extends AppCompatActivity {
 
                     if (intent.hasExtra(getString(R.string.selected_img))) {
                         imgUrl = intent.getStringExtra(getString(R.string.selected_img));
-                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imageCount, imgUrl, null);
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imgUrl, null, NextActivity.this);
                     } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                         bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imageCount, null, bitmap);
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, null, bitmap, NextActivity.this);
                     }
                 }
             }
         });
-
-        setImage();
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                imageCount = modelFirebase.getImageCount(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
-    private void setImage() {
-        intent = getIntent();
-        ImageView img = findViewById(R.id.imgShare);
-
-        if (intent.hasExtra(getString(R.string.selected_img))) {
-            imgUrl = intent.getStringExtra(getString(R.string.selected_img));
-            UniversalImageLoader.setIamge(imgUrl, img, null, mAppend);
-        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
-            bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-            img.setImageBitmap(bitmap);
-        }
     }
 }

@@ -40,6 +40,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private TextView post_user_name;
     private ImageView user_profile_image;
     private ImageView imgBackArrow;
+    private boolean new_image = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,7 @@ public class ViewPostActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         photo_id = data.getString("photo_id");
         user_id = data.getString("user_id");
+        new_image = data.getBoolean("new_image");
 
         settUserName(user_id);
         displayPost(photo_id, user_id);
@@ -83,6 +85,10 @@ public class ViewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                if(new_image){
+                    Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

@@ -102,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         initImageLoader();
         setupGridView();
 
-        Button editProfile = (Button) findViewById(R.id.editProfileButtonid);
+        Button editProfile = findViewById(R.id.editProfileButtonid);
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

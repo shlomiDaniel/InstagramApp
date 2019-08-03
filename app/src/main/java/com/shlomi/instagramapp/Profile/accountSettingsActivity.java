@@ -56,11 +56,11 @@ public class accountSettingsActivity extends AppCompatActivity {
             if (intent.getStringExtra("return_to_fragment").equals("Edit Profile")) {
                 if (intent.hasExtra(getString(R.string.selected_img))) {
                     ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
-                    modelFirebase.uploadNewPhoto("profile_photo", null, 0, intent.getStringExtra(getString(R.string.selected_img)), null);
+                    modelFirebase.uploadNewPhoto("profile_photo", null, intent.getStringExtra(getString(R.string.selected_img)), null, accountSettingsActivity.this);
 
                 } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                     ModelFirebase modelFirebase = new ModelFirebase(accountSettingsActivity.this);
-                    modelFirebase.uploadNewPhoto("profile_photo", null, 0,null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)));
+                    modelFirebase.uploadNewPhoto("profile_photo", null, null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)), accountSettingsActivity.this);
                 }
             }
         }
