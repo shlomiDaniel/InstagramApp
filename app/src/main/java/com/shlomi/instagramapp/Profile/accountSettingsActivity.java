@@ -37,7 +37,7 @@ public class accountSettingsActivity extends AppCompatActivity {
         rl = findViewById(R.id.relayout1);
 
         setupSetting();
-        ImageView imageView = (ImageView) findViewById(R.id.profile_menu);
+        ImageView imageView = findViewById(R.id.profile_menu);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,23 +48,6 @@ public class accountSettingsActivity extends AppCompatActivity {
         setupFragments();
         getIncomingIntant();
     }
-
-    /*@Override
-    protected void onDestroy() {
-        Intent current_intent = getIntent();
-        if (current_intent.hasExtra("back_to_post")) {
-            Bundle data = getIntent().getExtras();
-            final String photo_id = data.getString("photo_id");
-            final String user_id = data.getString("user_id");
-
-            Intent intent  = new Intent(accountSettingsActivity.this, ViewPostActivity.class);
-            intent.putExtra("photo_id", photo_id);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
-        }
-
-        super.onDestroy();
-    }*/
 
     private void getIncomingIntant() {
         Intent intent = getIntent();

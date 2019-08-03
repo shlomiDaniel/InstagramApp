@@ -141,42 +141,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void registerUser(){
-     final String email = emailText.getText().toString();
-     final String password = passwordText.getText().toString();
-     if(TextUtils.isEmpty(email)){
-         Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
-         return;
-     }
-     if(TextUtils.isEmpty(password)){
-         Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
-       return;
-     }
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
 
-     progressDialog.setMessage("Please Wait...");
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.setMessage("Please Wait...");
         progressDialog.show();
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-               if(task.isSuccessful()){
-                   Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
+                if(task.isSuccessful()){
+                    Toast.makeText(MainActivity.this,"Register Succses , User Created",Toast.LENGTH_SHORT).show();
 
-                   progressDialog.cancel();
+                    progressDialog.cancel();
 
-                   String name = userName.getText().toString().trim();
-                   writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
-                   uploadImage();
-                   startActivity(new Intent(getApplicationContext(), Home.class));
+                    String name = userName.getText().toString().trim();
+                    writeNewUser(firebaseAuth.getUid(),name,email,password,getUrl(),"","");
+                    uploadImage();
+                    startActivity(new Intent(getApplicationContext(), Home.class));
 
-                   // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
+                    // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
 
-               }else{
-                   Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
-
-               }
+                }else{
+                    Toast.makeText(MainActivity.this,"Register faild , User not Created,try again.",Toast.LENGTH_SHORT).show();
+                    progressDialog.cancel();
+                }
             }
         });
-
-
 
     }
     @Override

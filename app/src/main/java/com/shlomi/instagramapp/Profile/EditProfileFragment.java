@@ -64,7 +64,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
-    public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {
+public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
@@ -107,8 +107,8 @@ import static android.support.constraint.Constraints.TAG;
         photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-            profilePhoto.setImageURI(uri);
-            Glide.with(getContext() /* context */).load(uri).into(profilePhoto);
+                profilePhoto.setImageURI(uri);
+                Glide.with(getContext() /* context */).load(uri).into(profilePhoto);
             }
         });
 
@@ -124,30 +124,30 @@ import static android.support.constraint.Constraints.TAG;
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            saveProfileSettings();
-            Toast.makeText(getActivity(), "here", Toast.LENGTH_SHORT).show();
+                saveProfileSettings();
+                Toast.makeText(getActivity(), "here", Toast.LENGTH_SHORT).show();
             }
         });
 
         return view;
     }
 
-        @Override
-        protected void onDestroy() {
-            Intent current_intent = getActivity().getIntent();
-            if (current_intent.hasExtra("back_to_post")) {
-                Bundle data = getActivity().getIntent().getExtras();
-                final String photo_id = data.getString("photo_id");
-                final String user_id = data.getString("user_id");
+    @Override
+    public void onDestroy() {
+        Intent current_intent = getActivity().getIntent();
+        if (current_intent.hasExtra("back_to_post")) {
+            Bundle data = getActivity().getIntent().getExtras();
+            final String photo_id = data.getString("photo_id");
+            final String user_id = data.getString("user_id");
 
-                Intent intent  = new Intent(accountSettingsActivity.this, ViewPostActivity.class);
-                intent.putExtra("photo_id", photo_id);
-                intent.putExtra("user_id", user_id);
-                startActivity(intent);
-            }
-
-            super.onDestroy();
+            Intent intent = new Intent(getActivity(), ViewPostActivity.class);
+            intent.putExtra("photo_id", photo_id);
+            intent.putExtra("user_id", user_id);
+            startActivity(intent);
         }
+
+        super.onDestroy();
+    }
 
     private void saveProfileSettings() {
         final String displayNamee = displayName.getText().toString();
@@ -209,7 +209,8 @@ import static android.support.constraint.Constraints.TAG;
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
     }
@@ -227,7 +228,8 @@ import static android.support.constraint.Constraints.TAG;
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -247,9 +249,9 @@ import static android.support.constraint.Constraints.TAG;
         changeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), ShareActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getActivity().startActivity(intent);
+                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
             }
         });
     }
@@ -267,7 +269,8 @@ import static android.support.constraint.Constraints.TAG;
         ref = storageReference.child("photos").child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile_image.png");
         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri uri) { }
+            public void onSuccess(Uri uri) {
+            }
         });
 
 
@@ -282,12 +285,12 @@ import static android.support.constraint.Constraints.TAG;
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-            // Handle unsuccessful uploads
+                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
             }
         });
     }
@@ -308,49 +311,44 @@ import static android.support.constraint.Constraints.TAG;
         .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful())
-            {
-                Log.d(TAG, "User re-authenticated.");
-                mAuth.fetchProvidersForEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                        if (task.isSuccessful()) {
-                            try {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "User re-authenticated.");
+                    mAuth.fetchProvidersForEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                            if (task.isSuccessful()) {
+                                try {
 
-                                if (task.getResult().getProviders().size() == 1) {
-                                    Toast.makeText(getActivity(), "that email alreay in use", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Log.d(this,"that email is avalivble");
+                                    if (task.getResult().getProviders().size() == 1) {
+                                        Toast.makeText(getActivity(), "that email alreay in use", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Log.d(this,"that email is avalivble");
 
-                                    mAuth.getCurrentUser().updateEmail(email.getText().toString())
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Log.d(TAG, "User email address updated.");
-                                                        Toast.makeText(getActivity(), "email updated.", Toast.LENGTH_SHORT).show();
-                                                        Toast.makeText(getActivity(), email.getText().toString(), Toast.LENGTH_SHORT).show();
-                                                        modelFirebase.updateEmail(email.getText().toString());
+                                        mAuth.getCurrentUser().updateEmail(email.getText().toString())
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d(TAG, "User email address updated.");
+                                                            Toast.makeText(getActivity(), "email updated.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getActivity(), email.getText().toString(), Toast.LENGTH_SHORT).show();
+                                                            modelFirebase.updateEmail(email.getText().toString());
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
 
-                                }
+                                    }
 
 
-                            } catch (NullPointerException e) {
-
+                                } catch (NullPointerException e) {}
                             }
-                        } else {
-
                         }
-                    }
-                });
+                    });
 
-            } else {
-                Log.d(TAG, "User re-authenticated faild.");
+                } else {
+                    Log.d(TAG, "User re-authenticated faild.");
 
-            }
+                }
             }
         });
     }
