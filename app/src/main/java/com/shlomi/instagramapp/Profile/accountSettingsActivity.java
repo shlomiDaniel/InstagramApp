@@ -49,7 +49,7 @@ public class accountSettingsActivity extends AppCompatActivity {
         getIncomingIntant();
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         Intent current_intent = getIntent();
         if (current_intent.hasExtra("back_to_post")) {
@@ -64,7 +64,7 @@ public class accountSettingsActivity extends AppCompatActivity {
         }
 
         super.onDestroy();
-    }
+    }*/
 
     private void getIncomingIntant() {
         Intent intent = getIntent();

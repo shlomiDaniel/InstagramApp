@@ -132,6 +132,23 @@ import static android.support.constraint.Constraints.TAG;
         return view;
     }
 
+        @Override
+        protected void onDestroy() {
+            Intent current_intent = getActivity().getIntent();
+            if (current_intent.hasExtra("back_to_post")) {
+                Bundle data = getActivity().getIntent().getExtras();
+                final String photo_id = data.getString("photo_id");
+                final String user_id = data.getString("user_id");
+
+                Intent intent  = new Intent(accountSettingsActivity.this, ViewPostActivity.class);
+                intent.putExtra("photo_id", photo_id);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+            }
+
+            super.onDestroy();
+        }
+
     private void saveProfileSettings() {
         final String displayNamee = displayName.getText().toString();
         final String user_name = userName.getText().toString();
