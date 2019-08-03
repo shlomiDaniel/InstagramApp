@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relayout1"
-                >
+                android:layout_below="@+id/relayout1">
 
-                <include layout="@layout/top_next_tool_bar"></include>
+                <include layout="@layout/top_next_tool_bar"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_below="@+id/relayout2"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relayout2"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/white_gray_border_top"
-
-                >
+                android:background="@drawable/white_gray_border_top">
 
                 <ImageView
+                    android:id="@+id/imgShare"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@+id/imgShare"
-                    android:scaleType="centerCrop"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginBottom="40dp"
-                    />
+                    android:contentDescription="@string/selected_img"
+                    android:scaleType="centerCrop" />
+
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/imgShare"
                     android:id="@+id/caption"
-                    android:hint="Write a description..."
-                    android:layout_marginLeft="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:height="138dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toEndOf="@+id/imgShare"
+                    android:layout_toRightOf="@+id/imgShare"
                     android:background="@null"
-                    android:layout_marginTop="50dp"
-                    />
-
-
+                    android:paddingTop="25dp"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingEnd="10dp"
+                    android:gravity="top"
+                    android:textSize="18sp"
+                    android:hint="@string/writeADescription" />
 
             </RelativeLayout>
-
-
         </RelativeLayout>
-
-
-
-
-
-
     </ScrollView>
-
-
 </RelativeLayout>
