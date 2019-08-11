@@ -42,6 +42,7 @@ import com.shlomi.instagramapp.Utils.StringManipulation;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -192,7 +193,7 @@ public class ModelFirebase {
     public void uploadNewPhoto(String photo_type, final String caption, String imgUrl, Bitmap bm, final AppCompatActivity sourceActivity) {
         FilePath filePath = new FilePath();
 
-
+        // new post
         if (!photo_type.equals("profile_photo")) {
             if (bm == null) {
                 bm = ImageManager.getBitmap(imgUrl);
@@ -215,7 +216,7 @@ public class ModelFirebase {
                         @Override
                         public void onSuccess(Uri uri) {
                             String photoLink = uri.toString();
-                            Toast.makeText(context, "photo update success", Toast.LENGTH_LONG).show();
+
                             if (caption != null) {
                                 data = addPhotoToDataBase(caption, photoLink);
                             } else {
@@ -236,19 +237,18 @@ public class ModelFirebase {
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "photo update failed", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(context, "Unable to add image to storage reference", Toast.LENGTH_LONG).show();
                 }
             })
             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    final double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                final double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
 
-                    if (progress - 15 > mPhotoUploadProgress) {
-                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                        mPhotoUploadProgress = progress;
-                    }
+                if (progress - 15 > mPhotoUploadProgress) {
+                    Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                    mPhotoUploadProgress = progress;
+                }
                 }
             });
         }
@@ -266,36 +266,36 @@ public class ModelFirebase {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                    task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            StorageReference ref = storageReference.child("images/" + "profile_image.png");
-                            String userId = firebaseAuth.getCurrentUser().getUid();
-                            ref = storageReference.child("photos").child("users").child(userId).child("profile_image.png");
+                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                    StorageReference ref = storageReference.child("images/" + "profile_image.png");
+                    String userId = firebaseAuth.getCurrentUser().getUid();
+                    ref = storageReference.child("photos").child("users").child(userId).child("profile_image.png");
 
-                            String photoLink = uri.toString();
-                            Toast.makeText(context, "Profile Photo updated success", Toast.LENGTH_LONG).show();
-                            setProfilePhoto(photoLink);
-                        }
-                    });
+                    String photoLink = uri.toString();
+                    Toast.makeText(context, "Profile Photo updated success", Toast.LENGTH_LONG).show();
+                    setProfilePhoto(photoLink);
+                    }
+                });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "photo update failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Unable to add image to storage reference", Toast.LENGTH_LONG).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                            .getTotalByteCount());
-                    if (progress - 15 > mPhotoUploadProgress) {
-                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                        mPhotoUploadProgress = progress;
-                    }
+                // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                        .getTotalByteCount());
+                if (progress - 15 > mPhotoUploadProgress) {
+                    Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                    mPhotoUploadProgress = progress;
+                }
                 }
             });
         }

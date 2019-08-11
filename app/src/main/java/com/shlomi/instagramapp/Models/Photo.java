@@ -12,8 +12,7 @@ public class Photo {
     private String tags;
     private ArrayList<String> likes;
 
-    public Photo() {
-    }
+    public Photo() { }
 
     public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags) {
         this.caption = caption;
@@ -23,7 +22,10 @@ public class Photo {
         this.user_id = user_id;
         this.tags = tags;
         this.likes = new ArrayList<>();
+    }
 
+    public void setLikes(ArrayList<String> likes) {
+        this.likes = likes;
     }
 
     public void setCaption(String caption) {
@@ -46,9 +48,7 @@ public class Photo {
         this.user_id = user_id;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+    public void setTags(String tags) { this.tags = tags; }
 
     public String getCaption() {
         return caption;

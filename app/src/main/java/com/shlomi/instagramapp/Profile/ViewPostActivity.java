@@ -25,11 +25,14 @@ import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class ViewPostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ImageView imagePost;
     private String photo_id;
     private String user_id;
+    private String user_name;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private Photo photo;
@@ -78,17 +81,17 @@ public class ViewPostActivity extends AppCompatActivity {
         user_id = data.getString("user_id");
         new_image = data.getBoolean("new_image");
 
-        settUserName(user_id);
+        setUserName(user_id);
         displayPost(photo_id, user_id);
 
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                if(new_image){
-                    Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                }
+            finish();
+            if(new_image){
+                Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
             }
         });
 
@@ -114,9 +117,66 @@ public class ViewPostActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        like_deactive.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                setLike(user_id, user_name, photo_id);
+            }
+        });
+
+        like_active.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                setLike(user_id, user_name, photo_id);
+            }
+        });
     }
 
-    private void settUserName(final String user_id){
+    private void setLike(final String user_id, final String user_name,  final String photo_id){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        Query query = reference.child("user_photos").child(user_id);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                Photo p = null;
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    p = snap.getValue(Photo.class);
+                    if(p.getPhoto_id().equals(photo_id)){
+                       break;
+                    }
+                }
+
+                if(p!=null){
+                    if(p.getLikes() == null){
+                        p.setLikes(new ArrayList<String>());
+                    }
+
+                    if(!p.getLikes().contains(user_name)) {
+                        p.getLikes().add(user_name);
+                        reference.child("user_photos").child(user_id).child(photo_id).setValue(p);
+                        like_deactive.setVisibility(View.GONE);
+                        like_active.setVisibility(View.VISIBLE);
+                    }else{
+                        p.getLikes().remove(user_name);
+                        reference.child("user_photos").child(user_id).child(photo_id).setValue(p);
+                        like_deactive.setVisibility(View.VISIBLE);
+                        like_active.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setUserName(final String user_id){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
         ref.child("users")
@@ -129,7 +189,8 @@ public class ViewPostActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                post_user_name.setText(snapshot.getValue(User.class).getUserName());
+                user_name = (snapshot.getValue(User.class).getUserName());
+                post_user_name.setText(user_name);
                 Picasso.get().load(snapshot.getValue(User.class).getProfile_image()).into(user_profile_image);
             }
         });
@@ -143,16 +204,30 @@ public class ViewPostActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Photo p;
+                photo = null;
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    Photo p = snap.getValue(Photo.class);
+                    p = snap.getValue(Photo.class);
                     if(p.getPhoto_id().equals(photo_id)){
                         photo = p;
                         break;
                     }
                 }
 
-                Picasso.get().load(photo.getImage_path()).into(imagePost);
-                post_description.setText(photo.getCaption());
+                // default behaviour
+                like_deactive.setVisibility(View.VISIBLE);
+                like_active.setVisibility(View.GONE);
+
+                if(photo!=null) {
+                    if (photo.getLikes() != null)
+                        if (photo.getLikes().size() > 0) {
+                            like_deactive.setVisibility(View.GONE);
+                            like_active.setVisibility(View.VISIBLE);
+                        }
+
+                    Picasso.get().load(photo.getImage_path()).into(imagePost);
+                    post_description.setText(photo.getCaption());
+                }
             }
 
             @Override
