@@ -37,14 +37,20 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/ivElipses"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_action_name" />
+                    android:src="@drawable/ic_action_name"
+                    android:onClick="showPopup"
+
+
+                    />
+
+
             </RelativeLayout>
 
 
@@ -84,12 +90,16 @@
                         android:id="@+id/like_active"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
                         app:srcCompat="@drawable/vector_heart_red" />
                 </RelativeLayout>
 
                 <ImageView
-                    android:id="@+id/image_heart"
+                    android:id="@+id/comment_id"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

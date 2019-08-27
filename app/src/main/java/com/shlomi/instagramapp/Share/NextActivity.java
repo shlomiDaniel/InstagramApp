@@ -78,10 +78,12 @@ public class NextActivity extends AppCompatActivity {
 
                 final String description = photoDescription.getText().toString();
 
-                if(description.equals("")){
+                if (description.equals("")) {
                     Toast.makeText(NextActivity.this, "Please write something to describe your photo.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (imgUrl != null) {
 
                 if (!imgUrl.equals("")) {
                     Toast.makeText(NextActivity.this, "uploading photo...", Toast.LENGTH_SHORT).show();
@@ -89,10 +91,14 @@ public class NextActivity extends AppCompatActivity {
                     if (intent.hasExtra(getString(R.string.selected_img))) {
                         imgUrl = intent.getStringExtra(getString(R.string.selected_img));
                         modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imgUrl, null, NextActivity.this);
-                    } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                    }
+                }
+            }else{
+                     if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                         bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
                         modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, null, bitmap, NextActivity.this);
                     }
+
                 }
             }
         });

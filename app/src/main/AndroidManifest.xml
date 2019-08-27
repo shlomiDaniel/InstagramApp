@@ -20,6 +20,8 @@
         <activity
             android:name=".Home.HomeActivity"
             android:label="@string/title_activity_home"></activity>
+
+        <activity android:name=".Profile.ViewCommentActivity"/>
         <activity android:name=".Share.ShareActivity" />
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Home.Home" />

@@ -14,6 +14,10 @@
     <string name="profile_photo">profile_photo</string>
     <string name="no_likes">0 likes</string>
     <string name="posts">Posts</string>
+
+
+    <string name="filed_comment">comments</string>
+
     <string name="selected_img">selected_img</string>
     <string name="selected_bitmap">selected_bitmap</string>
     <string name="auth_failed">Failed to Authenticated</string>
@@ -35,6 +39,8 @@
     <string name="totalUploadedPhotos">%d Photos</string>
     <string name="noPhotosUploaded">No Photos</string>
     <string name="photos">Photos</string>
+    <string name="filed_user_id">user_id</string>
+
     <string name="writeADescription"><font size="16">Write a description...</font></string>
     <string name="post_description">The app allows users to upload photos and videos to the service, which can be edited with various filters, and organized with tags and location information. </string>
 </resources>

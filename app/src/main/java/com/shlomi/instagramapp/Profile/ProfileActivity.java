@@ -124,7 +124,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapShot : dataSnapshot.getChildren()) {
-                    photos.add(singleSnapShot.getValue(Photo.class));
+                    if(singleSnapShot.getValue(Photo.class)!=null){
+                        photos.add(singleSnapShot.getValue(Photo.class));
+                    }
+
+
                 }
 
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;
@@ -168,7 +172,8 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent  = new Intent(ProfileActivity.this, ViewPostActivity.class);
             intent.putExtra("photo_id", photo.getPhoto_id());
             intent.putExtra("user_id", photo.getUser_id());
-
+            ///
+            intent.putExtra( "photo",photo );
             startActivity(intent);
         }
     };

@@ -47,11 +47,20 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapShot : dataSnapshot.getChildren()) {
+
                     Photo p = singleSnapShot.getValue(Photo.class);
 
-                    if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(p.getUser_id())) {
-                        photos.add(p);
+                    if(p.getUser_id()!=null){
+                        if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(p.getUser_id())) {
+                            if(p!=null){
+
+                                photos.add(p);
+                            }
+
+                        }
+
                     }
+
                 }
 
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;

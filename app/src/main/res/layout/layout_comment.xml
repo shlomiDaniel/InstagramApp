@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ImageView
+    android:layout_width="45dp"
+    android:layout_height="45dp"
+    android:id="@+id/commentProfileImage"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="5dp"
+    android:src="@drawable/profile_image"
+
+    />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relayout1"
+        android:layout_toRightOf="@+id/changeProfilePhoto"
+        android:layout_marginTop="15dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="shlomiDaniel"
+                android:id="@+id/commentUserName"
+                android:layout_marginLeft="55dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="this is a comment.."
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:layout_toRightOf="@+id/commentUserName"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 days ago..."
+                android:textColor="@color/grey"
+                android:textSize="13sp"
+                android:id="@+id/commentTimePost"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="45dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Replay"
+                android:textColor="@color/grey"
+                android:textSize="16sp"
+                android:id="@+id/commentReplay"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="135dp"
+                android:textStyle="bold"
+                />
+
+
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

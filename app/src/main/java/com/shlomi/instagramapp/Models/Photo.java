@@ -1,9 +1,14 @@
 package com.shlomi.instagramapp.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.widget.ListView;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Photo {
+public class Photo implements Parcelable {
     private String caption;
     private String date_created;
     private String image_path;
@@ -11,10 +16,23 @@ public class Photo {
     private String user_id;
     private String tags;
     private ArrayList<String> likes;
+    private List<Comment> comments;
+
 
     public Photo() { }
 
-    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags) {
+//    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags) {
+//        this.caption = caption;
+//        this.date_created = date_created;
+//        this.image_path = image_path;
+//        this.photo_id = photo_id;
+//        this.user_id = user_id;
+//        this.tags = tags;
+//        this.likes = new ArrayList<>();
+//       // this.comments = new ArrayList<>(  );
+//    }
+
+    public Photo ( String caption, String date_created, String image_path, String photo_id, String user_id, String tags, ArrayList<String> likes, ArrayList<Comment> comments ) {
         this.caption = caption;
         this.date_created = date_created;
         this.image_path = image_path;
@@ -22,9 +40,64 @@ public class Photo {
         this.user_id = user_id;
         this.tags = tags;
         this.likes = new ArrayList<>();
+        this.comments = comments;
     }
 
-    public void setLikes(ArrayList<String> likes) {
+//    public List<Comment> getComments () {
+//        return comments;
+//    }
+//
+    public void setComments ( List<Comment> comments ) {
+        this.comments = comments;
+    }
+
+    //    public Photo ( String caption, String date_created, String image_path, String photo_id, String user_id, String tags, ArrayList<String> likes, ArrayList<Comment> comments ) {
+//        this.caption = caption;
+//        this.date_created = date_created;
+//        this.image_path = image_path;
+//        this.photo_id = photo_id;
+//        this.user_id = user_id;
+//        this.tags = tags;
+//        this.likes = likes;
+//        this.comments = comments;
+//    }
+
+
+
+//    public void setComments ( ArrayList<Comment> comments ) {
+//        this.comments = comments;
+//    }
+////
+//    public List<Comment> getComments () {
+//        return comments;
+//    }
+
+    protected Photo ( Parcel in ) {
+        caption = in.readString();
+        date_created = in.readString();
+        image_path = in.readString();
+        photo_id = in.readString();
+        user_id = in.readString();
+        tags = in.readString();
+        likes = in.createStringArrayList();
+
+
+    }
+
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel ( Parcel in ) {
+            return new Photo( in );
+        }
+
+        @Override
+        public Photo[] newArray ( int size ) {
+            return new Photo[size];
+        }
+    };
+
+    public void setLikes( ArrayList<String> likes) {
         this.likes = likes;
     }
 
@@ -76,5 +149,28 @@ public class Photo {
 
     public ArrayList<String> getLikes() {
         return likes;
+    }
+
+
+
+    @Override
+    public int hashCode () {
+        return super.hashCode();
+    }
+
+    @Override
+    public int describeContents () {
+        return 0;
+    }
+//
+    @Override
+    public void writeToParcel ( Parcel dest, int flags ) {
+        dest.writeString( caption );
+        dest.writeString( date_created );
+        dest.writeString( image_path );
+        dest.writeString( photo_id );
+        dest.writeString( user_id );
+        dest.writeString( tags );
+        dest.writeStringList( likes );
     }
 }
