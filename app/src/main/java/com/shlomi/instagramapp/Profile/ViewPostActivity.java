@@ -87,24 +87,24 @@ public class ViewPostActivity extends AppCompatActivity {
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            finish();
-            if(new_image){
-                Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+                finish();
+                if(new_image){
+                    Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
         post_user_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
-                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-                intent.putExtra("back_to_post", true);
-                intent.putExtra("photo_id", photo_id);
-                intent.putExtra("user_id", user_id);
-                startActivity(intent);
-                finish();
+            Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+            intent.putExtra("back_to_post", true);
+            intent.putExtra("photo_id", photo_id);
+            intent.putExtra("user_id", user_id);
+            startActivity(intent);
+            finish();
             }
         });
 
@@ -121,14 +121,14 @@ public class ViewPostActivity extends AppCompatActivity {
         like_deactive.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                setLike(user_id, user_name, photo_id);
+            setLike(user_id, user_name, photo_id);
             }
         });
 
         like_active.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                setLike(user_id, user_name, photo_id);
+            setLike(user_id, user_name, photo_id);
             }
         });
     }

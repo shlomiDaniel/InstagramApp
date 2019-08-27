@@ -1,6 +1,7 @@
 package com.shlomi.instagramapp.Utils;
 
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -30,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Cache.AppDatabase;
+import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Home.Home;
 import com.shlomi.instagramapp.Models.User;
@@ -42,8 +45,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-
     private Button buttonRegister;
     private EditText emailText;
     private EditText passwordText;
@@ -55,30 +56,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseDatabase firebaseDatabase;
     String url;
     FirebaseStorage storage;
-    // FirebaseDatabase database;
     StorageReference storageReference;
-
-    // FirebaseStorage storage;
-    // FirebaseDatabase database;
-    // StorageReference storageReference;
     public ModelFirebase modelFirebase;
-
-
+    public CacheModel appCache;
     private Uri filePath;
-
     private final int PICK_IMAGE_REQUEST = 71;
-
-    // Creating StorageReference and DatabaseReference object.
-    //StorageReference storageReference;
     DatabaseReference databaseReference;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
         buttonRegister = findViewById(R.id.buttonRegister);
         emailText = findViewById(R.id.editTextMail);
         passwordText = findViewById(R.id.editTextPassword);
@@ -97,8 +86,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        //important
+        appCache = new CacheModel(MainActivity.this);
+
+
+        // check if user is already logged in
         if (firebaseAuth.getCurrentUser() != null) {
+            appCache.getDb().users().insertAll( list of users here );
             finish();
             startActivity(new Intent(getApplicationContext(), Home.class));
         }
