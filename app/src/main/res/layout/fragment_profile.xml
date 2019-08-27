@@ -7,13 +7,11 @@
     tools:context=".Profile.ProfileActivity">
 
     <RelativeLayout
-
-        android:background="@color/colorPrimary"
+        android:id="@+id/relayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relayout1"
+        android:background="@color/colorPrimary"
         tools:ignore="MissingConstraints">
-
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -23,14 +21,8 @@
             <include layout="@layout/layaot_center_profile" />
         </RelativeLayout>
 
-
-
-
-
-        <include layout="@layout/layout_bottom_navogation"/>
+        <include layout="@layout/layout_bottom_navogation" />
 
     </RelativeLayout>
-
-
 
 </RelativeLayout>

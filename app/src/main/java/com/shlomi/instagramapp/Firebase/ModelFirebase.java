@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,12 +29,14 @@ import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
-import com.shlomi.instagramapp.Profile.ViewPostActivity;
+import com.shlomi.instagramapp.Post.ViewPostActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.ImageManager;
 import com.shlomi.instagramapp.Utils.StringManipulation;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -197,7 +200,7 @@ public class ModelFirebase {
     public void uploadNewPhoto(String photo_type, final String caption, String imgUrl, Bitmap bm, final AppCompatActivity sourceActivity) {
         FilePath filePath = new FilePath();
 
-        // new post
+        // new user post
         if (!photo_type.equals("profile_photo")) {
             if (bm == null) {
                 bm = ImageManager.getBitmap(imgUrl);
@@ -205,9 +208,8 @@ public class ModelFirebase {
 
             final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE + "/" + userId + "/" + UUID.randomUUID().toString());
 
-            UploadTask uploadTask = null;
             byte[] bytes = ImageManager.getByteFromBitMap(bm, 100);
-            uploadTask = storageReference.putBytes(bytes);
+            UploadTask uploadTask = storageReference.putBytes(bytes);
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -219,6 +221,9 @@ public class ModelFirebase {
 
                     @Override
                     public void onSuccess(Uri uri) {
+                        Button share = sourceActivity.findViewById(R.id.tvShare);
+                        share.setEnabled(true);
+                        share.setAlpha(1.0f);
                         String photoLink = uri.toString();
 
                         if (caption != null) {
@@ -241,22 +246,26 @@ public class ModelFirebase {
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "Unable to add image to storage reference", Toast.LENGTH_LONG).show();
+                    Button share = sourceActivity.findViewById(R.id.tvShare);
+                    share.setEnabled(true);
+                    share.setAlpha(1.0f);
+                    Toast.makeText(context, "Unable to add image to storage reference", Toast.LENGTH_LONG).show();
                 }
             })
             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                final double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    final double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
 
-                if (progress - 15 > mPhotoUploadProgress) {
-                    Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                    mPhotoUploadProgress = progress;
-                }
+                    if (progress - 15 > mPhotoUploadProgress) {
+                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
                 }
             });
         }
 
+        // upload user profile image
         if (photo_type.equals("profile_photo")) {
             final StorageReference storageReference = firebaseStorage.getReference().child(filePath.FIRE_BASE_IMAGE_STORAGE + "/" + userId + "/profile_image");
 
@@ -264,9 +273,9 @@ public class ModelFirebase {
                 bm = ImageManager.getBitmap(imgUrl);
             }
 
-            UploadTask uploadTask = null;
             byte[] bytes = ImageManager.getByteFromBitMap(bm, 100);
-            uploadTask = storageReference.putBytes(bytes);
+            UploadTask uploadTask = storageReference.putBytes(bytes);
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -293,19 +302,18 @@ public class ModelFirebase {
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                        .getTotalByteCount());
-                if (progress - 15 > mPhotoUploadProgress) {
-                    Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                    mPhotoUploadProgress = progress;
-                }
+                    // double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    if (progress - 15 > mPhotoUploadProgress) {
+                        Toast.makeText(context, "photo upload in progress: " + String.format(Locale.US,"%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
                 }
             });
         }
     }
 
-    private String getTimestap() {
+    private String getTimestamp() {
         SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
         sfd.setTimeZone(TimeZone.getTimeZone("Israel"));
         return sfd.format(new Date());
@@ -317,13 +325,17 @@ public class ModelFirebase {
 
         Bundle data = new Bundle();
         Photo photo = new Photo();
+        ArrayList<String> likes = new ArrayList<>();
+        final String user_id = firebaseAuth.getCurrentUser().getUid();
+        likes.add(user_id);
 
         photo.setCaption(caption);
-        photo.setDate_created(getTimestap());
+        photo.setDate_created(getTimestamp());
         photo.setImage_path(url);
         photo.setTags(tags);
         photo.setPhoto_id(newPhotoKey);
-        photo.setUser_id(firebaseAuth.getCurrentUser().getUid());
+        photo.setUser_id(user_id);
+        photo.setLikes(likes);
 
         if(this.cache != null){
             PhotoEntity photo_entity = new PhotoEntity(photo.getPhoto_id(), photo.getCaption(), photo.getDate_created(), photo.getImage_path(), photo.getUser_id(),photo.getTags());

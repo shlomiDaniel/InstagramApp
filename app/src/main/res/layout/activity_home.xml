@@ -14,11 +14,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/relayout1">
         <include layout="@layout/layout_top"/>
-
-
     </RelativeLayout>
-    <RelativeLayout
 
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/relayout2"

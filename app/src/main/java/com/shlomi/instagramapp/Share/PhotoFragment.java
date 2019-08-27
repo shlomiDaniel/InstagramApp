@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.shlomi.instagramapp.Post.UploadPostActivity;
 import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.Permissions;

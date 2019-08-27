@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.shlomi.instagramapp.Post.UploadPostActivity;
 import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.FilePath;

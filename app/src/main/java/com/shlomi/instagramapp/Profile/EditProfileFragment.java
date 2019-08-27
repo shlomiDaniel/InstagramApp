@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +29,6 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,26 +38,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shlomi.instagramapp.Dialogs.ConfirmPasswordDialog;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
+import com.shlomi.instagramapp.Post.ViewPostActivity;
 import com.shlomi.instagramapp.Share.ShareActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 import com.shlomi.instagramapp.R;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
 public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnconfirmPasswordListner {

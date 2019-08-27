@@ -27,6 +27,7 @@ import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
+import com.shlomi.instagramapp.Post.ViewPostActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.GridPhotoAdapter;

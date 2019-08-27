@@ -1,11 +1,10 @@
-package com.shlomi.instagramapp.Profile;
+package com.shlomi.instagramapp.Post;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +20,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
+import com.shlomi.instagramapp.Profile.ProfileActivity;
+import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
@@ -89,34 +90,34 @@ public class ViewPostActivity extends AppCompatActivity {
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            finish();
-            if(new_image){
-                Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+                finish();
+                if(new_image){
+                    Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
         post_user_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
-            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-            intent.putExtra("back_to_post", true);
-            intent.putExtra("photo_id", photo_id);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
-            finish();
+                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                intent.putExtra("back_to_post", true);
+                intent.putExtra("photo_id", photo_id);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+                finish();
             }
         });
 
         user_profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
-            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-            startActivity(intent);
-            finish();
+                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                startActivity(intent);
+                finish();
             }
         });
 

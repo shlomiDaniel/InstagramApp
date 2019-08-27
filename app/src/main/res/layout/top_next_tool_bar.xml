@@ -27,16 +27,19 @@
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_back_arrow" />
 
-                <TextView
+                <Button
                     android:id="@+id/tvShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/string_share"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:background="@android:color/transparent"
+                    android:textSize="18sp" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

@@ -1,4 +1,4 @@
-package com.shlomi.instagramapp.Share;
+package com.shlomi.instagramapp.Post;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,14 +16,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
-import com.shlomi.instagramapp.Home.Home;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 
 public class UploadPostActivity extends AppCompatActivity {
     private FirebaseDatabase mfirebasedatabase;
     private DatabaseReference myRef;
-    private static final String TAG = "UploadPostActivity";
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private Bitmap bitmap;
@@ -31,7 +30,7 @@ public class UploadPostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String mAppend = "file:/";
     private Intent intent;
-    private TextView share;
+    private Button share;
     private ImageView backArrow;
     private ImageView img;
     private CacheModel appCache;
@@ -73,7 +72,6 @@ public class UploadPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             // Upload the image to firebase
-
             final String description = photoDescription.getText().toString();
 
             if(description.equals("")){
@@ -82,6 +80,8 @@ public class UploadPostActivity extends AppCompatActivity {
             }
 
             if (!imgUrl.equals("")) {
+                share.setEnabled(false);
+                share.setAlpha(0.5f);
                 Toast.makeText(UploadPostActivity.this, "uploading photo...", Toast.LENGTH_SHORT).show();
 
                 if (intent.hasExtra(getString(R.string.selected_img))) {

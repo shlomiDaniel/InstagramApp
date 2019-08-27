@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shlomi.instagramapp.Models.Photo;
-import com.shlomi.instagramapp.Profile.ViewPostActivity;
+import com.shlomi.instagramapp.Post.ViewPostActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
