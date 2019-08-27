@@ -1,7 +1,12 @@
 package com.shlomi.instagramapp.Models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.widget.ListView;
 
 import java.lang.reflect.Array;
@@ -12,14 +17,21 @@ public class Photo implements Parcelable {
     private String caption;
     private String date_created;
     private String image_path;
+
+
     private String photo_id;
+
     private String user_id;
+
     private String tags;
+
     private ArrayList<String> likes;
-    private List<Comment> comments;
+    //private List<Comment> comments;
 
 
-    public Photo() { }
+    public Photo() {
+        //likes = new ArrayList<>();
+    }
 
 //    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags) {
 //        this.caption = caption;
@@ -39,8 +51,8 @@ public class Photo implements Parcelable {
         this.photo_id = photo_id;
         this.user_id = user_id;
         this.tags = tags;
-        this.likes = new ArrayList<>();
-        this.comments = comments;
+        this.likes = likes;
+        //this.comments = comments;
     }
 
 //    public List<Comment> getComments () {
@@ -48,7 +60,7 @@ public class Photo implements Parcelable {
 //    }
 //
     public void setComments ( List<Comment> comments ) {
-        this.comments = comments;
+        //this.comments = comments;
     }
 
     //    public Photo ( String caption, String date_created, String image_path, String photo_id, String user_id, String tags, ArrayList<String> likes, ArrayList<Comment> comments ) {

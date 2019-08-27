@@ -76,9 +76,6 @@ public class ViewPostActivity extends AppCompatActivity implements Serializable 
 
         setContentView(R.layout.fragment_view_post);
 
-
-
-
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -101,9 +98,7 @@ public class ViewPostActivity extends AppCompatActivity implements Serializable 
 
         Photo mp;
         try{
-
-
-            mp =getIntent().getExtras().getParcelable("photo");
+            mp = getIntent().getExtras().getParcelable("photo");
         }catch (NullPointerException ex){}
         if (currentUser == null) {
             finish();
@@ -298,6 +293,8 @@ public class ViewPostActivity extends AppCompatActivity implements Serializable 
                         like_deactive.setVisibility(View.VISIBLE);
                         like_active.setVisibility(View.GONE);
                     }
+
+                    post_number_of_likes.setText( p.getLikes().size() + " likes" );
                 }
             }
 

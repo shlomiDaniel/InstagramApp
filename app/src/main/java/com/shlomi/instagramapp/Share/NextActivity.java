@@ -3,21 +3,16 @@ package com.shlomi.instagramapp.Share;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
@@ -37,6 +32,7 @@ public class NextActivity extends AppCompatActivity {
     private TextView share;
     private ImageView backArrow;
     private ImageView img;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
