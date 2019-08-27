@@ -186,8 +186,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Log.println(1,"TAG",userId);
         firebaseDatabase.getReference().child("users").child(userId).setValue(hashMap);
         modelFirebase.sendVereficationEmail();
-
-
         //ref.child("users").child(userId).setValue(user);
     }
 

@@ -1,7 +1,5 @@
 package com.shlomi.instagramapp.Firebase;
 
-import android.Manifest;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,55 +9,42 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.shlomi.instagramapp.Home.HomeActivity;
 import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
 import com.shlomi.instagramapp.Models.UserSetting;
 import com.shlomi.instagramapp.Profile.ViewPostActivity;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Share.ShareActivity;
 import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.ImageManager;
 import com.shlomi.instagramapp.Utils.StringManipulation;
-
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.UUID;
 
 public class ModelFirebase {
-
-    public Context mcontext;
-    public FirebaseAuth firebaseAuth;
-    public FirebaseDatabase firebaseDatabase;
-    public FirebaseStorage firebaseStorage;
+    private Context mcontext;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
     private Context context;
-    public DatabaseReference databaseReference;
-    public String userId;
+    private DatabaseReference databaseReference;
+    private String userId;
     private double mPhotoUploadProgress = 0;
 
     public ModelFirebase(Context context) {
@@ -68,6 +53,7 @@ public class ModelFirebase {
         databaseReference = firebaseDatabase.getReference();
         firebaseStorage = FirebaseStorage.getInstance();
         this.context = context;
+
         if (firebaseAuth.getCurrentUser() != null) {
             userId = firebaseAuth.getCurrentUser().getUid();
         }
@@ -79,11 +65,11 @@ public class ModelFirebase {
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
+                if (task.isSuccessful()) {
 
-                    } else {
-                        Toast.makeText(mcontext, "couldnt send verefication email.", Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(mcontext, "couldnt send verefication email.", Toast.LENGTH_SHORT).show();
+                }
                 }
             });
         }
@@ -100,19 +86,20 @@ public class ModelFirebase {
 
                 try {
                     user.setUserName(
-                            ds.child(userId).getValue(User.class).getUserName()
+                        ds.child(userId).getValue(User.class).getUserName()
 
                     );
+
                     user.setEmail(
-                            ds.child(userId).getValue(User.class).getEmail()
-
+                        ds.child(userId).getValue(User.class).getEmail()
                     );
+
                     user.setPassword(
-                            ds.child(userId).getValue(User.class).getPassword()
-
+                        ds.child(userId).getValue(User.class).getPassword()
                     );
+
                     user.setProfile_image_url(
-                            ds.child(userId).getValue(User.class).getProfile_image()
+                        ds.child(userId).getValue(User.class).getProfile_image()
                     );
                 } catch (NullPointerException ex) {
                     Log.d("error", "nullpointer ex from users");

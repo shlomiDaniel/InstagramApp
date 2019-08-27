@@ -3,11 +3,13 @@ package com.shlomi.instagramapp.Cache;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity
 public class UserEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
     @ColumnInfo(name = "email")
     private String email;
@@ -21,21 +23,21 @@ public class UserEntity {
     @ColumnInfo(name = "userName")
     private String userName;
 
-    UserEntity(String email, String password, String profile_image, String userName){
+    public UserEntity(String id, String email, String password, String profile_image, String userName){
+        this.id = id;
         this.email = email;
         this.password = password;
         this.profile_image = profile_image;
         this.userName = userName;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-
 
     public void setEmail(String email) {
         this.email = email;

@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.shlomi.instagramapp.Cache.AppDatabase;
 import com.shlomi.instagramapp.Cache.CacheModel;
+import com.shlomi.instagramapp.Cache.UserEntity;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Home.Home;
 import com.shlomi.instagramapp.Models.User;
@@ -42,7 +44,9 @@ import com.shlomi.instagramapp.R;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button buttonRegister;
@@ -54,14 +58,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    String url;
-    FirebaseStorage storage;
-    StorageReference storageReference;
-    public ModelFirebase modelFirebase;
-    public CacheModel appCache;
-    private Uri filePath;
+    private String url;
+    private StorageReference storageReference;
+    private Uri filePath = null;
     private final int PICK_IMAGE_REQUEST = 71;
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
+    private CacheModel appCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +82,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firebaseDatabase = FirebaseDatabase.getInstance();
         userName = findViewById(R.id.editUserName);
         databaseReference = firebaseDatabase.getReference();
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-
+        storageReference = FirebaseStorage.getInstance().getReference();
         appCache = new CacheModel(MainActivity.this);
-
 
         // check if user is already logged in
         if (firebaseAuth.getCurrentUser() != null) {
-            appCache.getDb().users().insertAll( list of users here );
             finish();
-            startActivity(new Intent(getApplicationContext(), Home.class));
+            startActivity(new Intent(getApplicationContext(), Home.class)); // yes, take us to home
         }
 
+        // select an image (when creating a new user)
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
@@ -145,22 +140,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Register Succses , User Created", Toast.LENGTH_SHORT).show();
+            if (task.isSuccessful()) {
+                Toast.makeText(MainActivity.this, "Register Success , User Created", Toast.LENGTH_SHORT).show();
 
-                    progressDialog.cancel();
+                progressDialog.cancel();
 
-                    String name = userName.getText().toString().trim();
-                    writeNewUser(firebaseAuth.getUid(), name, email, password, getUrl(), "", "");
-                    uploadImage();
-                    startActivity(new Intent(getApplicationContext(), Home.class));
+                String name = userName.getText().toString().trim();
+                writeNewUser(firebaseAuth.getUid(), name, email, password, getUrl(), "", "");
 
-                    // modelFirebase.addAcountSettingToDataBase("","","","description","web","");
+                // save image to cache
+                UserEntity user = new UserEntity(firebaseAuth.getUid(), email, password,getUrl(),name);
+                appCache.getDb().users().insertAll(user);
 
-                } else {
-                    Toast.makeText(MainActivity.this, "Register faild , User not Created,try again.", Toast.LENGTH_SHORT).show();
-                    progressDialog.cancel();
-                }
+                uploadImage();
+                startActivity(new Intent(getApplicationContext(), Home.class));
+            } else {
+                String message = task.getException().getMessage();
+                String localizedMessage = task.getException().getLocalizedMessage();
+                String errorCode = ((FirebaseAuthInvalidUserException) task.getException()).getErrorCode();
+                Toast.makeText(MainActivity.this, "User Registration failed.", Toast.LENGTH_SHORT).show();
+                progressDialog.cancel();
+            }
             }
         });
     }
@@ -168,7 +168,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view == buttonRegister) {
-            registerUser();
+            if(filePath!=null) {
+                registerUser();
+            }else{
+                Toast.makeText(MainActivity.this, "Please select an image profile image.", Toast.LENGTH_SHORT).show();
+            }
         } else if (view == signInTextView) {
             finish();
             startActivity(new Intent(this, SignInActivity.class));
@@ -186,40 +190,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void uploadImage() {
-        //String profile_image = UUID.randomUUID().toString();
         if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/" + "profile_image.png");
+            StorageReference ref;
             String userId = firebaseAuth.getCurrentUser().getUid();
             ref = storageReference.child("photos").child("users").child(userId).child("profile_image");
             ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                            finish();
-                            // startActivity(new Intent(getApplicationContext(), Home.class));
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                finish();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                }
+            });
         }
     }
 
@@ -231,13 +232,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.i("profile_image : ", uri.toString());
-                url = uri.toString();
-                if (url != null && url != "") {
-
-                    writeImage();
-                }
-                //uri = uri;
+            Log.i("profile_image : ", uri.toString());
+            url = uri.toString();
+            if (!url.equals("")) {
+                writeImage();
+            }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

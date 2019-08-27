@@ -74,7 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignInActivity.class));
         }
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
         setupToolBar();
         setTitle("");
         setupButonNavigation();
@@ -179,7 +178,9 @@ public class ProfileActivity extends AppCompatActivity {
         emailtText.setText(user.getEmail());
 
         proileName.setText(user.getUserName());
-        Picasso.get().load(user.getProfile_image()).into(profile_photo);
+        if(!user.getProfile_image().equals("")) {
+            Picasso.get().load(user.getProfile_image()).into(profile_photo);
+        }
     }
 
     private void initImageLoader() {

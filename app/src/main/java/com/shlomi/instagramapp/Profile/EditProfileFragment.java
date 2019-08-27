@@ -212,7 +212,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
     }
 
     private void setupFirebase() {
