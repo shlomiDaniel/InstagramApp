@@ -48,12 +48,11 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView proileName;
     private TextView emailtText;
     private GridView gridView;
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
     private DatabaseReference myRef;
     private final int activity_num = 1;
     private final int NUM_GRID_COLUMS = 3;
     private ArrayList<Photo> photos;
+    private Button editProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         profile_photo = findViewById(R.id.profile_photo);
         proileName = findViewById(R.id.proileName);
         firebaseAuth = FirebaseAuth.getInstance();
+        editProfile = findViewById(R.id.editProfileButtonid);
 
         if (firebaseAuth.getCurrentUser() == null) {
             finish();
@@ -80,19 +80,14 @@ public class ProfileActivity extends AppCompatActivity {
         initImageLoader();
         setupGridView();
 
-        Button editProfile = findViewById(R.id.editProfileButtonid);
-
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
-                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-                startActivity(intent);
+            Intent intent = new Intent(ProfileActivity.this, accountSettingsActivity.class);
+            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+            startActivity(intent);
             }
         });
-
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
