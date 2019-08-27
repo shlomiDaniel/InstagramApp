@@ -11,11 +11,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Utils.MainActivity;
 
 public class Home extends AppCompatActivity {
     private static String TAG = "Home_Activity";
+    private CacheModel appCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,9 @@ public class Home extends AppCompatActivity {
 
         setupUniversalImageLoad();
         setupViewPager();
+
+        appCache = new CacheModel(Home.this);
     }
-
-
 
     private void setupUniversalImageLoad() {
         // UNIVERSAL IMAGE LOADER SETUP

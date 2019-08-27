@@ -52,5 +52,7 @@ dependencies {
     implementation "android.arch.persistence.room:common:$arch_version"
     implementation "android.arch.lifecycle:livedata:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
+    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
+    releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
 }
 apply plugin: 'com.google.gms.google-services'

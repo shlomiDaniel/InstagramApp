@@ -156,9 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), Home.class));
             } else {
                 String message = task.getException().getMessage();
-                String localizedMessage = task.getException().getLocalizedMessage();
-                String errorCode = ((FirebaseAuthInvalidUserException) task.getException()).getErrorCode();
-                Toast.makeText(MainActivity.this, "User Registration failed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "User Registration failed: " + message, Toast.LENGTH_SHORT).show();
                 progressDialog.cancel();
             }
             }
