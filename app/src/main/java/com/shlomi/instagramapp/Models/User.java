@@ -5,27 +5,26 @@ import com.shlomi.instagramapp.Utils.ModelFirebase;
 import java.util.HashMap;
 
 public class User {
+    private String id;
     private String profile_image;
-   // private ModelFirebase firebase;
     private String userName;
     private String password;
     private String email;
 
-
-
-   public User(){
-         this.email = "";
-         this.password="";
-         this.userName = "";
-         this.profile_image="";
-
+    public User(){
+        this.id = "";
+        this.email = "";
+        this.password="";
+        this.userName = "";
+        this.profile_image="";
     }
-    public User(String userId,String userName,String email,String password,String profile_image_url){
+
+    public User(String userId, String userName, String email, String password, String profile_image_url){
+        this.id = userId;
         this.email = email;
         this.password=password;
         this.userName = userName;
         this.profile_image = profile_image_url;
-
     }
 
     public HashMap<String,Object> toMap(String userId, String userName, String email,String password,String profile_image_url) {
@@ -38,6 +37,10 @@ public class User {
         result.put("profile_image", profile_image);
 
         return result;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getEmail() {

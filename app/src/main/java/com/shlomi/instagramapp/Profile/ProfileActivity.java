@@ -15,15 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.Models.Photo;
@@ -36,7 +33,6 @@ import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {

@@ -13,7 +13,7 @@ public interface UserEntityDao {
     List<UserEntity> getAll();
 
     @Query("SELECT * FROM userentity WHERE id IN (:userIds)")
-    List<UserEntity> getByIds(int[] userIds);
+    List<UserEntity> getByIds(String[] userIds);
 
     @Insert
     void insertAll(UserEntity... users);

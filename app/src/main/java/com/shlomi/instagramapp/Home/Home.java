@@ -1,10 +1,19 @@
 package com.shlomi.instagramapp.Home;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -12,26 +21,62 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shlomi.instagramapp.Cache.CacheModel;
+import com.shlomi.instagramapp.Cache.UserEntity;
+import com.shlomi.instagramapp.Models.Photo;
+import com.shlomi.instagramapp.Models.User;
+import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 
 public class Home extends AppCompatActivity {
     private static String TAG = "Home_Activity";
-    private CacheModel appCache;
+    private CacheModel appCache = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        appCache = new CacheModel(Home.this);
         BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(Home.this, bn);
 
         setupUniversalImageLoad();
         setupViewPager();
 
-        appCache = new CacheModel(Home.this);
+        if(appCache!=null){
+            addCurrentUser();
+        }
     }
+
+    private void addCurrentUser(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        Query query = reference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                String[] users = new String[1];
+                users[0] = user.getId();
+
+                // add user to cache if not exists
+                if(appCache.getDb().users().getByIds(users).size() == 0){
+                    UserEntity userEntity = new UserEntity(user.getId(),user.getEmail(),user.getPassword(),user.getProfile_image(),user.getUserName());
+                    appCache.getDb().users().insertAll(userEntity);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     private void setupUniversalImageLoad() {
         // UNIVERSAL IMAGE LOADER SETUP
