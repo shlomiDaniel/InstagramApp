@@ -26,7 +26,7 @@
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".Profile.ViewPostActivity" />
         <activity android:name=".Utils.SignInActivity" />
-        <activity android:name=".Share.NextActivity"></activity>
+        <activity android:name=".Share.UploadPostActivity"></activity>
         <activity android:name=".Utils.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

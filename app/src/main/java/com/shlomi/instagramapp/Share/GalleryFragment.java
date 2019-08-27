@@ -26,7 +26,6 @@ import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Utils.FilePath;
 import com.shlomi.instagramapp.Utils.FileSearch;
 import com.shlomi.instagramapp.Utils.GridImageAdapter;
-import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 
 import java.util.ArrayList;
 
@@ -65,7 +64,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isRoootTask()) {
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    Intent intent = new Intent(getActivity(), UploadPostActivity.class);
                     intent.putExtra(getString(R.string.selected_img), selectedImage);
                     startActivity(intent);
                 } else {

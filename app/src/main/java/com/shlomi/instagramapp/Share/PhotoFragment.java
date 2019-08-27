@@ -57,7 +57,7 @@ public class PhotoFragment extends Fragment {
             bitmap = (Bitmap) data.getExtras().get("data");
             if (isRoootTask()) {
                 try {
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    Intent intent = new Intent(getActivity(), UploadPostActivity.class);
                     intent.putExtra(getString(R.string.selected_bitmap), bitmap);
 
                     startActivity(intent);

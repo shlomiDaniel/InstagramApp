@@ -22,6 +22,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shlomi.instagramapp.Cache.CacheModel;
+import com.shlomi.instagramapp.Cache.PhotoEntity;
 import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Models.UserAccountSetting;
@@ -46,16 +48,31 @@ public class ModelFirebase {
     private DatabaseReference databaseReference;
     private String userId;
     private double mPhotoUploadProgress = 0;
+    private CacheModel cache;
 
     public ModelFirebase(Context context) {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
-        firebaseStorage = FirebaseStorage.getInstance();
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.firebaseDatabase = FirebaseDatabase.getInstance();
+        this.databaseReference = firebaseDatabase.getReference();
+        this.firebaseStorage = FirebaseStorage.getInstance();
         this.context = context;
+        this.cache = null;
 
-        if (firebaseAuth.getCurrentUser() != null) {
-            userId = firebaseAuth.getCurrentUser().getUid();
+        if (this.firebaseAuth.getCurrentUser() != null) {
+            this.userId = firebaseAuth.getCurrentUser().getUid();
+        }
+    }
+
+    public ModelFirebase(Context context, CacheModel cache) {
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.firebaseDatabase = FirebaseDatabase.getInstance();
+        this.databaseReference = firebaseDatabase.getReference();
+        this.firebaseStorage = FirebaseStorage.getInstance();
+        this.context = context;
+        this.cache = cache;
+
+        if (this.firebaseAuth.getCurrentUser() != null) {
+            this.userId = firebaseAuth.getCurrentUser().getUid();
         }
     }
 
@@ -195,30 +212,30 @@ public class ModelFirebase {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                    task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        Bundle data;
+                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    Bundle data;
 
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String photoLink = uri.toString();
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String photoLink = uri.toString();
 
-                            if (caption != null) {
-                                data = addPhotoToDataBase(caption, photoLink);
-                            } else {
-                                data = addPhotoToDataBase("", photoLink);
-                            }
-
-                            Intent intent = new Intent(sourceActivity, ViewPostActivity.class);
-                            final String photo_id = data.getString("photo_id");
-                            final String user_id = data.getString("user_id");
-                            intent.putExtra("photo_id", photo_id);
-                            intent.putExtra("user_id", user_id);
-                            intent.putExtra("new_image", true);
-                            context.startActivity(intent);
+                        if (caption != null) {
+                            data = addPhotoToDataBase(caption, photoLink);
+                        } else {
+                            data = addPhotoToDataBase("", photoLink);
                         }
-                    });
+
+                        Intent intent = new Intent(sourceActivity, ViewPostActivity.class);
+                        final String photo_id = data.getString("photo_id");
+                        final String user_id = data.getString("user_id");
+                        intent.putExtra("photo_id", photo_id);
+                        intent.putExtra("user_id", user_id);
+                        intent.putExtra("new_image", true);
+                        context.startActivity(intent);
+                    }
+                });
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -307,6 +324,11 @@ public class ModelFirebase {
         photo.setTags(tags);
         photo.setPhoto_id(newPhotoKey);
         photo.setUser_id(firebaseAuth.getCurrentUser().getUid());
+
+        if(this.cache != null){
+            PhotoEntity photo_entity = new PhotoEntity(photo.getPhoto_id(), photo.getCaption(), photo.getDate_created(), photo.getImage_path(), photo.getUser_id(),photo.getTags());
+            cache.getDb().photos().insertAll(photo_entity);
+        }
 
         data.putString("photo_id", photo.getPhoto_id());
         data.putString("user_id" ,photo.getUser_id());

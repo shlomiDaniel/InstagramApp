@@ -32,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.idescout.sql.SqlScoutServer;
 import com.shlomi.instagramapp.Cache.AppDatabase;
 import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Cache.UserEntity;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int PICK_IMAGE_REQUEST = 71;
     private DatabaseReference databaseReference;
     private CacheModel appCache;
+    private SqlScoutServer sqlScoutServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         databaseReference = firebaseDatabase.getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         appCache = new CacheModel(MainActivity.this);
+        sqlScoutServer = SqlScoutServer.create(this, getPackageName());
 
         // check if user is already logged in
         if (firebaseAuth.getCurrentUser() != null) {

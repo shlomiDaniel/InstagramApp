@@ -40,7 +40,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
-
     private ModelFirebase modelFirebase;
     private FirebaseAuth firebaseAuth;
     private ImageView profile_photo;
