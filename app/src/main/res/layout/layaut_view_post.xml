@@ -71,7 +71,9 @@
                         android:id="@+id/like_deactive"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        android:layout_alignBottom="@+id/like_active"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="0dp"
                         app:srcCompat="@drawable/vector_heart_deactive" />
                 </RelativeLayout>
 

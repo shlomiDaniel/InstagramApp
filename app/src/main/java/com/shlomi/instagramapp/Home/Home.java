@@ -14,7 +14,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Utils.MainActivity;
 
 public class Home extends AppCompatActivity {
     private static String TAG = "Home_Activity";

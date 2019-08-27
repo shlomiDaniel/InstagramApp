@@ -26,6 +26,7 @@ import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ViewPostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -44,6 +45,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private ImageView user_profile_image;
     private ImageView imgBackArrow;
     private boolean new_image = false;
+    private FirebaseUser currentUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +63,11 @@ public class ViewPostActivity extends AppCompatActivity {
         user_profile_image = findViewById(R.id.user_profile_image);
         post_user_name = findViewById(R.id.post_user_name);
         imgBackArrow = findViewById(R.id.imgBackArrow);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
         // init
-        like_active.setVisibility(View.INVISIBLE);
+        like_deactive.setVisibility(View.VISIBLE);
+        like_active.setVisibility(View.GONE);
         post_user_name.setText("");
         post_description.setText("");
         post_number_of_likes.setText(R.string.no_likes);
@@ -82,16 +85,15 @@ public class ViewPostActivity extends AppCompatActivity {
         new_image = data.getBoolean("new_image");
 
         setUserName(user_id);
-        displayPost(photo_id, user_id);
 
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                if(new_image){
-                    Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                }
+            finish();
+            if(new_image){
+                Intent intent = new Intent(ViewPostActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
             }
         });
 
@@ -111,29 +113,29 @@ public class ViewPostActivity extends AppCompatActivity {
         user_profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
-                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
-                startActivity(intent);
-                finish();
+            Intent intent = new Intent(ViewPostActivity.this, accountSettingsActivity.class);
+            intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+            startActivity(intent);
+            finish();
             }
         });
 
         like_deactive.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-            setLike(user_id, user_name, photo_id);
+            setLike(user_id, photo_id, currentUser.getUid());
             }
         });
 
         like_active.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-            setLike(user_id, user_name, photo_id);
+            setLike(user_id, photo_id, currentUser.getUid());
             }
         });
     }
 
-    private void setLike(final String user_id, final String user_name,  final String photo_id){
+    private void setLike(final String user_id, final String photo_id, final String clicked_user_id){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         Query query = reference.child("user_photos").child(user_id);
@@ -155,17 +157,19 @@ public class ViewPostActivity extends AppCompatActivity {
                         p.setLikes(new ArrayList<String>());
                     }
 
-                    if(!p.getLikes().contains(user_name)) {
-                        p.getLikes().add(user_name);
+                    if(!p.getLikes().contains(clicked_user_id)) {
+                        p.getLikes().add(clicked_user_id);
                         reference.child("user_photos").child(user_id).child(photo_id).setValue(p);
                         like_deactive.setVisibility(View.GONE);
                         like_active.setVisibility(View.VISIBLE);
                     }else{
-                        p.getLikes().remove(user_name);
+                        p.getLikes().remove(clicked_user_id);
                         reference.child("user_photos").child(user_id).child(photo_id).setValue(p);
                         like_deactive.setVisibility(View.VISIBLE);
                         like_active.setVisibility(View.GONE);
                     }
+
+                    post_number_of_likes.setText(String.format(Locale.US,"%d likes", p.getLikes().size()));
                 }
             }
 
@@ -192,6 +196,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 user_name = (snapshot.getValue(User.class).getUserName());
                 post_user_name.setText(user_name);
                 Picasso.get().load(snapshot.getValue(User.class).getProfile_image()).into(user_profile_image);
+                displayPost(photo_id, user_id);
             }
         });
     }
@@ -221,8 +226,12 @@ public class ViewPostActivity extends AppCompatActivity {
                 if(photo!=null) {
                     if (photo.getLikes() != null)
                         if (photo.getLikes().size() > 0) {
-                            like_deactive.setVisibility(View.GONE);
-                            like_active.setVisibility(View.VISIBLE);
+                            post_number_of_likes.setText(String.format(Locale.US,"%d likes", photo.getLikes().size()));
+
+                            if(photo.getLikes().contains(currentUser.getUid())) {
+                                like_deactive.setVisibility(View.GONE);
+                                like_active.setVisibility(View.VISIBLE);
+                            }
                         }
 
                     Picasso.get().load(photo.getImage_path()).into(imagePost);
