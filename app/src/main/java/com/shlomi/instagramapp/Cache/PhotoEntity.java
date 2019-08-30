@@ -32,6 +32,7 @@ public class PhotoEntity {
         this.date = date;
         this.image = image;
         this.tags = tags;
+        this.user_id = user_id;
     }
 
     @NonNull

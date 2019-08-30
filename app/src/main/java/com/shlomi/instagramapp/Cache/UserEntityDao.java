@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface UserEntityDao {
     @Query("SELECT * FROM userentity")
-    List<UserEntity> getAll();
+    UserEntity getUser();
 
     @Query("SELECT * FROM userentity WHERE id IN (:userIds)")
     List<UserEntity> getByIds(String[] userIds);

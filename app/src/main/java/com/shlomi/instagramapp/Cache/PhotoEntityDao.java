@@ -15,6 +15,9 @@ public interface PhotoEntityDao {
     @Query("SELECT * FROM photoentity WHERE photo_id IN (:photosIds)")
     List<PhotoEntity> getByIds(String[] photosIds);
 
+    @Query("SELECT * FROM photoentity WHERE photo_id = (:photoId)")
+    PhotoEntity getById(String photoId);
+
     @Insert
     void insertAll(PhotoEntity... users);
 
