@@ -90,6 +90,7 @@ public class HomeFragment extends Fragment {
 
                     if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(p.getUser_id())) {
                         photos.add(p);
+
                         // cache user photos
                         if(appCache.getDb().photos().getById(p.getPhoto_id()) == null){
                             PhotoEntity photo_entity = new PhotoEntity(p.getPhoto_id(), p.getCaption(), p.getDate_created(), p.getImage_path(), p.getUser_id(),p.getTags());
