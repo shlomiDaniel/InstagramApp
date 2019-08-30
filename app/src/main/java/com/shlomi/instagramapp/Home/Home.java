@@ -27,7 +27,6 @@ import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
 
 public class Home extends AppCompatActivity {
-    private static String TAG = "Home_Activity";
     private CacheModel appCache = null;
 
     @Override
