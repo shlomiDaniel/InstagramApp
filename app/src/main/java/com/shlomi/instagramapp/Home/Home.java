@@ -36,10 +36,12 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         appCache = new CacheModel(Home.this);
+
+        // set navigation
         BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(Home.this, bn);
-
         bn.getMenu().getItem(0).setIcon(R.drawable.ic_home_solid);
+
         setupUniversalImageLoad();
         setupViewPager();
 

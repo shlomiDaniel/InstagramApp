@@ -12,8 +12,12 @@
             app:itemBackground="@color/white"
             app:itemIconTint="@android:color/black"
             app:itemTextColor="@android:color/black"
-            android:layout_gravity="start" app:menu="@menu/bottom_navigation_menu">
+            android:layout_gravity="start"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation_menu">
         </android.support.design.widget.BottomNavigationView>
 
     </RelativeLayout>
+
+
 </merge>

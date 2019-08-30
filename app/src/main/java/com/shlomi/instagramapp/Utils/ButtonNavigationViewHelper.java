@@ -1,5 +1,7 @@
 package com.shlomi.instagramapp.Utils;
 
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,8 +13,10 @@ import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Search.SearchActivity;
 import com.shlomi.instagramapp.Share.ShareActivity;
 
+import java.lang.reflect.Field;
+
 public class ButtonNavigationViewHelper {
-    public static void enableNavigation(final Context context, BottomNavigationView bn) {
+   public static void enableNavigation(final Context context, BottomNavigationView bn) {
         bn.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
