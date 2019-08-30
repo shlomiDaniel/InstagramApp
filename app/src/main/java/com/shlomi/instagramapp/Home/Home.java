@@ -22,12 +22,9 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Cache.UserEntity;
-import com.shlomi.instagramapp.Models.Photo;
 import com.shlomi.instagramapp.Models.User;
-import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Utils.GridPhotoAdapter;
 
 public class Home extends AppCompatActivity {
     private static String TAG = "Home_Activity";
@@ -42,6 +39,7 @@ public class Home extends AppCompatActivity {
         BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(Home.this, bn);
 
+        bn.getMenu().getItem(0).setIcon(R.drawable.ic_home_solid);
         setupUniversalImageLoad();
         setupViewPager();
 

@@ -70,8 +70,12 @@ public class GridPhotoAdapter extends ArrayAdapter<Photo> {
                     viewHolder.progressBar.setVisibility(View.GONE);
                 }
 
-                images.remove(position);
-                notifyDataSetChanged();
+                try {
+                    images.remove(position);
+                    notifyDataSetChanged();
+                }catch (IndexOutOfBoundsException err){
+                    err.printStackTrace();
+                }
             }
         });
 

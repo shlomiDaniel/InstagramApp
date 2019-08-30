@@ -337,6 +337,7 @@ public class ModelFirebase {
         photo.setUser_id(user_id);
         photo.setLikes(likes);
 
+        // add image to cache (after adding it to firebase)
         if(this.cache != null){
             PhotoEntity photo_entity = new PhotoEntity(photo.getPhoto_id(), photo.getCaption(), photo.getDate_created(), photo.getImage_path(), photo.getUser_id(),photo.getTags());
             cache.getDb().photos().insertAll(photo_entity);
