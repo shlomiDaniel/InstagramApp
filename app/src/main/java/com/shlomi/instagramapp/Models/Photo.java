@@ -11,6 +11,8 @@ public class Photo {
     private String user_id;
     private String tags;
     private ArrayList<String> likes;
+    private String lng;
+    private String lat;
 
     public Photo() { }
 
@@ -24,7 +26,23 @@ public class Photo {
         this.likes = new ArrayList<>();
     }
 
-    public void setLikes(ArrayList<String> likes) {
+    public String getLat () {
+        return lat;
+    }
+
+    public String getLng () {
+        return lng;
+    }
+
+    public void setLat ( String lat ) {
+        this.lat = lat;
+    }
+
+    public void setLng ( String lng ) {
+        this.lng = lng;
+    }
+
+    public void setLikes( ArrayList<String> likes) {
         this.likes = likes;
     }
 

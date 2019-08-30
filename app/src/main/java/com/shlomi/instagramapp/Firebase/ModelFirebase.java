@@ -37,6 +37,7 @@ import com.shlomi.instagramapp.Profile.ViewPostActivity;
 import com.shlomi.instagramapp.R;
 import com.shlomi.instagramapp.Share.ShareActivity;
 import com.shlomi.instagramapp.Utils.FilePath;
+import com.shlomi.instagramapp.Utils.GpsTracker;
 import com.shlomi.instagramapp.Utils.ImageManager;
 import com.shlomi.instagramapp.Utils.StringManipulation;
 
@@ -218,9 +219,9 @@ public class ModelFirebase {
                             String photoLink = uri.toString();
 
                             if (caption != null) {
-                                data = addPhotoToDataBase(caption, photoLink);
+                                data = addPhotoToDataBase(caption, photoLink, sourceActivity);
                             } else {
-                                data = addPhotoToDataBase("", photoLink);
+                                data = addPhotoToDataBase("", photoLink, sourceActivity);
                             }
 
                             Intent intent = new Intent(sourceActivity, ViewPostActivity.class);
@@ -307,12 +308,20 @@ public class ModelFirebase {
         return sfd.format(new Date());
     }
 
-    private Bundle addPhotoToDataBase(String caption, String url) {
+    private Bundle addPhotoToDataBase(String caption, String url,final AppCompatActivity sourceActivity) {
+        GpsTracker gps = new GpsTracker(sourceActivity.getApplicationContext());
         String tags = StringManipulation.getTags(caption);
         String newPhotoKey = databaseReference.child("photos").push().getKey();
 
         Bundle data = new Bundle();
         Photo photo = new Photo();
+        double latitude = 0;
+        double longitude = 0;
+
+        if(gps.canGetLocation()) {
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+        }
 
         photo.setCaption(caption);
         photo.setDate_created(getTimestap());
@@ -320,6 +329,8 @@ public class ModelFirebase {
         photo.setTags(tags);
         photo.setPhoto_id(newPhotoKey);
         photo.setUser_id(firebaseAuth.getCurrentUser().getUid());
+        photo.setLat(String.format(Locale.US,"%f",latitude));
+        photo.setLng(String.format(Locale.US,"%f",longitude));
 
         data.putString("photo_id", photo.getPhoto_id());
         data.putString("user_id" ,photo.getUser_id());
