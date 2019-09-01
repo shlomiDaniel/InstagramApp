@@ -11,10 +11,12 @@ public class Photo {
     private String user_id;
     private String tags;
     private ArrayList<String> likes;
+    private String latitude;
+    private String longitude;
 
     public Photo() { }
 
-    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags) {
+    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags, String latitude, String longitude) {
         this.caption = caption;
         this.date_created = date_created;
         this.image_path = image_path;
@@ -22,6 +24,24 @@ public class Photo {
         this.user_id = user_id;
         this.tags = tags;
         this.likes = new ArrayList<>();
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public void setLikes(ArrayList<String> likes) {

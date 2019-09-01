@@ -141,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         // cache user photos
                         if(appCache.getDb().photos().getById(photo.getPhoto_id()) == null){
-                            PhotoEntity photo_entity = new PhotoEntity(photo.getPhoto_id(), photo.getCaption(), photo.getDate_created(), photo.getImage_path(), photo.getUser_id(),photo.getTags());
+                            PhotoEntity photo_entity = new PhotoEntity(photo.getPhoto_id(), photo.getCaption(), photo.getDate_created(), photo.getImage_path(), photo.getUser_id(),photo.getTags(), photo.getLongitude(), photo.getLatitude());
                             appCache.getDb().photos().insertAll(photo_entity);
                         }
                     }
@@ -175,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             for(PhotoEntity p : cachedPhotos){
                 if(p.getUser_id().equals(firebaseAuth.getCurrentUser().getUid())) {
-                    Photo photo = new Photo(p.getCaption(), p.getDate(), p.getImage(), p.getPhoto_id(), p.getUser_id(), p.getTags());
+                    Photo photo = new Photo(p.getCaption(), p.getDate(), p.getImage(), p.getPhoto_id(), p.getUser_id(), p.getTags(), p.getLongitude(), p.getLatitude());
                     photos.add(photo);
                 }
             }

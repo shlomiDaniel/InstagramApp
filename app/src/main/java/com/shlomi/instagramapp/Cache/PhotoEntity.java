@@ -26,13 +26,21 @@ public class PhotoEntity {
     @ColumnInfo(name = "tags")
     private String tags;
 
-    public PhotoEntity(String photo_id, String caption, String date, String image, String user_id, String tags){
+    @ColumnInfo(name = "longitude")
+    private String longitude;
+
+    @ColumnInfo(name = "latitude")
+    private String latitude;
+
+    public PhotoEntity(String photo_id, String caption, String date, String image, String user_id, String tags, String longitude, String latitude){
         this.photo_id = photo_id;
         this.caption = caption;
         this.date = date;
         this.image = image;
         this.tags = tags;
         this.user_id = user_id;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     @NonNull
@@ -82,5 +90,21 @@ public class PhotoEntity {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
     }
 }

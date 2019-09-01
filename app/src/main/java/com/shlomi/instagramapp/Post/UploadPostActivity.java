@@ -1,9 +1,16 @@
 package com.shlomi.instagramapp.Post;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.shlomi.instagramapp.Cache.CacheModel;
 import com.shlomi.instagramapp.Firebase.ModelFirebase;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Services.GPS_Service;
 import com.shlomi.instagramapp.Utils.UniversalImageLoader;
 
 public class UploadPostActivity extends AppCompatActivity {
@@ -33,6 +41,38 @@ public class UploadPostActivity extends AppCompatActivity {
     private ImageView backArrow;
     private ImageView img;
     private CacheModel appCache;
+    private BroadcastReceiver broadcastReceiver = null;
+    private String GPSLongitude;
+    private String GPSLatitude;
+    private Intent service = null;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    GPSLongitude = intent.getExtras().get("long").toString();
+                    GPSLatitude = intent.getExtras().get("lat").toString();
+                }
+            };
+        }
+
+        registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(broadcastReceiver != null){
+            unregisterReceiver(broadcastReceiver);
+        }
+
+        if(service!=null){
+            stopService(service);
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +90,8 @@ public class UploadPostActivity extends AppCompatActivity {
         img = findViewById(R.id.imgShare);
         appCache = new CacheModel(UploadPostActivity.this);
         modelFirebase = new ModelFirebase(UploadPostActivity.this, appCache);
+        service = new Intent(getApplicationContext(), GPS_Service.class);
+        startService(service);
 
         // Show selected image
         if (intent.hasExtra(getString(R.string.selected_img))) {
@@ -70,27 +112,26 @@ public class UploadPostActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            // Upload the image to firebase
-            final String description = photoDescription.getText().toString();
+                // Upload the image to firebase
+                final String description = photoDescription.getText().toString();
 
-            if(description.equals("")){
-                Toast.makeText(UploadPostActivity.this, "Please write something to describe your photo.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!imgUrl.equals("")) {
-                share.setEnabled(false);
-                share.setAlpha(0.5f);
-                Toast.makeText(UploadPostActivity.this, "uploading photo...", Toast.LENGTH_SHORT).show();
-
-                if (intent.hasExtra(getString(R.string.selected_img))) {
-                    imgUrl = intent.getStringExtra(getString(R.string.selected_img));
-                    modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imgUrl, null, UploadPostActivity.this);
-                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
-                    bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-                    modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, null, bitmap, UploadPostActivity.this);
+                if(description.equals("")){
+                    Toast.makeText(UploadPostActivity.this, "Please write something to describe your photo.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
+
+                if (!imgUrl.equals("")) {
+                    share.setEnabled(false);
+                    share.setAlpha(0.5f);
+
+                    if (intent.hasExtra(getString(R.string.selected_img))) {
+                        imgUrl = intent.getStringExtra(getString(R.string.selected_img));
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, imgUrl, null, GPSLongitude, GPSLatitude, UploadPostActivity.this);
+                    } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                        bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                        modelFirebase.uploadNewPhoto(getString(R.string.new_photo), description, null, bitmap, GPSLongitude, GPSLatitude, UploadPostActivity.this);
+                    }
+                }
             }
         });
     }

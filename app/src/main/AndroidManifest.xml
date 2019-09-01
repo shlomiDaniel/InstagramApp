@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,25 +19,28 @@
         android:noHistory="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".Home.HomeActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/title_activity_home"/>
         <activity android:name=".Share.ShareActivity" />
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Home.Home" />
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".Post.ViewPostActivity" />
         <activity android:name=".Utils.SignInActivity" />
-        <activity android:name=".Post.UploadPostActivity"></activity>
+        <activity android:name=".Post.UploadPostActivity"/>
         <activity android:name=".Utils.MainActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Profile.accountSettingsActivity" />
+        <service android:name="com.shlomi.instagramapp.Services.GPS_Service"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 </manifest>

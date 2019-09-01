@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
 
         for(PhotoEntity p : cachedPhotos){
             if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(p.getUser_id())) {
-                Photo photo = new Photo(p.getCaption(), p.getDate(), p.getImage(), p.getPhoto_id(), p.getUser_id(), p.getTags());
+                Photo photo = new Photo(p.getCaption(), p.getDate(), p.getImage(), p.getPhoto_id(), p.getUser_id(), p.getTags(), p.getLongitude(), p.getLatitude());
                 photos.add(photo);
             }
         }
@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
 
                         // cache user photos
                         if(appCache.getDb().photos().getById(p.getPhoto_id()) == null){
-                            PhotoEntity photo_entity = new PhotoEntity(p.getPhoto_id(), p.getCaption(), p.getDate_created(), p.getImage_path(), p.getUser_id(),p.getTags());
+                            PhotoEntity photo_entity = new PhotoEntity(p.getPhoto_id(), p.getCaption(), p.getDate_created(), p.getImage_path(), p.getUser_id() ,p.getTags(), p.getLongitude(), p.getLatitude());
                             appCache.getDb().photos().insertAll(photo_entity);
                         }
                     }
