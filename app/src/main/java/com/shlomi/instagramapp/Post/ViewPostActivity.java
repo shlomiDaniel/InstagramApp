@@ -3,12 +3,12 @@ package com.shlomi.instagramapp.Post;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,9 +30,9 @@ import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -54,13 +54,13 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
     private ImageView imgBackArrow;
     private boolean new_image = false;
     private FirebaseUser currentUser;
-    private GoogleMap GMap;
+    private GoogleMap GMap = null;
+    private SupportMapFragment mapFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fragment_view_post);
-
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -74,9 +74,15 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
         imgBackArrow = findViewById(R.id.imgBackArrow);
         currentUser = mAuth.getCurrentUser();
 
+        // set navigation
+        BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
+        ButtonNavigationViewHelper.enableNavigation(ViewPostActivity.this, bn);
+        bn.getMenu().getItem(4).setIcon(R.drawable.ic_home_solid);
+
         // maps
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        mapFragment.getView().setVisibility(View.GONE);
 
         // init
         like_deactive.setVisibility(View.VISIBLE);
@@ -96,8 +102,6 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
         photo_id = data.getString("photo_id");
         user_id = data.getString("user_id");
         new_image = data.getBoolean("new_image");
-
-        setUserName(user_id);
 
         imgBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +155,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         GMap = googleMap;
+        loadData(user_id);
     }
 
     private void setLike(final String user_id, final String photo_id, final String clicked_user_id){
@@ -198,7 +203,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
         });
     }
 
-    private void setUserName(final String user_id){
+    private void loadData(final String user_id){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
         ref.child("users")
@@ -256,15 +261,13 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
                     post_description.setText(photo.getCaption());
 
                     // show position in map
-                    if(photo.getLongitude()!=null && photo.getLatitude()!=null){
+                    if(photo.getLongitude()!=null && photo.getLatitude()!=null && GMap!=null){
+                        mapFragment.getView().setVisibility(View.VISIBLE);
                         double latitude = Double.parseDouble(photo.getLatitude());
                         double longitude = Double.parseDouble(photo.getLongitude());
-                        // Add a marker in Sydney, Australia,
-                        // and move the map's camera to the same location.
                         LatLng location = new LatLng(latitude, longitude);
                         GMap.addMarker(new MarkerOptions().position(location).title("Post Location"));
-                        GMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-                        GMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
+                        GMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.5f), 4000, null);
                     }
                 }
             }
