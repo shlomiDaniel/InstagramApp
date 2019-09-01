@@ -3,11 +3,19 @@ package com.shlomi.instagramapp.Post;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.MapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +31,7 @@ import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Profile.ProfileActivity;
 import com.shlomi.instagramapp.Profile.accountSettingsActivity;
 import com.shlomi.instagramapp.R;
+import com.shlomi.instagramapp.Search.SearchActivity;
 import com.shlomi.instagramapp.Utils.SignInActivity;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +54,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private TextView post_user_name;
     private ImageView user_profile_image;
     private ImageView imgBackArrow;
+    private ImageView location;
     private boolean new_image = false;
     private FirebaseUser currentUser;
 
@@ -65,6 +75,7 @@ public class ViewPostActivity extends AppCompatActivity {
         post_user_name = findViewById(R.id.post_user_name);
         imgBackArrow = findViewById(R.id.imgBackArrow);
         currentUser = mAuth.getCurrentUser();
+        location = findViewById( R.id.location );
 
         // init
         like_deactive.setVisibility(View.VISIBLE);
@@ -78,6 +89,8 @@ public class ViewPostActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignInActivity.class));
             return;
         }
+
+
 
         // get data sent to this intent
         Bundle data = getIntent().getExtras();
@@ -97,6 +110,26 @@ public class ViewPostActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+
+
+
+        location.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick ( View v ) {
+                Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();
+                Log.d("asdasd","asdasd");
+                //anotherActivity anotherActivity = new anotherActivity();
+                Intent intent4 = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent4);
+
+            }
+
+        } );
+
 
         post_user_name.setOnClickListener(new View.OnClickListener() {
             @Override
