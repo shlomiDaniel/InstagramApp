@@ -108,8 +108,10 @@ public class ProfileActivity extends AppCompatActivity {
             });
         }else{
             UserEntity u = appCache.getDb().users().getUser();
-            UserSetting userSetting = new UserSetting(new User(u.getId(), u.getUserName(), u.getEmail(), u.getPassword(), u.getProfile_image()));
-            setProfileInfo(userSetting);
+            if(u!=null) {
+                UserSetting userSetting = new UserSetting(new User(u.getId(), u.getUserName(), u.getEmail(), u.getPassword(), u.getProfile_image()));
+                setProfileInfo(userSetting);
+            }
         }
     }
 
