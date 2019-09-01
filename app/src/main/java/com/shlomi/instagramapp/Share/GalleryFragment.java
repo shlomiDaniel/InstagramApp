@@ -93,6 +93,7 @@ public class GalleryFragment extends Fragment {
             String str = dir.get(i).substring(indx);
             dirNames.add(str);
         }
+
         dir.add(filePaths.DOWNLOADS);
         dir.add(filePaths.CAMERA);
         dir.add(filePaths.PICTURES);
@@ -102,15 +103,13 @@ public class GalleryFragment extends Fragment {
         list.add("Camera");
         list.add("PICTURES");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setupGreedView(dir.get(position));
-                Toast.makeText(getContext(), "Please Enter Email.", Toast.LENGTH_SHORT).show();
+                setupGridView(dir.get(position));
             }
 
             @Override
@@ -121,7 +120,7 @@ public class GalleryFragment extends Fragment {
     }
 
 
-    private void setupGreedView(String selectedDir) {
+    private void setupGridView(String selectedDir) {
         final ArrayList<String> imgUrl = FileSearch.getFilePath(selectedDir);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imgWidth = gridWidth / NUM_GRID_COL;
@@ -130,8 +129,12 @@ public class GalleryFragment extends Fragment {
         final GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layaout_grid_imgview, mAppend, imgUrl);
 
         gridView.setAdapter(adapter);
-        setImage(imgUrl.get(0), galleryImage, mAppend);
-        selectedImage = imgUrl.get(0);
+
+        if(imgUrl.size()>0) {
+            setImage(imgUrl.get(0), galleryImage, mAppend);
+            selectedImage = imgUrl.get(0);
+        }
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
