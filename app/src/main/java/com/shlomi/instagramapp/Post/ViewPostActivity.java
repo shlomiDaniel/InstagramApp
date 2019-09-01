@@ -8,6 +8,13 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +36,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class ViewPostActivity extends AppCompatActivity {
+public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseAuth mAuth;
     private ImageView imagePost;
     private String photo_id;
@@ -47,6 +54,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private ImageView imgBackArrow;
     private boolean new_image = false;
     private FirebaseUser currentUser;
+    private GoogleMap GMap;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,10 @@ public class ViewPostActivity extends AppCompatActivity {
         post_user_name = findViewById(R.id.post_user_name);
         imgBackArrow = findViewById(R.id.imgBackArrow);
         currentUser = mAuth.getCurrentUser();
+
+        // maps
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         // init
         like_deactive.setVisibility(View.VISIBLE);
@@ -134,6 +146,11 @@ public class ViewPostActivity extends AppCompatActivity {
             setLike(user_id, photo_id, currentUser.getUid());
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        GMap = googleMap;
     }
 
     private void setLike(final String user_id, final String photo_id, final String clicked_user_id){
@@ -237,6 +254,18 @@ public class ViewPostActivity extends AppCompatActivity {
 
                     Picasso.get().load(photo.getImage_path()).into(imagePost);
                     post_description.setText(photo.getCaption());
+
+                    // show position in map
+                    if(photo.getLongitude()!=null && photo.getLatitude()!=null){
+                        double latitude = Double.parseDouble(photo.getLatitude());
+                        double longitude = Double.parseDouble(photo.getLongitude());
+                        // Add a marker in Sydney, Australia,
+                        // and move the map's camera to the same location.
+                        LatLng location = new LatLng(latitude, longitude);
+                        GMap.addMarker(new MarkerOptions().position(location).title("Post Location"));
+                        GMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                        GMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
+                    }
                 }
             }
 
