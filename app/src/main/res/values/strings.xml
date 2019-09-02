@@ -8,6 +8,7 @@
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="profile_activity">Profile Activity</string>
     <string name="sign_out">Sign Out</string>
+    <string name="sign_in">Sign In</string>
     <string name="view_post">View Post</string>
     <string name="profile_fragment">Profile</string>
     <string name="new_photo">new_photo</string>
@@ -42,5 +43,6 @@
     <string name="passwordText">Password:</string>
     <string name="writeADescription"><font size="16">Write a description...</font></string>
     <string name="alreadyAMemeber">Already a Member? Click Here</string>
+    <string name="noAccount">"Don't have an account? Register</string>
     <string name="post_description">The app allows users to upload photos and videos to the service, which can be edited with various filters, and organized with tags and location information. </string>
 </resources>

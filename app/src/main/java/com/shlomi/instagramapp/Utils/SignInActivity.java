@@ -21,9 +21,9 @@ import com.shlomi.instagramapp.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private  EditText emailText;
-    private  EditText passwordText;
-    private  TextView registerTextView;
+    private EditText emailText;
+    private EditText passwordText;
+    private Button btnViewRegister;
     private Button buttonSignIn;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -33,59 +33,60 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-         emailText = (EditText) findViewById(R.id.editTextMail);
-         passwordText = (EditText) findViewById(R.id.editTextPassword);
-         buttonSignIn = (Button)findViewById(R.id.buttonSignIn);
-        registerTextView = (TextView)findViewById(R.id.textViewRegister);
+        emailText = findViewById(R.id.editTextMail);
+        passwordText = findViewById(R.id.editTextPassword);
+        buttonSignIn = findViewById(R.id.buttonSignIn);
+        btnViewRegister = findViewById(R.id.btnViewRegister);
+
         buttonSignIn.setOnClickListener(this);
-        registerTextView.setOnClickListener(this);
+        btnViewRegister.setOnClickListener(this);
+
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    private void signIn(){
+    private void signIn() {
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Please Enter Email.",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Please Enter Email.", Toast.LENGTH_SHORT).show();
 
             return;
         }
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(this,"Please Enter password.",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please Enter password.", Toast.LENGTH_SHORT).show();
             return;
         }
         progressDialog.setMessage("Waiting...");
         progressDialog.show();
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();
-               if(task.isSuccessful()){
-                   Toast.makeText(SignInActivity.this,"Log In Success.",Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    Toast.makeText(SignInActivity.this, "Log In Success.", Toast.LENGTH_SHORT).show();
 
-                 //startActivity(new Intent(getApplicationContext(),new ProfileActivity().getClass()));Intent i = new Intent(CurrentClassName.this, LoginActivity.class);
-                   Intent intent = new Intent(SignInActivity.this, Home.class);
-                  // finish();
-                   startActivity(intent);
-               }else{
-                   Toast.makeText(SignInActivity.this,"Log In Faild,Try Again..",Toast.LENGTH_SHORT).show();
+                    //startActivity(new Intent(getApplicationContext(),new ProfileActivity().getClass()));Intent i = new Intent(CurrentClassName.this, LoginActivity.class);
+                    Intent intent = new Intent(SignInActivity.this, Home.class);
+                    // finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SignInActivity.this, "Log In Faild,Try Again..", Toast.LENGTH_SHORT).show();
 
                     //Toast.makeText()
-               }
+                }
             }
         });
     }
 
     @Override
-    public void onClick(View view){
-        if (view == buttonSignIn){
+    public void onClick(View view) {
+        if (view == buttonSignIn) {
             signIn();
         }
-        if (view == registerTextView){
+        if (view == btnViewRegister) {
             finish();
-            startActivity(new Intent(this,MainActivity.class));
-            System.out.print("here!!");
-         }
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 }

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonRegister;
     private EditText emailText;
     private EditText passwordText;
-    private TextView signInTextView;
+    private Button btnViewSignIn;
     private EditText userName;
     private ImageView profile_image;
     private ProgressDialog progressDialog;
@@ -75,14 +75,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonRegister = findViewById(R.id.buttonRegister);
         emailText = findViewById(R.id.editTextMail);
         passwordText = findViewById(R.id.editTextPassword);
-        signInTextView = findViewById(R.id.textViewSignIn);
-        buttonRegister.setOnClickListener(this);
-        signInTextView.setOnClickListener(this);
-        progressDialog = new ProgressDialog(this);
+        btnViewSignIn = findViewById(R.id.btnViewSignIn);
         profile_image = findViewById(R.id.profile_image);
+        userName = findViewById(R.id.editUserName);
+
+        buttonRegister.setOnClickListener(this);
+        btnViewSignIn.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        userName = findViewById(R.id.editUserName);
         databaseReference = firebaseDatabase.getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         appCache = new CacheModel(MainActivity.this);
@@ -174,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else{
                 Toast.makeText(MainActivity.this, "Please select an image profile image.", Toast.LENGTH_SHORT).show();
             }
-        } else if (view == signInTextView) {
+        } else if (view == btnViewSignIn) {
             finish();
             startActivity(new Intent(this, SignInActivity.class));
         }

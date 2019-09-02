@@ -83,10 +83,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:hint="@string/register" />
-
-
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -94,7 +90,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/textViewSignIn"
+                android:id="@+id/btnViewSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/darker_gray"
