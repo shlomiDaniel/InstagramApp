@@ -121,18 +121,18 @@ public class HomeFragment extends Fragment {
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            final ArrayList<Photo> all_photos = getPhotos();
-            final Photo photo = all_photos.get(position);
+        final ArrayList<Photo> all_photos = getPhotos();
+        final Photo photo = all_photos.get(position);
 
-            Bundle bundle = new Bundle();
-            bundle.putString("photo_id", photo.getPhoto_id());
-            bundle.putString("user_id", photo.getUser_id());
+        Bundle bundle = new Bundle();
+        bundle.putString("photo_id", photo.getPhoto_id());
+        bundle.putString("user_id", photo.getUser_id());
 
-            Intent intent  = new Intent(getActivity(), ViewPostActivity.class);
-            intent.putExtra("photo_id", photo.getPhoto_id());
-            intent.putExtra("user_id", photo.getUser_id());
+        Intent intent  = new Intent(getActivity(), ViewPostActivity.class);
+        intent.putExtra("photo_id", photo.getPhoto_id());
+        intent.putExtra("user_id", photo.getUser_id());
 
-            startActivity(intent);
+        startActivity(intent);
         }
     };
 }

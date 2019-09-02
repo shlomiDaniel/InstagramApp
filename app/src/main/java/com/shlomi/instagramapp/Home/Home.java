@@ -25,7 +25,6 @@ import com.shlomi.instagramapp.Cache.UserEntity;
 import com.shlomi.instagramapp.Models.User;
 import com.shlomi.instagramapp.Utils.ButtonNavigationViewHelper;
 import com.shlomi.instagramapp.R;
-import com.shlomi.instagramapp.Utils.InetConnection;
 
 public class Home extends AppCompatActivity {
     private CacheModel appCache = null;
