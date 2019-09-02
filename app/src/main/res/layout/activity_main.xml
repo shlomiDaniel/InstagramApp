@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
 
-
         <LinearLayout
-
             android:layout_width="340dp"
             android:layout_height="663dp"
             android:layout_centerInParent="true"
@@ -74,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:padding="3dp"
+                android:inputType="textPassword"
                 android:background="@color/common_google_signin_btn_text_dark_default"
                 android:hint="@string/passwordText" />
 

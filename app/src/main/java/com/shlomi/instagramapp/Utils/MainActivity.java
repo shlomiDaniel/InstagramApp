@@ -140,20 +140,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        progressDialog.setMessage("Please Wait...");
+        progressDialog.setMessage("Registering...");
         progressDialog.show();
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
-                Toast.makeText(MainActivity.this, "Register Success , User Created", Toast.LENGTH_SHORT).show();
-
                 progressDialog.cancel();
 
                 String name = userName.getText().toString().trim();
+                Toast.makeText(MainActivity.this, "Welcome " + name, Toast.LENGTH_SHORT).show();
+
                 writeNewUser(firebaseAuth.getUid(), name, email, password, getUrl(), "", "");
 
-                // save image to cache
+                // save user to cache
                 UserEntity user = new UserEntity(firebaseAuth.getUid(), email, password,getUrl(),name);
                 appCache.getDb().users().insertAll(user);
 
@@ -203,11 +203,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ref = storageReference.child("photos").child("users").child(userId).child("profile_image");
             ref.putFile(filePath)
             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                progressDialog.dismiss();
-                Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                finish();
+                @Override                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -235,11 +234,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         storageReference.child("images/profile_image.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-            Log.i("profile_image : ", uri.toString());
-            url = uri.toString();
-            if (!url.equals("")) {
-                writeImage();
-            }
+                url = uri.toString();
+                if (!url.equals("")) {
+                    writeImage();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -95,70 +95,37 @@ public class ModelFirebase {
         }
     }
 
-    public UserSetting getUserAccoountSetting(DataSnapshot dataSnapshot) {
+    public UserSetting getUserAccoountSetting(DataSnapshot dataSnapshot, final String userid) {
         UserAccountSetting setting = new UserAccountSetting();
         User user = new User();
         UserSetting userSetting = new UserSetting(user, setting);
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
             if (ds.getKey().equals("users")) {
-
-                try {
-                    user.setUserName(
-                        ds.child(userId).getValue(User.class).getUserName()
-
-                    );
-
-                    user.setEmail(
-                        ds.child(userId).getValue(User.class).getEmail()
-                    );
-
-                    user.setPassword(
-                        ds.child(userId).getValue(User.class).getPassword()
-                    );
-
-                    user.setProfile_image_url(
-                        ds.child(userId).getValue(User.class).getProfile_image()
-                    );
-                } catch (NullPointerException ex) {
-                    Log.d("error", "nullpointer ex from users");
+                for (DataSnapshot child : ds.getChildren()) {
+                    if (child.getKey().equals(userid)) {
+                        user.setUserName(child.getValue(User.class).getUserName());
+                        user.setEmail(child.getValue(User.class).getEmail());
+                        user.setPassword(child.getValue(User.class).getPassword());
+                        user.setProfile_image_url(child.getValue(User.class).getProfile_image());
+                        break;
+                    }
                 }
             }
 
             if (ds.getKey().equals("userAcountSetting")) {
-
-                try {
-                    setting.setDisplay_name(
-                        ds.child(userId).getValue(UserAccountSetting.class).getDisplay_name()
-                    );
-
-                    setting.setDescription(
-                        ds.child(userId).getValue(UserAccountSetting.class).getDescription()
-                    );
-
-                    setting.setProfile_photo(
-                        ds.child(userId).getValue(UserAccountSetting.class).getProfile_photo()
-                    );
-
-                    setting.setPosts(
-                        ds.child(userId).getValue(UserAccountSetting.class).getPosts()
-                    );
-
-                    setting.setFollowers(
-                        ds.child(userId).getValue(UserAccountSetting.class).getFollowers()
-                    );
-                    setting.setFollowing(
-                        ds.child(userId).getValue(UserAccountSetting.class).getFollowing()
-                    );
-                    setting.setWebsite(
-                        ds.child(userId).getValue(UserAccountSetting.class).getWebsite()
-                    );
-                    setting.setUserName(
-                        ds.child(userId).getValue(UserAccountSetting.class).getUserName()
-                    );
-                } catch (NullPointerException ex) {
-                    Log.d("error", "null pointer ex");
+                for (DataSnapshot child : ds.getChildren()) {
+                    if (child.getKey().equals(userid)) {
+                        setting.setDisplay_name(child.getValue(UserAccountSetting.class).getDisplay_name());
+                        setting.setDescription(child.getValue(UserAccountSetting.class).getDescription());
+                        setting.setProfile_photo(child.getValue(UserAccountSetting.class).getProfile_photo());
+                        setting.setPosts(child.getValue(UserAccountSetting.class).getPosts());
+                        setting.setFollowers(child.getValue(UserAccountSetting.class).getFollowers());
+                        setting.setFollowing(child.getValue(UserAccountSetting.class).getFollowing());
+                        setting.setWebsite(child.getValue(UserAccountSetting.class).getWebsite());
+                        setting.setUserName(child.getValue(UserAccountSetting.class).getUserName());
+                        break;
+                    }
                 }
             }
         }

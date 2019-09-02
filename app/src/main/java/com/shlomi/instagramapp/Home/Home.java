@@ -59,14 +59,16 @@ public class Home extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                if(user!=null) {
 
-                String[] users = new String[1];
-                users[0] = user.getId();
+                    String[] users = new String[1];
+                    users[0] = user.getId();
 
-                // add user to cache if not exists
-                if(appCache.getDb().users().getByIds(users).size() == 0){
-                    UserEntity userEntity = new UserEntity(user.getId(),user.getEmail(),user.getPassword(),user.getProfile_image(),user.getUserName());
-                    appCache.getDb().users().insertAll(userEntity);
+                    // add user to cache if not exists
+                    if (appCache.getDb().users().getByIds(users).size() == 0) {
+                        UserEntity userEntity = new UserEntity(user.getId(), user.getEmail(), user.getPassword(), user.getProfile_image(), user.getUserName());
+                        appCache.getDb().users().insertAll(userEntity);
+                    }
                 }
             }
 

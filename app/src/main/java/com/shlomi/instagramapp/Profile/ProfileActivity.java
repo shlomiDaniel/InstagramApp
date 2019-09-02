@@ -99,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    setProfileInfo(modelFirebase.getUserAccoountSetting(dataSnapshot));
+                    setProfileInfo(modelFirebase.getUserAccoountSetting(dataSnapshot, firebaseAuth.getCurrentUser().getUid()));
                 }
 
                 @Override

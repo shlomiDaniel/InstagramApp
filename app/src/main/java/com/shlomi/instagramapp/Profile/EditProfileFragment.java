@@ -212,7 +212,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setProfileWidget(modelFirebase.getUserAccoountSetting(dataSnapshot));
+                setProfileWidget(modelFirebase.getUserAccoountSetting(dataSnapshot, userid));
                 //checkIfUserNameExist(userName);
             }
 
