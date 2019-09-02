@@ -31,11 +31,10 @@
             tools:layout_editor_absoluteY="8dp">
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:hint="Register User"
+                android:hint="@string/registerUser"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse" />
 
@@ -45,8 +44,8 @@
                 android:layout_height="100dp"
                 android:layout_margin="50dp"
                 android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:src="@drawable/profile_image" />
-
 
             <EditText
                 android:id="@+id/editTextMail"
@@ -55,7 +54,8 @@
                 android:layout_margin="15dp"
                 android:layout_marginTop="0dp"
                 android:background="@color/common_google_signin_btn_text_dark_default"
-                android:hint="Email:" />
+                android:padding="3dp"
+                android:hint="@string/emailText" />
 
             <EditText
                 android:id="@+id/editUserName"
@@ -63,8 +63,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:padding="3dp"
                 android:background="@color/common_google_signin_btn_text_dark_default"
-                android:hint="User Name:" />
+                android:hint="@string/user_nameText" />
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -72,27 +73,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:padding="3dp"
                 android:background="@color/common_google_signin_btn_text_dark_default"
-                android:hint="Password:" />
+                android:hint="@string/passwordText" />
 
             <Button
                 android:id="@+id/buttonRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Register" />
+                android:layout_gravity="center"
+                android:hint="@string/register" />
 
-            <EditText
 
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
                 android:id="@+id/textViewSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_margin="5dp"
-                android:hint="Member?Click Here To Sign here"
+                android:background="@android:color/darker_gray"
+                android:hint="@string/alreadyAMemeber"
+                android:layout_gravity="bottom"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_dark_default" />
-
 
         </LinearLayout>
 
