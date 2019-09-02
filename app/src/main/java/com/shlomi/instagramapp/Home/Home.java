@@ -102,8 +102,8 @@ public class Home extends AppCompatActivity {
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
 
         adapter.addFragment(new HomeFragment());
-        adapter.addFragment(new CameraFragment());
-        adapter.addFragment(new MessagesFragment());
+        //adapter.addFragment(new CameraFragment());
+        //adapter.addFragment(new MessagesFragment());
 
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
@@ -112,7 +112,7 @@ public class Home extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_instagram_icon);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_sendmessage);
+        //tabLayout.getTabAt(1).setIcon(R.drawable.ic_camera);
+        //tabLayout.getTabAt(2).setIcon(R.drawable.ic_sendmessage);
     }
 }

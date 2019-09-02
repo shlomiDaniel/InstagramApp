@@ -118,7 +118,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void setupButonNavigation() {
         BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(ProfileActivity.this, bn);
-        bn.getMenu().getItem(4).setIcon(R.drawable.ic_user_solid);
+        bn.getMenu().getItem(2).setIcon(R.drawable.ic_user_solid);
 
         modelFirebase = new ModelFirebase(getApplicationContext());
         Menu menu = bn.getMenu();
