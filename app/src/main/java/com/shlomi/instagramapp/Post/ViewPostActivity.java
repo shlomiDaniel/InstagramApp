@@ -56,6 +56,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
     private FirebaseUser currentUser;
     private GoogleMap GMap = null;
     private SupportMapFragment mapFragment;
+    private BottomNavigationView bn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +76,8 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
         currentUser = mAuth.getCurrentUser();
 
         // set navigation
-        BottomNavigationView bn = findViewById(R.id.bottom_navigationViewBar);
+        bn = findViewById(R.id.bottom_navigationViewBar);
         ButtonNavigationViewHelper.enableNavigation(ViewPostActivity.this, bn);
-        bn.getMenu().getItem(4).setIcon(R.drawable.ic_home_solid);
 
         // maps
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -150,6 +150,11 @@ public class ViewPostActivity extends AppCompatActivity implements OnMapReadyCal
             setLike(user_id, photo_id, currentUser.getUid());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

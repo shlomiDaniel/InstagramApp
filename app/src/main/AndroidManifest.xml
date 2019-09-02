@@ -15,6 +15,7 @@
         android:name="com.supinfo.tesas.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
     <uses-permission android:name="com.supinfo.tesas.permission.MAPS_RECEIVE" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
