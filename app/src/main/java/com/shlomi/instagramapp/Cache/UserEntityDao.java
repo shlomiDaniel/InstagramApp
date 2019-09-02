@@ -15,6 +15,9 @@ public interface UserEntityDao {
     @Query("SELECT * FROM userentity WHERE id IN (:userIds)")
     List<UserEntity> getByIds(String[] userIds);
 
+    @Query("DELETE FROM userentity")
+    void deleteAll();
+
     @Insert
     void insertAll(UserEntity... users);
 

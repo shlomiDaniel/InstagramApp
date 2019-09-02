@@ -18,6 +18,9 @@ public interface PhotoEntityDao {
     @Query("SELECT * FROM photoentity WHERE photo_id = (:photoId)")
     PhotoEntity getById(String photoId);
 
+    @Query("DELETE FROM photoentity")
+    void deleteAll();
+
     @Insert
     void insertAll(PhotoEntity... users);
 
